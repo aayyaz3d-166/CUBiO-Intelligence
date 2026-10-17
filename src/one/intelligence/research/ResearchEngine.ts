@@ -16,7 +16,7 @@
 
 import { NativeValue, createRecord, createArray, createFloat, createInt, createString, toRaw, fromRaw } from '../../runtime/NativeValues';
 import { OneAddress369 } from '../../spatial/OneAddress369';
-import { KnowledgeInferenceEngine } from '../../../../scratch/cubio_neural_lattice/knowledge_inference_engine';
+import { KnowledgeInferenceEngine } from '../../lattice/knowledge_inference_engine';
 
 export type AllenRelation =
   | 'BEFORE'

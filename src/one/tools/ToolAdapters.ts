@@ -29,9 +29,9 @@ import {
   fromRaw,
 } from '../runtime/NativeValues';
 import { CanonicalSerializer } from '../data/CanonicalSerializer';
-import { SpatialReasoningEngine, SpatialPoint3D } from '../../../scratch/cubio_neural_lattice/spatial_reasoning_engine';
-import { KnowledgeInferenceEngine } from '../../../scratch/cubio_neural_lattice/knowledge_inference_engine';
-import { ProceduralVoxelWorldEngine } from '../../../scratch/cubio_neural_lattice/procedural_voxel_world';
+import { SpatialReasoningEngine, SpatialPoint3D } from '../lattice/spatial_reasoning_engine';
+import { KnowledgeInferenceEngine } from '../lattice/knowledge_inference_engine';
+import { ProceduralVoxelWorldEngine } from '../lattice/procedural_voxel_world';
 import { ProductionInferenceEngine } from '../../core/inference/productionInference';
 import { RSSGuard } from '../../core/memory/rssGuard';
 import { HarmonicAlignmentTrainer } from '../../core/training/harmonicAlignment';

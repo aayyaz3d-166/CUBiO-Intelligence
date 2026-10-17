@@ -14,8 +14,7 @@
  *   47. Distributed Simulation (multi-node cluster synchronization)
  */
 
-import { GPUComputeRaymarcher } from '../../../../scratch/cubio_neural_lattice/gpu_compute_raymarcher';
-import { SovereignClusterOrchestrator } from '../../../../scratch/cubio_neural_lattice/cluster_mesh_orchestrator';
+import { GPUComputeRaymarcher } from '../../lattice/gpu_compute_raymarcher';
 
 export interface DebugFrame {
   pc: number;
@@ -200,7 +199,6 @@ export class NativeExecutionOptimizer {
    * Simulates cluster fleet synchronization.
    */
   public simulateClusterSync(): { clusterNodes: number; syncStatus: string } {
-    const orchestrator = new SovereignClusterOrchestrator();
     return {
       clusterNodes: 3,
       syncStatus: 'FLEET_P2P_MESH_SYNCHRONIZED',

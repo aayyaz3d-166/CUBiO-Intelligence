@@ -26,3 +26,7 @@ export * from './tensor';
 export * from './jit';
 export * from './workers';
 export * from './training';
+
+// Disambiguate duplicate ExecutionMode export between ./runtime and ./jit
+export type { ExecutionMode } from './runtime';
+export type { ExecutionMode as JITExecutionMode } from './jit';

@@ -14,7 +14,7 @@
 import { NativeMemoryAPI, StoredRecordInfo } from '../../memory/NativeMemoryAPI';
 import { NativeVDB, VDBSearchResult } from '../../memory/NativeVDB';
 import { OneAddress369 } from '../../spatial/OneAddress369';
-import { KnowledgeInferenceEngine } from '../../../../scratch/cubio_neural_lattice/knowledge_inference_engine';
+import { KnowledgeInferenceEngine } from '../../lattice/knowledge_inference_engine';
 import { NativeValue, toRaw, fromRaw, isEqual } from '../../runtime/NativeValues';
 import { CanonicalSerializer } from '../../data/CanonicalSerializer';
 

@@ -203,6 +203,7 @@ export class HybridConversationEngine {
       });
       followUpResponse.meta.sessionId = sessionId;
       followUpResponse.meta.episodeLogged = true;
+      followUpResponse.episodeLogged = true;
       return followUpResponse;
     }
 
@@ -293,6 +294,7 @@ export class HybridConversationEngine {
           isSolved: false,
           isUncertain: true,
           meta: this.makeMeta(sessionId, false),
+          episodeLogged: false,
         };
       }
 
@@ -313,6 +315,7 @@ export class HybridConversationEngine {
           stopReason: 'Goal already satisfied at input',
           reasoningStatus: ReasoningStatus.SOLVED,
           meta: this.makeMeta(sessionId, false),
+          episodeLogged: false,
         };
       }
 
@@ -384,6 +387,7 @@ export class HybridConversationEngine {
         stopReason: result.stopReason,
         reasoningStatus: result.status,
         meta: this.makeMeta(sessionId, episodeLogged),
+        episodeLogged,
       };
     }
 
@@ -404,6 +408,7 @@ export class HybridConversationEngine {
           isSolved: false,
           isUncertain: true,
           meta: this.makeMeta(sessionId, false),
+          episodeLogged: false,
         };
       }
 
@@ -420,6 +425,7 @@ export class HybridConversationEngine {
           isUncertain: false,
           resolvedConcepts: [],
           meta: this.makeMeta(sessionId, false),
+          episodeLogged: false,
         };
       }
 
@@ -463,6 +469,7 @@ export class HybridConversationEngine {
         isUncertain: false,
         resolvedConcepts,
         meta: this.makeMeta(sessionId, false),
+        episodeLogged: false,
       };
     }
 
@@ -476,6 +483,7 @@ export class HybridConversationEngine {
       isSolved: false,
       isUncertain: true,
       meta: this.makeMeta(sessionId, false),
+      episodeLogged: false,
     };
   }
 
@@ -498,6 +506,7 @@ export class HybridConversationEngine {
         isSolved: false,
         isUncertain: true,
         meta: this.makeMeta(req.sessionId, false, false, undefined),
+        episodeLogged: false,
       };
     }
 
@@ -522,6 +531,7 @@ export class HybridConversationEngine {
         stopReason: 'Goal already satisfied at input',
         reasoningStatus: ReasoningStatus.SOLVED,
         meta: this.makeMeta(req.sessionId, false, false, undefined),
+        episodeLogged: false,
       };
     }
 
@@ -595,7 +605,13 @@ export class HybridConversationEngine {
     // embellish the natural-language presentation.  It NEVER writes to
     // long-term memory, NEVER overrides symbolic results, and NEVER replaces
     // the symbolic derivation.  Structured facts remain authoritative.
-    let neuralInfo = {
+    let neuralInfo: {
+      attempted: boolean;
+      proposal: NeuralProposal | undefined;
+      proposalValid: boolean;
+      modelLatch: string | undefined;
+      reason: string | undefined;
+    } = {
       attempted: false,
       proposal: undefined,
       proposalValid: false,
@@ -677,7 +693,7 @@ export class HybridConversationEngine {
       stopReason: result.stopReason,
       reasoningStatus: result.status,
       meta: this.makeMeta(req.sessionId, episodeLogged, neuralInfo.attempted, neuralInfo.attempted ? (neuralInfo.proposal ? 1 : 0) : undefined),
-      neuralInfo,
+      episodeLogged,
     };
   }
 
@@ -699,6 +715,7 @@ export class HybridConversationEngine {
         isSolved: false,
         isUncertain: true,
         meta: this.makeMeta(req.sessionId, false, false, undefined),
+        episodeLogged: false,
       };
     }
 
@@ -720,6 +737,7 @@ export class HybridConversationEngine {
         isUncertain: false,
         resolvedConcepts: [],
         meta: this.makeMeta(req.sessionId, false, false, undefined),
+        episodeLogged: false,
       };
     }
 
@@ -737,6 +755,7 @@ export class HybridConversationEngine {
           isUncertain: false,
           resolvedConcepts: [],
           meta: this.makeMeta(req.sessionId, false, false, undefined),
+          episodeLogged: false,
         };
       }
 
@@ -772,6 +791,7 @@ export class HybridConversationEngine {
           isUncertain: false,
           resolvedConcepts: resolvedList,
           meta: this.makeMeta(req.sessionId, false, false, undefined),
+          episodeLogged: false,
         };
       } else {
         return {
@@ -782,6 +802,7 @@ export class HybridConversationEngine {
           isUncertain: false,
           resolvedConcepts: [],
           meta: this.makeMeta(req.sessionId, false, false, undefined),
+          episodeLogged: false,
         };
       }
     }
@@ -834,7 +855,7 @@ export class HybridConversationEngine {
       .slice(0, 5)
       .map((r) => `  • ${r.relationType} → ${r.label} (inferred, depth ${r.inferenceDepth}, confidence: ${r.confidence.toFixed(2)})`);
 
-    const nlText = [
+    let nlText = [
       `Concept: "${concept.label}" (${concept.type}, confidence: ${concept.confidence.toFixed(2)})`,
       directLines.length > 0 ? `Direct relationships:\n${directLines.join('\n')}` : 'No direct relationships found.',
       inheritedLines.length > 0 ? `Inherited properties:\n${inheritedLines.join('\n')}` : '',
@@ -878,6 +899,7 @@ export class HybridConversationEngine {
       isUncertain: false,
       resolvedConcepts,
       meta: this.makeMeta(req.sessionId, false, false, undefined),
+      episodeLogged: false,
     };
   }
 
@@ -917,6 +939,7 @@ export class HybridConversationEngine {
       isSolved: true,
       isUncertain: false,
       meta: this.makeMeta(req.sessionId, false, neuralUsed, neuralInferenceMs),
+      episodeLogged: false,
     };
   }
 
@@ -984,6 +1007,7 @@ export class HybridConversationEngine {
       isSolved: false,
       isUncertain: true,
       meta: this.makeMeta(req.sessionId, false, neuralUsed, neuralInferenceMs),
+      episodeLogged: false,
     };
   }
 
@@ -999,6 +1023,7 @@ export class HybridConversationEngine {
       isSolved: false,
       isUncertain: false,
       meta: this.makeMeta(sessionId, false),
+      episodeLogged: false,
     };
   }
 
