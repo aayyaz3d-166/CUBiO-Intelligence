@@ -46,6 +46,7 @@ const KNOWN_EXPORTED_RUNNERS = Object.freeze({
   'tests/binary/phase2_binary_language.test.ts': 'runPhase2BinaryTests',
   'tests/reasoning/phase3_reasoning_engine.test.ts': 'runPhase3ReasoningTests',
   'tests/memory/phase4_memory_layer.test.ts': 'runPhase4MemoryTests',
+  'tests/esm/esm_runtime_verification.test.ts': 'runESMRuntimeTests',
 });
 
 const KNOWN_SELF_EXECUTING_SUITES = Object.freeze({

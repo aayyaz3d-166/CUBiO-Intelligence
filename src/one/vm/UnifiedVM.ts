@@ -25,6 +25,8 @@
 import { UnifiedIRProgram, IRInstruction, IROperand } from '../ir/UnifiedIR';
 import { ONE_BUILTIN_FUNCTIONS } from '../stdlib/OneStdLib';
 import { DeterministicNumericOps, toI32, toF32, toBool } from '../types/TypedNumeric';
+import { TENSOR_BUILTIN_FUNCTIONS } from '../jit/JITRuntimeContext';
+import { SpatialBridge } from '../spatial/SpatialBridge';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Runtime Types & Errors
@@ -139,7 +141,7 @@ export class UnifiedVM {
    */
   public execute(
     program: UnifiedIRProgram,
-    options?: { spatialBridge?: import('../spatial/SpatialBridge').SpatialBridge }
+    options?: { spatialBridge?: SpatialBridge }
   ): VMExecutionResult {
     const startMs = performance.now();
 
@@ -151,13 +153,12 @@ export class UnifiedVM {
     for (const [bName, bFn] of Object.entries(ONE_BUILTIN_FUNCTIONS)) {
       this.builtins.set(bName, bFn);
     }
-    const { TENSOR_BUILTIN_FUNCTIONS } = require('../jit/JITRuntimeContext');
     for (const [bName, bFn] of Object.entries(TENSOR_BUILTIN_FUNCTIONS)) {
       this.builtins.set(bName, bFn as any);
     }
 
     // Attach spatial bridge methods to global and builtins
-    const bridge = options?.spatialBridge ?? new (require('../spatial/SpatialBridge').SpatialBridge)();
+    const bridge = options?.spatialBridge ?? new SpatialBridge();
     const spatialObj = bridge.toVMObject();
     this.globals.set('spatial', spatialObj as unknown as VMValue);
     for (const [mName, mFn] of Object.entries(spatialObj)) {

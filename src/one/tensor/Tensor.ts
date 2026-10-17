@@ -10,6 +10,7 @@
  */
 
 import { TensorMemoryArena } from './TensorArena';
+import { AutogradBridge } from './AutogradBridge';
 
 export type TensorShape = readonly number[];
 export type TensorStrides = readonly number[];
@@ -352,10 +353,9 @@ export class Tensor {
 
   public add(other: Tensor | number, out?: Tensor, arena?: TensorMemoryArena): Tensor {
     if (out === undefined && other instanceof Tensor && (this.requiresGrad || other.requiresGrad)) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.add(this, other, arena);
+      if (AutogradBridge.isRecording()) {
+        const provider = AutogradBridge.getProvider();
+        if (provider) return provider.add(this, other, arena);
       }
     }
     const res = out ?? (arena ? arena.allocateTensor(this.shape) : Tensor.zeros(this.shape));
@@ -375,10 +375,9 @@ export class Tensor {
 
   public sub(other: Tensor | number, out?: Tensor, arena?: TensorMemoryArena): Tensor {
     if (out === undefined && other instanceof Tensor && (this.requiresGrad || other.requiresGrad)) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.sub(this, other, arena);
+      if (AutogradBridge.isRecording()) {
+        const provider = AutogradBridge.getProvider();
+        if (provider) return provider.sub(this, other, arena);
       }
     }
     const res = out ?? (arena ? arena.allocateTensor(this.shape) : Tensor.zeros(this.shape));
@@ -398,10 +397,9 @@ export class Tensor {
 
   public mul(other: Tensor | number, out?: Tensor, arena?: TensorMemoryArena): Tensor {
     if (out === undefined && other instanceof Tensor && (this.requiresGrad || other.requiresGrad)) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.mul(this, other, arena);
+      if (AutogradBridge.isRecording()) {
+        const provider = AutogradBridge.getProvider();
+        if (provider) return provider.mul(this, other, arena);
       }
     }
     const res = out ?? (arena ? arena.allocateTensor(this.shape) : Tensor.zeros(this.shape));
@@ -443,10 +441,9 @@ export class Tensor {
    */
   public matmul(other: Tensor, out?: Tensor, arena?: TensorMemoryArena): Tensor {
     if (out === undefined && (this.requiresGrad || other.requiresGrad)) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.matmul(this, other, arena);
+      if (AutogradBridge.isRecording()) {
+        const provider = AutogradBridge.getProvider();
+        if (provider) return provider.matmul(this, other, arena);
       }
     }
     if (this.ndim !== 2 || other.ndim !== 2) {
@@ -493,12 +490,9 @@ export class Tensor {
    * Sum reduction over all elements or along a dimension.
    */
   public sum(axis?: number, keepdim: boolean = false, arena?: TensorMemoryArena): Tensor {
-    if (this.requiresGrad) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.reduceSum(this, axis, keepdim, arena);
-      }
+    if (this.requiresGrad && AutogradBridge.isRecording()) {
+      const provider = AutogradBridge.getProvider();
+      if (provider) return provider.reduceSum(this, axis, keepdim, arena);
     }
     if (axis === undefined) {
       let total = 0.0;
@@ -559,12 +553,9 @@ export class Tensor {
    * Mean reduction over all elements or along a dimension.
    */
   public mean(axis?: number, keepdim: boolean = false, arena?: TensorMemoryArena): Tensor {
-    if (this.requiresGrad) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.reduceMean(this, axis, keepdim, arena);
-      }
+    if (this.requiresGrad && AutogradBridge.isRecording()) {
+      const provider = AutogradBridge.getProvider();
+      if (provider) return provider.reduceMean(this, axis, keepdim, arena);
     }
     const s = this.sum(axis, keepdim, arena);
     const count = axis === undefined ? this.size : this.shape[axis < 0 ? axis + this.ndim : axis];
@@ -579,12 +570,9 @@ export class Tensor {
    * Fast approximate GELU activation: 0.5 * x * (1 + tanh(sqrt(2/pi) * (x + 0.044715 * x^3))).
    */
   public gelu(out?: Tensor, arena?: TensorMemoryArena): Tensor {
-    if (out === undefined && this.requiresGrad) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.gelu(this, arena);
-      }
+    if (out === undefined && this.requiresGrad && AutogradBridge.isRecording()) {
+      const provider = AutogradBridge.getProvider();
+      if (provider) return provider.gelu(this, arena);
     }
     const res = out ?? (arena ? arena.allocateTensor(this.shape) : Tensor.zeros(this.shape));
     const c1 = 0.7978845608; // sqrt(2/pi)
@@ -613,12 +601,9 @@ export class Tensor {
    * Softmax along last dimension.
    */
   public softmax(axis: number = -1, out?: Tensor, arena?: TensorMemoryArena): Tensor {
-    if (out === undefined && this.requiresGrad) {
-      const { AutogradTape } = require('./autograd/AutogradTape');
-      if (AutogradTape.isRecording()) {
-        const { AutogradOps } = require('./autograd/AutogradOps');
-        return AutogradOps.softmax(this, axis, arena);
-      }
+    if (out === undefined && this.requiresGrad && AutogradBridge.isRecording()) {
+      const provider = AutogradBridge.getProvider();
+      if (provider) return provider.softmax(this, axis, arena);
     }
     const resolvedAxis = axis < 0 ? axis + this.ndim : axis;
     if (resolvedAxis !== this.ndim - 1) {
@@ -804,8 +789,13 @@ export class Tensor {
    * Executes reverse-mode automatic differentiation starting from this tensor.
    */
   public backward(grad?: Tensor, arena?: TensorMemoryArena, retainGraph: boolean = false): void {
-    const { AutogradTape } = require('./autograd/AutogradTape');
-    AutogradTape.getActiveTape().backward(this, grad, arena, retainGraph);
+    const provider = AutogradBridge.getProvider();
+    if (!provider) {
+      throw new Error(
+        'Autograd provider is not registered. Ensure @one/tensor or @one/tensor/autograd is loaded before calling backward().'
+      );
+    }
+    provider.backward(this, grad, arena, retainGraph);
   }
 
   /**
@@ -823,10 +813,9 @@ export class Tensor {
    * Rectified Linear Unit activation with autograd support.
    */
   public relu(arena?: TensorMemoryArena): Tensor {
-    const { AutogradTape } = require('./autograd/AutogradTape');
-    if (this.requiresGrad && AutogradTape.isRecording()) {
-      const { AutogradOps } = require('./autograd/AutogradOps');
-      return AutogradOps.relu(this, arena);
+    if (this.requiresGrad && AutogradBridge.isRecording()) {
+      const provider = AutogradBridge.getProvider();
+      if (provider) return provider.relu(this, arena);
     }
     const out = arena ? arena.allocateTensor(this.shape) : Tensor.zeros(this.shape);
     for (let i = 0; i < this.size; i++) {

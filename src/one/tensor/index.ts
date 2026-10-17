@@ -4,6 +4,7 @@
  * Barrel Export for @one/tensor
  */
 
+export * from './AutogradBridge';
 export * from './Tensor';
 export * from './TensorArena';
 export * from './GradCheck';
