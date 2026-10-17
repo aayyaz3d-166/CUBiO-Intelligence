@@ -1,0 +1,156 @@
+{
+  "gate_id": "GATE-10-26-MASTER-TEST",
+  "generated_at": "2026-10-11T23:50:00+05:00",
+  "repository": "F:/ONE language",
+  "environment": {
+    "os": "Windows 11",
+    "node_version": "26.7.0",
+    "npm_version": "10.2.4 (from Node distribution)",
+    "python_version": "3.14.7",
+    "shell": "MSYS2 MinGW64 (/mingw64/bin/gcc)",
+    "package_type": "module",
+    "git": "None",
+    "tsconfig": {
+      "target": "ES2022",
+      "module": "es2022",
+      "moduleResolution": "node",
+      "rootDir": "./src",
+      "outDir": "./dist"
+    }
+  },
+  "documentation": "The documented test command is: npx ts-node --transpile-only tests/phase1_bridge_verification.test.ts",
+  "test_executions": [
+    {
+      "suite": "tests/phase1_bridge_verification.test.ts",
+      "command": "npx ts-node --transpile-only tests/phase1_bridge_verification.test.ts",
+      "working_directory": "F:/ONE language",
+      "start_status": "not_started",
+      "end_status": "failed",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "error_output": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\\\ONE language\\\\src\\\\one\\\\address369_canonical' imported from F:\\\\ONE language\\\\tests\\\\phase1_bridge_verification.test.ts",
+      "log_path": "none",
+      "modifies_files": false,
+      "modifies_external_state": false,
+      "module_resolution_error": true
+    },
+    {
+      "suite": "tests/binary/phase2_binary_language.test.ts",
+      "command": "npx ts-node --transpile-only tests/binary/phase2_binary_language.test.ts",
+      "working_directory": "F:/ONE language",
+      "start_status": "not_started",
+      "end_status": "failed",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "error_output": "ERR_UNSUPPORTED_DIR_IMPORT: Directory import 'F:\\\\ONE language\\\\src\\\\binary' is not supported resolving ES modules imported from F:\\\\ONE language\\\\tests\\\\binary\\\\phase2_binary_language.test.ts",
+      "log_path": "none",
+      "modifies_files": false,
+      "modifies_external_state": false,
+      "module_resolution_error": true
+    },
+    {
+      "suite": "tests/reasoning/phase3_reasoning_engine.test.ts",
+      "command": "npx ts-node --transpile-only tests/reasoning/phase3_reasoning_engine.test.ts",
+      "working_directory": "F:/ONE language",
+      "start_status": "not_started",
+      "end_status": "failed",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "error_output": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\\\ONE language\\\\src\\\\one\\\\intelligence\\\\reasoning\\\\types' imported from F:\\\\ONE language\\\\src\\\\one\\\\intelligence\\\\reasoning\\\\index.ts",
+      "log_path": "none",
+      "modifies_files": false,
+      "modifies_external_state": false,
+      "module_resolution_error": true
+    },
+    {
+      "suite": "tests/memory/phase4_memory_layer.test.ts",
+      "command": "npx ts-node --transpile-only tests/memory/phase4_memory_layer.test.ts",
+      "working_directory": "F:/ONE language",
+      "start_status": "not_started",
+      "end_status": "failed",
+      "exit_code": 1,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "error_output": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\\\ONE language\\\\src\\\\one\\\\intelligence\\\\memory\\\\index' imported from F:\\\\ONE language\\\\tests\\\\memory\\\\phase4_memory_layer.test.ts",
+      "log_path": "none",
+      "modifies_files": false,
+      "modifies_external_state": false,
+      "module_resolution_error": true
+    }
+  ],
+  "test_execution_summary": {
+    "total_suites_attempted": 4,
+    "total_passed": 0,
+    "total_failed": 4,
+    "total_skipped": 0,
+    "total_not_run": 4,
+    "reproducible": false,
+    "reason": "All 4 suites fail with Node ESM module-resolution errors (ERR_MODULE_NOT_FOUND, ERR_UNSUPPORTED_DIR_IMPORT). Node 26 does not support directory imports without explicit .ts extensions or --experimental-strip-types.",
+    "suites_with_existing_reports": [
+      {
+        "suite": "tests/phase1_bridge_verification.test.ts",
+        "existing_report": "audit/gate10/test_baseline_report.json",
+        "reported_assertions": 178,
+        "reported_passed": 178,
+        "reported_failed": 0,
+        "notes": "Gate 10 baseline report; not independently re-executed in this audit"
+      }
+    ]
+  },
+  "module_resolution_details": {
+    "error_type_1": "ERR_MODULE_NOT_FOUND",
+    "error_type_2": "ERR_UNSUPPORTED_DIR_IMPORT",
+    "root_cause": "Test files import from src/... directory paths (e.g., '../src/one/address369_canonical', '../../src/binary', '../../src/one/intelligence/memory/index'). Node 26 ESM does not support directory imports without explicit .ts extensions or a --experimental-strip-types flag.",
+    "impacts": [
+      "All 4 phase-suite tests",
+      "Gate 10 baseline test reproduction",
+      "Clean-environment test counts"
+    ],
+    "proposed_fix": "Update test imports to use explicit .ts extensions (e.g., '../src/one/address369_canonical.ts') or add --experimental-strip-types to ts-node."
+  },
+  "known_test_failures_from_existing_records": [
+    {
+      "gate": "GATE 14",
+      "suite": "tests/hybrid/phase5_hybrid_conversation.test.ts",
+      "failures": [
+        "G-01",
+        "G-02",
+        "G-03",
+        "G-04",
+        "G-06",
+        "G-07",
+        "H-01"
+      ],
+      "notes": "7 new follow-up tests reported as failed; engine safe-fail behavior confirmed correct; expectations being corrected. The suite was not among the 4 phase-suite tests attempted above but was documented as having 7 known failures at compaction boundary."
+    }
+  ],
+  "protected_artifact_integrity": {
+    "binary_protocol_files": {
+      "src/binary/binaryCodebook.ts": "MATCH",
+      "src/binary/binaryDecoder.ts": "MATCH",
+      "src/binary/binaryEncoder.ts": "MATCH"
+    },
+    "model_checkpoint": {
+      "path": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+      "size_bytes": 19594556,
+      "sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "status": "MATCH"
+    },
+    "configuration_files": {
+      "package.json": "VERIFIED",
+      "tsconfig.json": "VERIFIED",
+      "README.md": "VERIFIED"
+    }
+  }
+}

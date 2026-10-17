@@ -1,0 +1,393 @@
+import {
+  UnifiedProgramNode,
+  UnifiedStatementNode,
+  ExpressionNode,
+  VariableDeclarationNode,
+  FunctionDeclarationNode,
+  ReturnStatementNode,
+  IfStatementNode,
+  WhileStatementNode,
+  ForStatementNode,
+  BlockStatementNode,
+  PrintStatementNode,
+  DeclarativeSpatialNodeWrapper,
+  LiteralNode,
+  IdentifierNode,
+  BinaryExpressionNode,
+  UnaryExpressionNode,
+  CallExpressionNode,
+  MemberExpressionNode,
+} from '../ast/UnifiedAST';
+import {
+  UnifiedIRProgram,
+  IRInstruction,
+  IROperand,
+  createRegister,
+  createVariable,
+  createConstant,
+  createLabel,
+  createSpatialPayload,
+} from './UnifiedIR';
+
+export class IRLowering {
+  private regCounter: number = 1;
+  private labelCounter: number = 1;
+  private instructions: IRInstruction[] = [];
+
+  public lower(program: UnifiedProgramNode): UnifiedIRProgram {
+    this.regCounter = 1;
+    this.labelCounter = 1;
+    this.instructions = [];
+
+    for (const stmt of program.body) {
+      this.lowerStatement(stmt);
+    }
+
+    return {
+      version: '0.1.0-IR',
+      instructions: this.instructions,
+      declarativeMetadata: program.declarativeMeta,
+    };
+  }
+
+  private nextReg(type?: string): IROperand {
+    return createRegister(this.regCounter++, type);
+  }
+
+  private nextLabel(prefix: string = 'label'): IROperand {
+    return createLabel(`${prefix}_${this.labelCounter++}`);
+  }
+
+  private emit(
+    opcode: IRInstruction['opcode'],
+    destination?: IROperand,
+    sources: IROperand[] = [],
+    metadata?: Record<string, unknown>
+  ): IRInstruction {
+    const instr: IRInstruction = {
+      index: this.instructions.length,
+      opcode,
+      destination,
+      sources,
+      metadata,
+    };
+    this.instructions.push(instr);
+    return instr;
+  }
+
+  // ── Statement Lowering ─────────────────────────────────────────────────────
+
+  private lowerStatement(stmt: UnifiedStatementNode): void {
+    switch (stmt.kind) {
+      case 'VariableDeclaration':
+        this.lowerVariableDeclaration(stmt);
+        break;
+
+      case 'FunctionDeclaration':
+        this.lowerFunctionDeclaration(stmt);
+        break;
+
+      case 'ReturnStatement':
+        this.lowerReturnStatement(stmt);
+        break;
+
+      case 'IfStatement':
+        this.lowerIfStatement(stmt);
+        break;
+
+      case 'WhileStatement':
+        this.lowerWhileStatement(stmt);
+        break;
+
+      case 'ForStatement':
+        this.lowerForStatement(stmt);
+        break;
+
+      case 'BlockStatement':
+        this.lowerBlockStatement(stmt);
+        break;
+
+      case 'ExpressionStatement':
+        this.lowerExpression(stmt.expression);
+        break;
+
+      case 'PrintStatement':
+        this.lowerPrintStatement(stmt);
+        break;
+
+      case 'DeclarativeSpatialNode':
+        this.lowerDeclarativeSpatialNode(stmt);
+        break;
+    }
+  }
+
+  private lowerVariableDeclaration(node: VariableDeclarationNode): void {
+    if (node.initializer) {
+      const initReg = this.lowerExpression(node.initializer);
+      this.emit('STORE', createVariable(node.identifier, node.inferredType), [initReg]);
+    }
+  }
+
+  private lowerFunctionDeclaration(node: FunctionDeclarationNode): void {
+    const fnLabel = createLabel(`func_${node.name}`);
+    const endLabel = this.nextLabel(`func_end_${node.name}`);
+    this.emit('CONST', fnLabel, [], {
+      isFunctionHeader: true,
+      name: node.name,
+      params: node.params.map((p) => p.name),
+      endLabel: endLabel.value,
+    });
+
+    this.lowerBlockStatement(node.body);
+
+    // Default return if not explicit
+    this.emit('RETURN', undefined, []);
+
+    this.emit('CONST', endLabel, [], { isLabel: true, isFunctionEnd: true, name: node.name });
+  }
+
+  private lowerReturnStatement(node: ReturnStatementNode): void {
+    if (node.value) {
+      const valReg = this.lowerExpression(node.value);
+      this.emit('RETURN', undefined, [valReg]);
+    } else {
+      this.emit('RETURN', undefined, []);
+    }
+  }
+
+  private lowerIfStatement(node: IfStatementNode): void {
+    const condReg = this.lowerExpression(node.condition);
+    const elseLabel = this.nextLabel('else');
+    const endLabel = this.nextLabel('endif');
+
+    this.emit('JUMP_IF', elseLabel, [condReg], { condition: 'false' });
+    this.lowerBlockStatement(node.consequent);
+    this.emit('JUMP', endLabel, []);
+
+    this.emit('CONST', elseLabel, [], { isLabel: true });
+    if (node.alternate) {
+      if (node.alternate.kind === 'IfStatement') {
+        this.lowerIfStatement(node.alternate);
+      } else {
+        this.lowerBlockStatement(node.alternate);
+      }
+    }
+
+    this.emit('CONST', endLabel, [], { isLabel: true });
+  }
+
+  private lowerWhileStatement(node: WhileStatementNode): void {
+    const startLabel = this.nextLabel('while_start');
+    const endLabel = this.nextLabel('while_end');
+
+    this.emit('CONST', startLabel, [], { isLabel: true });
+    const condReg = this.lowerExpression(node.condition);
+    this.emit('JUMP_IF', endLabel, [condReg], { condition: 'false' });
+
+    this.lowerBlockStatement(node.body);
+    this.emit('JUMP', startLabel, []);
+
+    this.emit('CONST', endLabel, [], { isLabel: true });
+  }
+
+  private lowerForStatement(node: ForStatementNode): void {
+    const startLabel = this.nextLabel('for_start');
+    const endLabel = this.nextLabel('for_end');
+
+    const iterReg = this.lowerExpression(node.iterable);
+    this.emit('CONST', startLabel, [], { isLabel: true });
+
+    // Loop header
+    const itemReg = this.nextReg();
+    this.emit('LOAD', itemReg, [iterReg], {
+      iteratorVar: node.iterator,
+      endLabel: endLabel.value,
+    });
+    this.emit('STORE', createVariable(node.iterator), [itemReg]);
+
+    this.lowerBlockStatement(node.body);
+    this.emit('JUMP', startLabel, []);
+
+    this.emit('CONST', endLabel, [], { isLabel: true });
+  }
+
+  private lowerBlockStatement(node: BlockStatementNode): void {
+    for (const stmt of node.statements) {
+      this.lowerStatement(stmt);
+    }
+  }
+
+  private lowerPrintStatement(node: PrintStatementNode): void {
+    const exprReg = this.lowerExpression(node.expression);
+    this.emit('PRINT', undefined, [exprReg]);
+  }
+
+  private lowerDeclarativeSpatialNode(node: DeclarativeSpatialNodeWrapper): void {
+    this.emit('SPATIAL_OP', undefined, [createSpatialPayload(node.payload)], {
+      nodeType: node.nodeType,
+    });
+  }
+
+  // ── Expression Lowering ────────────────────────────────────────────────────
+
+  private lowerExpression(expr: ExpressionNode): IROperand {
+    switch (expr.kind) {
+      case 'Literal': {
+        const dest = this.nextReg(expr.inferredType);
+        this.emit('CONST', dest, [createConstant(expr.value, expr.inferredType)]);
+        return dest;
+      }
+
+      case 'Identifier': {
+        const dest = this.nextReg(expr.inferredType);
+        this.emit('LOAD', dest, [createVariable(expr.name, expr.inferredType)]);
+        return dest;
+      }
+
+      case 'BinaryExpression': {
+        // Assignment: obj.key = val  or  arr[i] = val
+        if (expr.operator === '=' && expr.left.kind === 'MemberExpression') {
+          const memberNode = expr.left as MemberExpressionNode;
+          const objReg = this.lowerExpression(memberNode.object);
+          const valReg = this.lowerExpression(expr.right);
+          if (!memberNode.computed) {
+            // obj.key = val  → FIELD_SET
+            this.emit('FIELD_SET', undefined, [objReg, valReg], {
+              field: memberNode.property as string,
+            });
+          } else {
+            // arr[i] = val  → INDEX_SET
+            const idxReg = this.lowerExpression(memberNode.property as ExpressionNode);
+            this.emit('INDEX_SET', undefined, [objReg, idxReg, valReg]);
+          }
+          return valReg;
+        }
+
+        // Assignment: x = 10
+        if (expr.operator === '=' && expr.left.kind === 'Identifier') {
+          const valReg = this.lowerExpression(expr.right);
+          this.emit('STORE', createVariable(expr.left.name), [valReg]);
+          return valReg;
+        }
+
+        const leftReg = this.lowerExpression(expr.left);
+        const rightReg = this.lowerExpression(expr.right);
+        const dest = this.nextReg(expr.inferredType);
+
+        switch (expr.operator) {
+          case '+':
+            this.emit('ADD', dest, [leftReg, rightReg]);
+            break;
+          case '-':
+            this.emit('SUB', dest, [leftReg, rightReg]);
+            break;
+          case '*':
+            this.emit('MUL', dest, [leftReg, rightReg]);
+            break;
+          case '/':
+            this.emit('DIV', dest, [leftReg, rightReg]);
+            break;
+          case '%':
+            this.emit('MOD', dest, [leftReg, rightReg]);
+            break;
+          case '<':
+          case '<=':
+          case '>':
+          case '>=':
+          case '==':
+          case '!=':
+          case '&&':
+          case '||':
+            this.emit('CMP', dest, [leftReg, rightReg], { operator: expr.operator });
+            break;
+          default:
+            this.emit('MOVE', dest, [leftReg]);
+        }
+        return dest;
+      }
+
+      case 'UnaryExpression': {
+        const operandReg = this.lowerExpression(expr.operand);
+        const dest = this.nextReg(expr.inferredType);
+        if (expr.operator === '-') {
+          const zero = this.nextReg('number');
+          this.emit('CONST', zero, [createConstant(0, 'number')]);
+          this.emit('SUB', dest, [zero, operandReg]);
+        } else if (expr.operator === '!') {
+          this.emit('CMP', dest, [operandReg], { operator: '!' });
+        } else {
+          this.emit('MOVE', dest, [operandReg]);
+        }
+        return dest;
+      }
+
+      case 'CallExpression': {
+        // Method call: callee is a MemberExpression → dispatch as "Object.method"
+        if (expr.callee.kind === 'MemberExpression') {
+          const calleeNode = expr.callee as MemberExpressionNode;
+          const objReg = this.lowerExpression(calleeNode.object);
+          const argRegs = expr.args.map((a) => this.lowerExpression(a));
+          const dest = this.nextReg(expr.inferredType);
+          const methodName = typeof calleeNode.property === 'string'
+            ? calleeNode.property
+            : 'unknown';
+          // Build qualified name for stdlib: "Math.sqrt", "Array.push" etc.
+          let qualifiedName = methodName;
+          if (calleeNode.object.kind === 'Identifier') {
+            qualifiedName = `${calleeNode.object.name}.${methodName}`;
+          }
+          this.emit('CALL', dest, [createVariable(qualifiedName), objReg, ...argRegs], {
+            isMethodCall: true,
+          });
+          return dest;
+        }
+
+        // Normal call: callee is an Identifier
+        const argRegs = expr.args.map((a) => this.lowerExpression(a));
+        const dest = this.nextReg(expr.inferredType);
+        const calleeName = expr.callee.kind === 'Identifier' ? expr.callee.name : 'anon';
+        this.emit('CALL', dest, [createVariable(calleeName), ...argRegs]);
+        return dest;
+      }
+
+      case 'MemberExpression': {
+        const objReg = this.lowerExpression(expr.object);
+        const dest = this.nextReg(expr.inferredType);
+        if (!expr.computed) {
+          // obj.key → FIELD_GET
+          this.emit('FIELD_GET', dest, [objReg], { field: expr.property as string });
+        } else {
+          // arr[i] → INDEX_GET
+          const idxReg = this.lowerExpression(expr.property as ExpressionNode);
+          this.emit('INDEX_GET', dest, [objReg, idxReg]);
+        }
+        return dest;
+      }
+
+      case 'ArrayLiteral': {
+        const elemRegs = expr.elements.map((e) => this.lowerExpression(e));
+        const dest = this.nextReg(expr.inferredType);
+        this.emit('CONST', dest, elemRegs, { isArrayLiteral: true });
+        return dest;
+      }
+
+      case 'ObjectLiteral': {
+        const dest = this.nextReg(expr.inferredType);
+        const keys: string[] = [];
+        const valRegs: IROperand[] = [];
+        for (const prop of expr.properties) {
+          keys.push(prop.key);
+          valRegs.push(this.lowerExpression(prop.value));
+        }
+        this.emit('CONST', dest, valRegs, { isObjectLiteral: true, keys });
+        return dest;
+      }
+
+      default: {
+        const dest = this.nextReg((expr as any)?.inferredType);
+        this.emit('CONST', dest, [createConstant(null)]);
+        return dest;
+      }
+    }
+  }
+}

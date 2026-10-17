@@ -1,0 +1,82 @@
+{
+  "auditDate": "2026-09-28T06:38:42.040Z",
+  "milestonesAudited": [
+    "ONE-01",
+    "ONE-02",
+    "ONE-03",
+    "ONE-04",
+    "ONE-05",
+    "ONE-06",
+    "ONE-07",
+    "ONE-08"
+  ],
+  "verdict": "GO",
+  "stageDivergences": [
+    {
+      "stage": "Embedding Lookup",
+      "maxAbsDiff": 0,
+      "meanAbsDiff": 0,
+      "relDiff": 0,
+      "passed": true
+    },
+    {
+      "stage": "QKV Linear Projection",
+      "maxAbsDiff": 0,
+      "meanAbsDiff": 0,
+      "relDiff": 0,
+      "passed": true
+    },
+    {
+      "stage": "LayerNorm Output",
+      "maxAbsDiff": 0,
+      "meanAbsDiff": 0,
+      "relDiff": 0,
+      "passed": true
+    },
+    {
+      "stage": "Activation Output",
+      "maxAbsDiff": 0,
+      "meanAbsDiff": 0,
+      "relDiff": 0,
+      "passed": true
+    },
+    {
+      "stage": "Logits Output",
+      "maxAbsDiff": 0,
+      "meanAbsDiff": 0,
+      "relDiff": 0,
+      "passed": true
+    },
+    {
+      "stage": "Cross-Entropy Loss",
+      "maxAbsDiff": 1.1855171289099076e-7,
+      "meanAbsDiff": 1.1855171289099076e-7,
+      "relDiff": 3.19922537709746e-8,
+      "passed": true
+    }
+  ],
+  "performanceMetrics": {
+    "backendA_ReferenceDurationMs": 0.08539999999993597,
+    "backendB_OneTensorDurationMs": 0.7888000000000375,
+    "backendC_JITDurationMs": 0.676300000000083,
+    "systemRSS_MB": 551.65625,
+    "v8HeapUsed_MB": 174.11927032470703,
+    "arenaAllocated_MB": 1,
+    "arenaActive_MB": 0.00006103515625,
+    "arenaReuses": 1,
+    "c5M_StepTimeMs": 31.04,
+    "c5M_MatmulTimeSharePct": 10.72,
+    "c5M_VectorAdamWTimeSharePct": 74.5,
+    "c5M_VectorClippingTimeSharePct": 13.89
+  },
+  "bugFindings": [],
+  "summary": {
+    "totalAssertions": 25,
+    "passedAssertions": 25,
+    "p0Count": 0,
+    "p1Count": 0,
+    "p2Count": 0,
+    "p3Count": 0,
+    "p4Count": 0
+  }
+}

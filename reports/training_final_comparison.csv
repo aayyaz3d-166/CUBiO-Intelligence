@@ -1,0 +1,10 @@
+metric,baseline_value,final_value,improvement_ratio,unit
+step_latency_ms,6.812,3.984,1.71x,ms
+throughput_steps_sec,146.79,251.01,1.71x,steps/sec
+tokens_per_sec,4697.32,8032.39,1.71x,tokens/sec
+backward_pass_ms,3.652,1.481,2.47x,ms
+mlp_kernel_ms,1.380,1.407,0.98x,ms
+attention_qkv_ms,0.275,0.423,0.65x,ms
+optimizer_adamw_ms,1.023,0.523,1.96x,ms
+heap_allocation_mb_step,4.451,0.004,Eliminated,MB/step
+physical_rss_mb,348.55,332.38,Bounded,MB

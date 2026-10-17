@@ -1,0 +1,43 @@
+# ==============================================================================
+# ONE LANGUAGE — REPOSITORY BASELINE IGNORE RULES
+# Target: Local Git Version Control Baseline (No Remote Push)
+# ==============================================================================
+
+# 1. Dependencies
+node_modules/
+*/node_modules/
+
+# 2. Build Outputs & Clean Build Artifacts
+dist/
+dist-clean/
+*/dist/
+
+# 3. Compilers & Runtime Caches
+*.tsbuildinfo
+__pycache__/
+*/__pycache__/
+*.pyc
+
+# 4. Large Standalone Binaries (>180MB total; preserved locally)
+*.exe
+/cubio-v3-release.exe
+/one.exe
+
+# 5. Intermediate Single Executable Application (SEA) Blobs
+*.blob
+/sea-prep.blob
+/sea-cli-prep.blob
+
+# 6. Emitted Test Binaries & Graphic Raster Frames
+*.bin
+!/one-baremetal.bin
+*.tga
+
+# 7. Transient Test Outputs (Preserved locally)
+temp_*.3dmemory
+
+# 8. Pre-Phase Micro-Backups (Preserved locally, not tracked)
+/.backup_*/
+
+# 9. Nested Legacy Clone Workspace (Consolidated into legacy_experiments; preserved locally)
+/ONE language/

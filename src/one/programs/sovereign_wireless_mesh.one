@@ -1,0 +1,170 @@
+// ONE Language Native Source: Sovereign Network & RF Telemetry Protocol
+// Gate CNL-P26.8: Zero-Hallucination Wireless / Mesh Data Transmission
+
+module One.Engine.NetworkProtocol {
+
+    // ── Data Structures ────────────────────────────────────────────────────
+
+    struct TransmissionPacket {
+        is_valid: Bool;
+        bytes_sent: Int32;
+        status_code: String;
+        hardware_timestamp: Int64;
+        interface_name: String;
+        pqc_packet_seal: String;
+    }
+
+    struct RFTelemetryReading {
+        is_valid: Bool;
+        interface_name: String;
+        signal_strength_dbm: Float32;    // Real dBm from OS driver — 0.0 if absent
+        link_speed_mbps: Float32;        // Physical link speed
+        is_associated: Bool;             // True only if connected to AP
+        status_code: String;
+        hardware_timestamp: Int64;
+        pqc_seal: String;
+    }
+
+    struct PhysicalInterfaceProbe {
+        interface_found: Bool;
+        interface_name: String;
+        probe_method: String;            // "OS_IF_INDEX" | "SYSFS_WIRELESS" | "NETSH_WLAN" | "NONE"
+        probe_latency_ns: Int64;
+    }
+
+    // ── Sovereign Wireless Mesh ────────────────────────────────────────────
+
+    native class SovereignWirelessMesh {
+        private is_hardware_link_up: Bool;
+        private active_interface: String;
+
+        constructor() {
+            // STRICT: Probe MUST use OS-level adapter enumeration
+            // NOT socket creation (which always succeeds without hardware)
+            let probe: PhysicalInterfaceProbe = this.probe_physical_interface();
+            this.is_hardware_link_up = probe.interface_found;
+            this.active_interface = probe.interface_name;
+        }
+
+        // Priority 1: Linux sysfs wireless check
+        // Priority 2: Windows netsh wlan enumeration
+        // Priority 3: OS interface index with wireless marker
+        // Priority 4: NONE → PHYSICAL_LINK_DOWN_NO_SIMULATION
+        private method probe_physical_interface(): PhysicalInterfaceProbe {
+            let t0: Int64 = NativeSystem.GetNanosecondTimestamp();
+
+            // Sysfs probe (Linux embedded / Raspberry Pi)
+            if (NativeSystem.PathExists("/sys/class/net")) {
+                let ifaces: String[] = NativeSystem.ListDirectory("/sys/class/net");
+                for (let iface: String in ifaces) {
+                    let wireless_path: String = "/sys/class/net/" + iface + "/wireless";
+                    if (NativeSystem.PathExists(wireless_path)) {
+                        let operstate: String = NativeSystem.ReadFile(
+                            "/sys/class/net/" + iface + "/operstate"
+                        );
+                        if (operstate.Trim() == "up") {
+                            return PhysicalInterfaceProbe(
+                                true, iface, "SYSFS_WIRELESS",
+                                NativeSystem.GetNanosecondTimestamp() - t0
+                            );
+                        }
+                    }
+                }
+            }
+
+            // Netsh probe (Windows)
+            let netsh_result: String = NativeSystem.RunShellCommand(
+                "netsh wlan show interfaces"
+            );
+            if (netsh_result.Contains("State") && netsh_result.Contains("connected")) {
+                let iface_name: String = NativeSystem.ExtractRegex(
+                    netsh_result, "Name\\s*:\\s*(.+)"
+                );
+                return PhysicalInterfaceProbe(
+                    true, iface_name.Trim(), "NETSH_WLAN",
+                    NativeSystem.GetNanosecondTimestamp() - t0
+                );
+            }
+
+            // OS interface index (cross-platform fallback)
+            let if_list: String[] = NativeSystem.GetNetworkInterfaces();
+            for (let iface: String in if_list) {
+                if (iface.StartsWith("wlan") || iface.StartsWith("Wi-Fi") ||
+                    iface.StartsWith("wlp") || iface.StartsWith("WLAN")) {
+                    return PhysicalInterfaceProbe(
+                        true, iface, "OS_IF_INDEX",
+                        NativeSystem.GetNanosecondTimestamp() - t0
+                    );
+                }
+            }
+
+            // No physical wireless hardware found — honest zero-state
+            return PhysicalInterfaceProbe(
+                false, "", "NONE",
+                NativeSystem.GetNanosecondTimestamp() - t0
+            );
+        }
+
+        // RF Telemetry: reads real signal from OS driver
+        public method read_signal_telemetry(): RFTelemetryReading {
+            if (!this.is_hardware_link_up) {
+                return RFTelemetryReading(
+                    false, "", 0.0f, 0.0f, false,
+                    "PHYSICAL_MEASUREMENT_UNAVAILABLE", 0, ""
+                );
+            }
+
+            // Real OS driver query for signal strength
+            let signal_dbm: Float32 = NativeSystem.ReadWirelessSignalDBm(
+                this.active_interface
+            );
+            let link_speed: Float32 = NativeSystem.ReadLinkSpeedMbps(
+                this.active_interface
+            );
+            let is_associated: Bool = NativeSystem.IsInterfaceAssociated(
+                this.active_interface
+            );
+            let ts: Int64 = NativeSystem.GetNanosecondTimestamp();
+
+            // PQC seal on real hardware reading
+            let seal: String = NativeCrypto.PQCLatticeSeal(
+                signal_dbm.ToString() + "@" + ts.ToString() +
+                "@" + this.active_interface
+            );
+
+            return RFTelemetryReading(
+                true, this.active_interface, signal_dbm,
+                link_speed, is_associated,
+                "OK_LIVE_HARDWARE", ts, seal
+            );
+        }
+
+        // Packet transmission — only if physical link confirmed
+        public method transmit_packet(
+            payload_lattice_address: Int32,
+            data_stream: Byte[64]
+        ): TransmissionPacket {
+            if (!this.is_hardware_link_up) {
+                return TransmissionPacket(
+                    false, 0,
+                    "PHYSICAL_LINK_DOWN_NO_SIMULATION",
+                    0, "", ""
+                );
+            }
+
+            let bytes_written: Int32 = NativeSystem.WriteToHardwareSocket(
+                0x8369, data_stream
+            );
+            let ts: Int64 = NativeSystem.GetHardwareClockTicks();
+            let seal: String = NativeCrypto.PQCLatticeSeal(
+                bytes_written.ToString() + "@" + ts.ToString()
+            );
+
+            return TransmissionPacket(
+                true, bytes_written,
+                "OK_TRANSMITTED_VIA_PHYSICAL_RF",
+                ts, this.active_interface, seal
+            );
+        }
+    }
+}

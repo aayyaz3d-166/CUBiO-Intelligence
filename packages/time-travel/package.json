@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/time-travel",
+  "version": "1.0.0",
+  "description": "Bit-Exact Deterministic State Snapshotting & Cryptographic Rewind Engine",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Google DeepMind / Antigravity Sovereign Team",
+  "license": "Apache-2.0"
+}

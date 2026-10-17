@@ -1,0 +1,1958 @@
+{
+  "generated_at": "2026-10-11T04:45:33.237127+00:00",
+  "files": [
+    {
+      "path_relative": "README.md",
+      "size_bytes": 10958,
+      "sha256": "5DEAFD75041076839541D51FA948DFA0623183B88A9D1674B0E789482AAF313D",
+      "category": "config",
+      "protected": true
+    },
+    {
+      "path_relative": "package.json",
+      "size_bytes": 6605,
+      "sha256": "E4F6AAC69B8ADF02CFA90390D3C4309772368B00B180E47EE79284DD0F875CDB",
+      "category": "config",
+      "protected": true
+    },
+    {
+      "path_relative": "sea-cli-config.json",
+      "size_bytes": 109,
+      "sha256": "CC3036A005CD88170495853567B9D60C190C9F5854875DA750961B78E43D2CF6",
+      "category": "config",
+      "protected": true
+    },
+    {
+      "path_relative": "sea-config.json",
+      "size_bytes": 101,
+      "sha256": "AD55AEDD68C63D07CADE4FEE56F776AE2D95D2FD977884C18698CEC721ECA24C",
+      "category": "config",
+      "protected": true
+    },
+    {
+      "path_relative": "src\\binary\\binaryCodebook.ts",
+      "size_bytes": 5516,
+      "sha256": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\binary\\binaryDecoder.ts",
+      "size_bytes": 6640,
+      "sha256": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\binary\\binaryEncoder.ts",
+      "size_bytes": 3614,
+      "sha256": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\binary\\index.ts",
+      "size_bytes": 268,
+      "sha256": "1DD8E8C22FFE78891984820FE977908711D5A35ACD64748C41739A33061A52FC",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\binary\\triangleMapper.ts",
+      "size_bytes": 2653,
+      "sha256": "CC85C063C2EED24AC7AF73D62E7235A94B0C2E152CFE10FF0922069AE26D821F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\binary\\types.ts",
+      "size_bytes": 1671,
+      "sha256": "B54CC67FFFFBA9F28063285AE8F123E203F433E86545E3CECDF34C8E73D5642F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\builder\\cubio_builder.ts",
+      "size_bytes": 4780,
+      "sha256": "12852B6A23C91E248227DAAB18D5888174DCC0FCDDD7A05A80AF9FC8EF91EF6C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\cli\\main.ts",
+      "size_bytes": 96,
+      "sha256": "3E930716BC22519A44A09321D9186051DE871BFB212E878DDDA37CFA307A48A2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\cli\\oneCLI.ts",
+      "size_bytes": 33325,
+      "sha256": "E10244B8BFA8203C18A3A5C908B83D615EDA7C9C61235C3DCDC0B1F6FA6D5048",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\cli\\spatialVisualizer.ts",
+      "size_bytes": 1944,
+      "sha256": "E40E0C81D642DA12F0A1AECE4165355B1332570D4956E1BA60D748B7D3B90EC8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\cli\\test_phase6_cli.ts",
+      "size_bytes": 1349,
+      "sha256": "DA18ABB2A684ABC0EB681EB3EF1734CCD634EBC1F1F08036CDB06DF336731F8C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\compiler\\lexer.ts",
+      "size_bytes": 7601,
+      "sha256": "14075101EFD8009584FC8B9E06A33531600C3F737F7D3DF9FF5F51CA132B9D46",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\compiler\\oneCompiler.ts",
+      "size_bytes": 7677,
+      "sha256": "D0967E9DEA882CDFB9C44BCB0E69C4EA74A0B14DD4518D90FD3859040CCB965F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\compiler\\parser.ts",
+      "size_bytes": 23040,
+      "sha256": "6F298911AA64CD70D2E1C9B42682BE712275FD86A15B5A887872AA08D9EAFB65",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\benchmarks\\benchmarkCertification.ts",
+      "size_bytes": 4169,
+      "sha256": "329777CD8F9F6283ECF31E77F91656DDE3045C792E0F0DF96C8D2D0AFAC5F7F3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\checkpoint\\checkpointManager.ts",
+      "size_bytes": 2552,
+      "sha256": "E6D414F3B2081B5371BAFF59C8AA9C94833A665570248C59F067D6E290903204",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\checkpoint\\snapshotEngine.ts",
+      "size_bytes": 2552,
+      "sha256": "BF3674E20D3C4DDE1C3E26075619DD5A70EA722C90C69EB2645B0E3823A2B19D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\checkpoint\\wal.ts",
+      "size_bytes": 1459,
+      "sha256": "ABAF2BFF466D93B13E81A372F12FE646F1CD8870C3A90F8FD1C521004721EF0E",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\crypto\\pqc_lattice_seal.ts",
+      "size_bytes": 777,
+      "sha256": "E8BBCE234EC9BA3BCFE68E104FF675D26385AE9A2B759C0B3D8A96C4C0084044",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\engine\\cubioVM.ts",
+      "size_bytes": 11350,
+      "sha256": "543884E56E9348ED284E81C40C72E489EB105C5F97F89F907491DE12EB50850F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\engine\\spatialHarmonic369.ts",
+      "size_bytes": 1203,
+      "sha256": "F553659ECCEBCABA97301A01903CD9ADDC5EDFDA0ABE16903EF1ED664A282909",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\engine\\threadPool.ts",
+      "size_bytes": 7728,
+      "sha256": "B91AEFF09FFD16A8FBEA44B0EFD1B24FACDBD6A9D47743A3A0932A95C8560258",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\inference\\productionInference.ts",
+      "size_bytes": 912,
+      "sha256": "2979D320FE3F033D1098D73619B5B3DAD57BF6BA926B9823766F0F2F1E9915CB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\memory\\harmonic_decay.ts",
+      "size_bytes": 1376,
+      "sha256": "86B33DB89764C1AF750798BAA5F462EC904694A3B560D089C253C399EC48688B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\memory\\rssGuard.ts",
+      "size_bytes": 1099,
+      "sha256": "99D842137164C601A7A434C1F6C3A84CF2093A68D527C6D2B0393132C5EC6AB5",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\release\\masterCertification.ts",
+      "size_bytes": 2482,
+      "sha256": "E739C07A29620573B6DC37E449C18A206473558EE367A4B87DBFE9ED53D2E352",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\release\\provenanceMerkle.ts",
+      "size_bytes": 3030,
+      "sha256": "445849A36B981841649FCDE73D80F3BBB78768E6EF3A4BDCED8173ECB57834E1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\spatial_quantum_mapper.ts",
+      "size_bytes": 32323,
+      "sha256": "4A116F40D4121C081802D5517949366AC0C0537CAEA08D63DC86CBE3EA5235C6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\stream\\spatialFunnelEngine.ts",
+      "size_bytes": 1469,
+      "sha256": "F270F1A100D307369932A8EA21A2D8F8E793BA90CCC0340A08BD594F957A5086",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\stream\\spatialRingBuffer.ts",
+      "size_bytes": 3179,
+      "sha256": "77EE59AFCE2376363631A8A5F02DE430042BC36873A9C1AC74C1614E57D342D3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\test_phase2_execution.ts",
+      "size_bytes": 1828,
+      "sha256": "3A6ED07437507B62324A07E01038C63EF3ADE08CAFD32FA673090383C298CC65",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\test_phase4_checkpointing.ts",
+      "size_bytes": 3114,
+      "sha256": "C4B913D35E247FC87DDE4414029E6DD9299B627B413FDDE06E30FD485FA9FD31",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\test_spatial_quantum_mapper.ts",
+      "size_bytes": 14893,
+      "sha256": "BD484874F8120BA2D7D8F8DCF6A7B718F0ED1FFD08E7C0C2A3A090C38F0D20B2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\datasetIngestion.ts",
+      "size_bytes": 1014,
+      "sha256": "DA9AB19CC19BEB9240FDF31F1FFEBD12BE183EAD54A53D4434400DE8EAB94883",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\faultTolerantWAL.ts",
+      "size_bytes": 1083,
+      "sha256": "6DA4E0A536A1763AFBE93839448EB3E60BD2C5231A1AA863B2E451E72F7EE6BB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\harmonicAlignment.ts",
+      "size_bytes": 986,
+      "sha256": "E012A97F027426093E2FE457AF41014781CA9859F1FF69C13ECA30B2160BA287",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\pretrainingScheduler.ts",
+      "size_bytes": 660,
+      "sha256": "B2D6CA36DF749CB54B5425D0CF463EC01537E0527DCD9AF88B06EF4989BEA3F0",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\test_step63_64.ts",
+      "size_bytes": 800,
+      "sha256": "FD18F29D4F338BF603730F795CC705A2FAF51AEB4B6FBBD769F673ECF4E8EEBF",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\test_step65_66.ts",
+      "size_bytes": 1196,
+      "sha256": "F886304B8A71D01FFE082ABAD87C6838C2D302B2B55718BDC6B69C55C603DC58",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\core\\training\\test_step67_68.ts",
+      "size_bytes": 1384,
+      "sha256": "EB08A60F9DACF60F3DD2D82CF7D0B0A91C9178563922BDF66BB274DAC39A471F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\index.ts",
+      "size_bytes": 6638,
+      "sha256": "AF2B5625F6ADC0C73FAEF383B0816DFDDE0D8A74F8409670949A2B3E0D046B8F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mail\\omail_mailbox_manager.ts",
+      "size_bytes": 3698,
+      "sha256": "21CF20B184C945CC8E3EA274D068E09742DAB35F0EBAE0F680203CCF7F8C0AE8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mail\\omail_superposition_router.ts",
+      "size_bytes": 3814,
+      "sha256": "CD3C1201E2848242D3A539AE5097D3311A61AD1DE44A0133CC3EA3309DF8F627",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mail\\pqc_mail_envelope.ts",
+      "size_bytes": 5054,
+      "sha256": "0369CD0D55B4F1E6CB67D6F8AD5C5AF093D357A365DCD660903CB4ACCE3078E4",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mesh\\euclideanRouter.ts",
+      "size_bytes": 1489,
+      "sha256": "B6BB28F8EE17A8DEED37E650B10F7FA10A739F406FEC24ABEAB29B9937F49D00",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mesh\\nodeRegistry.ts",
+      "size_bytes": 1264,
+      "sha256": "86BBDB4813F99CF4208FA30B2675FB080F59589C320AFC78298FE5C5CF73C114",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mesh\\spatialMeshCluster.ts",
+      "size_bytes": 1463,
+      "sha256": "AFD8E69A2B68DEB6F1FE5CFEB788017CAD2BDBBC382868E9B19A358877FCDA9A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\mesh\\test_phase5_mesh.ts",
+      "size_bytes": 2035,
+      "sha256": "0D30585F73C63AE16A2B9F4F6C4A98D99C8F53FE08BCE480475DFE42F359CA69",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\net\\cubio_dns_engine.ts",
+      "size_bytes": 5724,
+      "sha256": "36403245C813C6DF58C5D7B6CA19187FDF0F6C1075FEABD0DF70718159794097",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\net\\decentralized_storage_matrix.ts",
+      "size_bytes": 5538,
+      "sha256": "F9771F23BE6E27FD940CA5B0CB617581EB8DE5762425DDB3CBB9492B655A70B1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\net\\sovereign_web_gateway.ts",
+      "size_bytes": 4592,
+      "sha256": "4AF1F25A90F07C9E752AF69695AF318D3EE7C6133BA3D474D05717752A373727",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\ode\\ode_harmonic_profiler.ts",
+      "size_bytes": 6292,
+      "sha256": "5CB42E9F806E33A0310D7C076BBEA7998AB14DCCB2AB89366CB80D492339EEFA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\ode\\ode_superposition_analyzer.ts",
+      "size_bytes": 2892,
+      "sha256": "F323D63991F7230584E0DD0553A9DD43E4A7B005DAD3CEEF65C6A6DC786D471C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\ode\\ode_workspace_engine.ts",
+      "size_bytes": 11788,
+      "sha256": "A10C911DD75807358561E86336426C347D105496D5DF95F7D51400226008A174",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\UnifiedCompiler.ts",
+      "size_bytes": 4153,
+      "sha256": "E9583325E82B1E587DCC6B44F026C7FC96189C0A5B0EDFE8CFBFFDCDAC1518FD",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\address369_canonical.ts",
+      "size_bytes": 4356,
+      "sha256": "0DAF3CB21062F0CCC5340A09FF7A1BE4244128B3AA81181DC3F672042C358343",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\agi_one_core_orchestrator.ts",
+      "size_bytes": 5740,
+      "sha256": "89715AEEEA044580D0287875E6799635D4F304C403EC93DEBC83BE9830887328",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\agi_one_ipc_bridge.ts",
+      "size_bytes": 5616,
+      "sha256": "4E051131890207A35BF0F6862C7227B441DAFF737B8020409D4E845FCE359F6A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ast\\DeclarativeASTAdapter.ts",
+      "size_bytes": 2629,
+      "sha256": "9D4E136BFB483C719F32ECA7F7BA71A87257A9EE8F6D8909595967A613DDC696",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ast\\SourceLocation.ts",
+      "size_bytes": 391,
+      "sha256": "26AF2B15DD120152D8CE19A16EA98657ED157049F43A822EB404041CE98E169B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ast\\UnifiedAST.ts",
+      "size_bytes": 5174,
+      "sha256": "5B61BD6FBF511C067D8052F9F82B5196E0B34EA6CCAF7F31338EA4B17E83A228",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ast\\index.ts",
+      "size_bytes": 105,
+      "sha256": "FEFFEA65EE67247F00EED3087936E5EACA59F780695F9A2125BCF3DA2C5B600C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\cli\\OneDeveloperCLI.ts",
+      "size_bytes": 13252,
+      "sha256": "E2A67D62E5085EA0105AFC07624BF5D4C04BD7400B8E7622DF2F17EAA4E501B2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\cli\\index.ts",
+      "size_bytes": 35,
+      "sha256": "D25AA5881910D734ACA94D4F728073AB1128B79E827BB04BF9134E937B4B300A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\computational\\ComputationalParser.ts",
+      "size_bytes": 23740,
+      "sha256": "5499CD5167EE5D9F6BBE3AA493B26A8435958BAA811B9B4A34C0BDEA26877AF6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\computational\\index.ts",
+      "size_bytes": 39,
+      "sha256": "CF5365D85F6CFCDAEDBE94AB202D1BAF8C9553DDA3048B51C9B4E3B2F1D342DB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalArray.ts",
+      "size_bytes": 4968,
+      "sha256": "811BDA1125C4EB107BDCCD2B8B7761F2E64C10869C63E96BCDB5D5C34A0C5390",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalMap.ts",
+      "size_bytes": 4052,
+      "sha256": "3B289E7321F364E5092D2ADEF0C9E5B8780ED43FB38E8DF771AA87F4092921C2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalObject.ts",
+      "size_bytes": 5019,
+      "sha256": "04226D1CA2DC06F821187B807DEF906CD7E35A3ED9E2EA2FE8EB0F2012F8E213",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalRef.ts",
+      "size_bytes": 5174,
+      "sha256": "D96BC9BA592DF4F7FFE0121035892F078275B4076160805AC8C4C7B724EA3F12",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalSerializer.ts",
+      "size_bytes": 4903,
+      "sha256": "292029AEF32898B569806F7B50CEED487D708404CEFCB3CA79826C1C7CD0D77E",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalState.ts",
+      "size_bytes": 5771,
+      "sha256": "163239484510A8A739120FE997821D8261B53411694F8A39BC696D12865D1321",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\CanonicalStruct.ts",
+      "size_bytes": 4546,
+      "sha256": "11CC381DA85F7553905650B3917DCDDB6C43BE169FAF6AD4E25D254D76B03A78",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\data\\index.ts",
+      "size_bytes": 465,
+      "sha256": "AA84D551F803D9C79CD55F8AF53D166FB7F1A2578A0EC9ED050FE3F031B47FFA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\diagnostics\\DiagnosticFormatter.ts",
+      "size_bytes": 5892,
+      "sha256": "AC4184FA2541C64C608DE2618FD6420A625EDF4D78C098210FBD92D6DC3AC724",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\diagnostics\\index.ts",
+      "size_bytes": 39,
+      "sha256": "079CAA8A2369D7CDD4F94538AAFFAAA044564BB320D3008B4AF6A05B18FF870F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\formatter\\OneFormatter.ts",
+      "size_bytes": 6482,
+      "sha256": "FBC1BABD1A3970B60339E1E81F8266D18A4D26F15E0BB594AF33BB8FDD7FD863",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\formatter\\index.ts",
+      "size_bytes": 32,
+      "sha256": "BC2047E1FE9AA09B8ECE5B23C40E72F82C756305B7D1705B440903F75674FAB3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\hardware_telemetry_engine.ts",
+      "size_bytes": 17227,
+      "sha256": "B5A92916F461B81C042AA85DB18A997B70AC0B5E61573A6EAE36E03B38BBF9E6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\index.ts",
+      "size_bytes": 767,
+      "sha256": "CD1F9276404C03C1453BD8153A7A5CDD93A64E98D5927019128464346993DCED",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\FastNativeTrainingEngine.ts",
+      "size_bytes": 34105,
+      "sha256": "5752ECB59A308E828E6C9D149179CF365271FB9AE323780DF5A546CF8346C5B1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\FastTSTrainingEngine.ts",
+      "size_bytes": 35896,
+      "sha256": "2E26B3383F64D13EBEC73EB960607A72D0F74EB2A2D6542EABACAE4C36E05B95",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\Level2TrainingAccelerator.ts",
+      "size_bytes": 33145,
+      "sha256": "F6A6FC0CB2D0A076C128F663A8E10CA406DEAAAA821FED9BA395FBA8C5F70F32",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\NativeExecutionOptimizer.ts",
+      "size_bytes": 7313,
+      "sha256": "E676E3E74B3A981F84574B0C0BB86024C5A647943422FD7284857D87895D576E",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\NativeTrainingAccelerator.ts",
+      "size_bytes": 37375,
+      "sha256": "6B06B15762A9C5492013528A08E5F3D9434D544976DCA578A81614E579A15E70",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\compute\\NativeTrainingKernelSelector.ts",
+      "size_bytes": 3782,
+      "sha256": "2144B4A31E1EBEC59FDAB860F916169CF74FC750E5F7AA8456F3786F9AE50B94",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\context\\ContextEngine.ts",
+      "size_bytes": 10609,
+      "sha256": "B738F043E32F316DDAFDC5B8970B20E1EB7E720DBC6AD874CB1429B697C92F71",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\counterfactual\\CounterfactualEngine.ts",
+      "size_bytes": 7987,
+      "sha256": "7B43ACD4BFF24F4A569450E98CB359C746DA047FC34A9C95DFD97DD0775DB3F0",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\hybrid\\HybridConversationEngine.ts",
+      "size_bytes": 27352,
+      "sha256": "903865ABFB7AF90A2EC7262D14A028F70394FC8E3146F2FEE022F94677F4FC41",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\hybrid\\IntentParser.ts",
+      "size_bytes": 10198,
+      "sha256": "C8F61CA34A521553BC6CEC439ACD28D8CE69D585617EB3F6E1F672797BC86747",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\hybrid\\Native5MAdapter.ts",
+      "size_bytes": 5612,
+      "sha256": "63049A540267C7398FAF152A94A59464182265230F0A34D9A4719ACCE6DEF451",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\hybrid\\index.ts",
+      "size_bytes": 269,
+      "sha256": "B88FF593759A61660EA1CEA74D8E0D3C4A0F77386B99176B9ED1D4E94A274214",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\hybrid\\types.ts",
+      "size_bytes": 8776,
+      "sha256": "22F8EB2C4033A29BA2EE73D7F5364C142FD455975A4B16C41324726FEBC89593",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\index.ts",
+      "size_bytes": 942,
+      "sha256": "47C2911B160AE566870AA5D771A50702DAE6BAB14504C2915A450C85D5DCAC50",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\invariants\\InvariantEngine.ts",
+      "size_bytes": 14573,
+      "sha256": "DE605C865D9303A122F81586D6881D35D117C61B0EFADD70FB4ABC5405095620",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\memory\\ConceptGraph.ts",
+      "size_bytes": 7462,
+      "sha256": "494EA106852B91F5A311BF6E9DA30C7CC5C182BB15AA33285BB282FC039A1A87",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\memory\\MemoryContextAdapter.ts",
+      "size_bytes": 4141,
+      "sha256": "9D4B08DE25247E6D7D78F779E73F6AEAC25CBA7842BB4DB369737A089665B56D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\memory\\SelectiveMemory.ts",
+      "size_bytes": 8152,
+      "sha256": "D03488E4DBEB5B31791CFF71FD3C09972404D63444D45F46ECAD9C42C134CBB8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\memory\\index.ts",
+      "size_bytes": 281,
+      "sha256": "6234F9AA25C58D449AD8C7F85F2099242A13071EB04009782AA6BD0CCEF9E271",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\memory\\types.ts",
+      "size_bytes": 3571,
+      "sha256": "FD8F656426361C19F15795415C9A659536E7420C0CC123F69CEC2D41E11E649B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\planning\\PipelineOptimizer.ts",
+      "size_bytes": 4198,
+      "sha256": "40151B34D5F7FE95921148F19F655FC4530C72751265FDDFD8DFBE883CA27E61",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\planning\\PlanningEngine.ts",
+      "size_bytes": 12421,
+      "sha256": "E95985E1B65A3C1C97969E9B424219B7415FB779B5986BCAFD3CA28B34AA1751",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\BinaryReasoningBridge.ts",
+      "size_bytes": 1955,
+      "sha256": "B6BE242386F79B3B6DDDB9C20E33F776799CC0E3924D609B8725165E91D616C4",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\CandidateEvaluator.ts",
+      "size_bytes": 4391,
+      "sha256": "555CB0B24C541E605D9863F363119EEF54863FFEFC7424F17F38E17C3C1FC40A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\ReasoningEngine.ts",
+      "size_bytes": 7260,
+      "sha256": "3867DEEF2A0ABF41FE5C51E698CB7C638BAC4917637FC41737F23AC4D1AC6D5D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\RuleRegistry.ts",
+      "size_bytes": 2289,
+      "sha256": "7DEF90E18DF0CE181DEFC1253634386C26F4002ED88C819BDFCCA5838E75C399",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\StateExplorer.ts",
+      "size_bytes": 3678,
+      "sha256": "098F971719714D91A8094983CD342270B68C530C50547DED1DBFE90601BABA92",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\index.ts",
+      "size_bytes": 343,
+      "sha256": "84F762B6C1466FC181C24BFB8A0F83C17B120AB78D475F4EBCC03DCE167BF94B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\reasoning\\types.ts",
+      "size_bytes": 5507,
+      "sha256": "179B27E99B42DF862C33E214BF8279EA2AB61B3EBE10539BE1012FA7A059A381",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\research\\ResearchEngine.ts",
+      "size_bytes": 9965,
+      "sha256": "E00BD5BAA51A4C7FC544C3910F7B464AA4BAAD332A3C92921A7723BBC50AB5D0",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\runtime\\CUBiOCoreBridge.ts",
+      "size_bytes": 9011,
+      "sha256": "C126ECCD883C121B68F64F548E4206B45FCA100CF16893D9D017F7E332A0839D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\runtime\\NativeToolLibrary.ts",
+      "size_bytes": 6092,
+      "sha256": "FF389B4F13D31D093ED2873D7F982E60244E4BA5986FD9FC9623B3104A97E9FF",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\runtime\\UnifiedCUBiORuntime.ts",
+      "size_bytes": 7332,
+      "sha256": "5F03E2900C8C0378F1B3044476509B0A5E1B3BB5D6D99DBF57B10D84C9DA5902",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\runtime\\UniversalToolSDK.ts",
+      "size_bytes": 4170,
+      "sha256": "3CD2343D12FA8FF61788CD727EAD6E1D446946F56A210D69E30FE1AF4DC30278",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\scheduler\\ResourceScheduler.ts",
+      "size_bytes": 7025,
+      "sha256": "4FA2873BE487FE73F45ABAE02AEB09EAB08ED36DFBAFE5BEE5F8A23813EB8910",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\search\\FastQueryEngine.ts",
+      "size_bytes": 11802,
+      "sha256": "4CC8B079D07BF3C21D0A5F6C73C33B9AF68B741C0B9831939083E56374FED721",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\intelligence\\search\\UniversalReferenceResolver.ts",
+      "size_bytes": 7947,
+      "sha256": "A884DAF769295CE0B1231AFC00EEBEAE1F60D35E2F084E6E1499ADA1A44FF947",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ir\\IRLowering.ts",
+      "size_bytes": 12534,
+      "sha256": "CD5D3EF5D0C0499D8E1C60B4609B1E1AACE07098F5433B7B84A4529D67380022",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ir\\IROptimizer.ts",
+      "size_bytes": 7231,
+      "sha256": "93660418F7B2847FBB0CF31896E754239CB0EBDA343E4AF4A8AD0BC1B9CB55CE",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ir\\IRPrinter.ts",
+      "size_bytes": 1856,
+      "sha256": "3B7AEBC98FF5013EC5CB36ABCDB77C7C80CF09D71BFCBE852C0E4832952E6C75",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ir\\UnifiedIR.ts",
+      "size_bytes": 1610,
+      "sha256": "983D4C294C8AC87E5D6C5D3D9BB0542EA923C0210A2B8E5E8ECBCB7AD1411B91",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\ir\\index.ts",
+      "size_bytes": 88,
+      "sha256": "877A1986D7E04336143AAD23056DFFCCD71FA1401F3FC3C35BE8BDE6D7E6F875",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\JITBytecodeEmitter.ts",
+      "size_bytes": 30790,
+      "sha256": "724221042A0D5C2FA1C9548FB6435E6BE54F11072E984C2C166D1B59F9B0A99C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\JITCompiler.ts",
+      "size_bytes": 4731,
+      "sha256": "8CD16A06D38EF417A3E862EB5141DBC629FC0C13B4007A32654627A7A7206C92",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\JITRuntimeContext.ts",
+      "size_bytes": 4007,
+      "sha256": "A9BE9EED7833DD097061EF807A3037E94B42D2F5B6618E104EA128112D3CCC8C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\JITSlotAllocator.ts",
+      "size_bytes": 4224,
+      "sha256": "06AD76ACA5DD70E34A90430CF8126A018591CF4C8ED35A4F0F1D8C5AC77ED808",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\UnifiedExecutionEngine.ts",
+      "size_bytes": 4096,
+      "sha256": "C2F9CE6738648E49AF8A746B3AAA7C38DC7D8C160915B5274FFDE9A5CCAF3B0B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\jit\\index.ts",
+      "size_bytes": 312,
+      "sha256": "E9E90A9DDF31A983B0E8FD61A8DB453B98CEB96BD039320BEB4A9ECBE16C818A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\lsp\\OneLanguageServer.ts",
+      "size_bytes": 8986,
+      "sha256": "5E7DC527005B3757582CEFD9CDE89D42C7C3B694CC8B52EEF4091C0B73B16079",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\lsp\\index.ts",
+      "size_bytes": 37,
+      "sha256": "A772A4EFE372BD9C7FF41C8BBFC46CBC82084BD895FC7572B0EB43388D73ECFA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\MemoryCache.ts",
+      "size_bytes": 5698,
+      "sha256": "1C3F4EF6A183B9DC6D5C63EC63C473E3B8E83A571D56ACF512DC3D7543302529",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\MemoryPageManager.ts",
+      "size_bytes": 4308,
+      "sha256": "005E36037214483598DA881415DA34111FA103C1D93F097B3161AB7627D0A0DD",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\NativeMemoryAPI.ts",
+      "size_bytes": 10026,
+      "sha256": "57E609BA8B50CF1A98E1427526A4EBA64D03A9C5313EE2E2FB7907A55D6802B2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\NativeVDB.ts",
+      "size_bytes": 8134,
+      "sha256": "FF549CF665D0A6CF4C6B76662966743C13E3CBD6750341896D6928869BFA0C3B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\OCCManager.ts",
+      "size_bytes": 5576,
+      "sha256": "C84EC9FC864C91EC006F22DF9F0773B9F040B6CAC417C049557C5C8DE9999DEB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\369SpatialPointerEngine.ts",
+      "size_bytes": 6550,
+      "sha256": "43E3AA9F38F02A9B3D4BC24529C209319802F9CE91FF5599A8B1FF02004C5159",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\BoundedWorkingSetManager.ts",
+      "size_bytes": 4234,
+      "sha256": "3F1C70C00EF2EAF7CF6BBDD2960A5901F8BD7126CAA6814380363A4B43F67BC9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ConstantMemoryBucketEngine.ts",
+      "size_bytes": 6213,
+      "sha256": "8E4E523DCA82ADFDC00631EA1368DBBE9DC4B5F2F64DCCDEDFF6560A02BC8813",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\DeterministicVirtualAddressGenerator.ts",
+      "size_bytes": 2173,
+      "sha256": "A44693154169B64AE7228BAD0D7CC07E44AB0E260E813B283AC60769D1BD5514",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ExtremeMemoryGovernor.ts",
+      "size_bytes": 3418,
+      "sha256": "5538A0154D94FF84479317C5EA9C303A52A62AAB2CE44B7D97C3430FEBB3712D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ExtremeScaleBenchmarkEngine.ts",
+      "size_bytes": 6675,
+      "sha256": "936D88566082C8435B0C224D44E6BB710280288474EEC3430DAE33C74A2AE88F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ExtremeSpatialLookupEngine.ts",
+      "size_bytes": 5937,
+      "sha256": "B66C9671030C3E09A7300BF2A4F6553CBEB89D37DFEFB31155EAFF75C29F8E06",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\GenerativeStateEncoder.ts",
+      "size_bytes": 6398,
+      "sha256": "FB00610A252D465B7A39ABD46EAFA33EF1241B012A821DDACE3E97265A32FDFB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\InformationRecoverabilityTester.ts",
+      "size_bytes": 4432,
+      "sha256": "4AEA2BB22A49F8ABD59EA6328CDFEDB0F140F5E03E065AFFDCA8C63853CC8A06",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\InvariantBucketEngine.ts",
+      "size_bytes": 4745,
+      "sha256": "DB539E12566ED9BF1FB405E69B48D36E198584195A2C1BEE1EE95EC53782D91A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\LosslessReconstructionEngine.ts",
+      "size_bytes": 2810,
+      "sha256": "1163203A630D56D2A98173A48AB0EDD2441D17B2257544DE263045630E94051D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\OnDemandMaterializer.ts",
+      "size_bytes": 6366,
+      "sha256": "339576795015E45DF71DC55C5F7A0093EBC2387F2F75E367FFD7644AA23D5FEE",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\RealityPathResolver.ts",
+      "size_bytes": 4503,
+      "sha256": "D567709558D0A9DF8747A8DA25D675250B86FA2F865B9B7996D3684708C688C9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ReferenceDeduplicationEngine.ts",
+      "size_bytes": 5226,
+      "sha256": "826986508D9F9A7AAB092338F753D58F892EB86B1CFCA5A9858238681A5E0D4F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\ScaleDriftMonitor.ts",
+      "size_bytes": 2930,
+      "sha256": "B839DF295836CAAB215B48BADF6A7373C54BE38732877B98765AF216DBCC7D80",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\SparseRealityIndex.ts",
+      "size_bytes": 2659,
+      "sha256": "D794F1523A88DDAB4642A2F9C3F912E9D68DDFF45544C800CC0137D67CA67AE3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\SpatialAccumulatorEngine.ts",
+      "size_bytes": 3125,
+      "sha256": "BBDD7780B9851787932772F8F326B48B1CC9A1787F2EC87BC2C732B13E165A4D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\UnifiedExtremeMemoryToolchain.ts",
+      "size_bytes": 12058,
+      "sha256": "4245928C316F38D04942C9B682873BF0D5EAE3D99FE1C57B424E60E3D80FD554",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualCapacityProfiler.ts",
+      "size_bytes": 3483,
+      "sha256": "4642226D5F771745B5345D7DB13B9A70776D7C22B900DFE41EB77C3C67CD51E8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualMemoryIntegrityEngine.ts",
+      "size_bytes": 3635,
+      "sha256": "8D94E74A9D03C9C7FF0E576D89A5AFFEAB0A4E7C7E982646C676FFF4AC7B0C16",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualMemoryPagingEngine.ts",
+      "size_bytes": 7613,
+      "sha256": "516E398FC68380E1535615E00AC6BDFD9EE136CBC10E5A8094B75608B5668D24",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualPhysicalCostAnalyzer.ts",
+      "size_bytes": 2981,
+      "sha256": "1AE7FB6735BBBAC331F074A06D80B4D5AB7C93CE778708FC0E701BD083B455F6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualScaleAddressEngine.ts",
+      "size_bytes": 8434,
+      "sha256": "C258405BFE9C42EA885F2100FC905A44A965CDCE946330AC137C140FB92613F8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\VirtualSpaceQueryEngine.ts",
+      "size_bytes": 4400,
+      "sha256": "CF616F8B693BC2D9854E99D9A2686DF4DA8462349E511B1457B21D9344429ED8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\extreme\\index.ts",
+      "size_bytes": 1303,
+      "sha256": "744065D9620E87F3413A069DB74C0E2B87DDB9E729F83B7953605A9A4713E0C4",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\memory\\index.ts",
+      "size_bytes": 326,
+      "sha256": "F4B7D6C1F28A0472B5AC4939A54A52C9E695F2DF1DE4893CC541B6AF1AA12332",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\native_model_registry.ts",
+      "size_bytes": 4251,
+      "sha256": "C11F451B13D17515D7B925783C77C7149AA28B55ECBE19DF926171B4A690F893",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\native_spatial_renderer.ts",
+      "size_bytes": 5453,
+      "sha256": "1B9F427315C8474384D8604136610688AD6CF24FC070579DC742873CA22BB5CB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\oneCompiler.ts",
+      "size_bytes": 9520,
+      "sha256": "B34B52F3853E80BFC8491A6D9421F64643A6DE277C778C2059C2A7BE9AD99819",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\oneLexer.ts",
+      "size_bytes": 12616,
+      "sha256": "A82BA2A032E9971ACF66586F7C0608F82B506A51D0F37F98371A4FB77373C5A0",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\oneParser.ts",
+      "size_bytes": 14587,
+      "sha256": "6176A106C3807CDBC9D579B8027BE5404C59706D2D3EF045785F5F6850AAD201",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\power_grid_engine.ts",
+      "size_bytes": 19075,
+      "sha256": "3A2183A3A3AEE7E7D8CCA187F0DCBFDE0ED445A264E88042F688F09776079C00",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\qed_quantum_bridge_engine.ts",
+      "size_bytes": 9363,
+      "sha256": "289D9511B5C76CA2B5C5164F0FC27BEDE9CEA04C9754088A5FCAB3222E64BF6D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\quantum_field_sync.ts",
+      "size_bytes": 3394,
+      "sha256": "2713EC6DCA64AF2F7A516478F417156D93D26E0956AFAF2D5F67207C2C6ECEA7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\quantum_metrics_engine.ts",
+      "size_bytes": 18434,
+      "sha256": "5E5D8C769ACEC93A3FAAD0881FBEC17777ECCB983F89EAB28E75BC38FCB28126",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\quantum_operator_bridge.ts",
+      "size_bytes": 19667,
+      "sha256": "EF8BC0D1031124C97CAF5A88E3FA89ED871F588E9C9592CF03AE507C3D447F52",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\CanonicalReality.ts",
+      "size_bytes": 15013,
+      "sha256": "A8DC4DD4480B67099EF453A80A5B190DB0F558764BDC8FD8F27DE1417E37D57F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\CanonicalTime.ts",
+      "size_bytes": 1570,
+      "sha256": "D95A085272D6709FBBB544D6B67612250A3B686361162C88E75A6329AE657115",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\CausalPath.ts",
+      "size_bytes": 2597,
+      "sha256": "3FB2B45A199F2CF9643FEC8BC82C06E8644041D917AAB367AFACC80EE5E2BA76",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\RealityBranch.ts",
+      "size_bytes": 2276,
+      "sha256": "22355C6DF489728BD813DFD2BA5AFD39735BC9820E474A6CE40AB0528706AC5D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\StateNode.ts",
+      "size_bytes": 2661,
+      "sha256": "7214E3F2935CC8A9107773479E7A04547C58B85EA0D0FE368A398E8DC5D453C8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\Transition.ts",
+      "size_bytes": 2563,
+      "sha256": "D31DF3E4C2C9656AE40E0D6AFB053EA2C339F7B5E9B259DB926C7183AF79281A",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\reality\\index.ts",
+      "size_bytes": 391,
+      "sha256": "ACA50468AF12BFDB6259DEE5ED156099A048062395AE4CC3FF68F6DBF00A2905",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\router\\GrammarRouter.ts",
+      "size_bytes": 3995,
+      "sha256": "F724F44C76BDAAEF4763ED775097339188F9782D25A26324DF415441E2902286",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\router\\index.ts",
+      "size_bytes": 33,
+      "sha256": "2B7AECF785CC183AFB4A91210A2FA2A318D30D6084FEE6D2C7BC1E8E0E723192",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeErrors.ts",
+      "size_bytes": 4458,
+      "sha256": "D48D53B6FF58F3DD3EEF348F3721481033DF6C942F45B71DBBAB15284609D82F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeExecutionModel.ts",
+      "size_bytes": 4893,
+      "sha256": "679E6D379E3895652F926F008EC847BA6D4326A76FBA6CE406ABABFE26608C18",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeModules.ts",
+      "size_bytes": 15984,
+      "sha256": "0F156F40D5AB17B60C2F4661E3BF226270FE6463AEE874F7DE533218F6D173DC",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeRuntime.ts",
+      "size_bytes": 30748,
+      "sha256": "BEE43FDCB2F51DBCC0D5A6F581E24D268642E7E853E7BA440A8C5A00C2E3D925",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeRuntimeState.ts",
+      "size_bytes": 9319,
+      "sha256": "EA2427CAF467429E4628259A5D63C356AE608EF440CCD8B9F0EE12894B91B85C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\NativeValues.ts",
+      "size_bytes": 12306,
+      "sha256": "187AB4A698223EEDB96700E3ECC6C7B43748A0BC1B7E103F98DC3D9AEE4CE7E3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\runtime\\index.ts",
+      "size_bytes": 359,
+      "sha256": "AEFE67A8266CB43B0539AFFE5A3C2742A0E32F92915D0FE8946E7F5A6423FB6F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\semantics\\SemanticAnalyzer.ts",
+      "size_bytes": 11928,
+      "sha256": "539C42BD481FB12BAFDE7596BBBA56A9632FEC7B962481397308EDE38C4A48DE",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\semantics\\SymbolTable.ts",
+      "size_bytes": 1523,
+      "sha256": "E53117D8CF28B911D6E62A1565DFC2FD123AE9EFA4CE0B5BAEBBC0F0FBB7C9FF",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\semantics\\index.ts",
+      "size_bytes": 67,
+      "sha256": "DAB7FAA29B83815086ADBD18729FC76D764E9A5E009144690A42BB134A90D2B2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\sovereign_wireless_mesh_engine.ts",
+      "size_bytes": 14769,
+      "sha256": "23906468CE2CD5666AB43AAF708FC308B5BC619FA01FAC370A41BD9B311DD6F9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial\\OneAddress369.ts",
+      "size_bytes": 14301,
+      "sha256": "D6CF3794B5FE5CC02BB49406804E352E6DC6DD316E31C74300C074F4C6125798",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial\\SpatialBridge.ts",
+      "size_bytes": 11510,
+      "sha256": "29C9ED7AF8C9691F198760051E2827A8BD9B26F3C09C66990FC6F8430C1632CA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial\\index.ts",
+      "size_bytes": 66,
+      "sha256": "E2C1D2F40B9833C33062145A724FCC85D96857E95C6EA7C3CDA525A1E6166890",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial_charge_sensor.ts",
+      "size_bytes": 3837,
+      "sha256": "92B2B97BBA04C7788C1D32B8125471937E5D05E91DE3125587A0E67F4E904486",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial_engine_binary_emitter.ts",
+      "size_bytes": 12679,
+      "sha256": "6DD8687457250ECAEB9D8BF81F330BAD5D42EE0F1A54817BA29639649107C861",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial_engine_compiler.ts",
+      "size_bytes": 6751,
+      "sha256": "61686F67067070B468DDA9621CFB511564FC5A1B21084753F3393B6065EBBA47",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial_material_grid_engine.ts",
+      "size_bytes": 9246,
+      "sha256": "39DC7E072C8B443A5D37BF25A986718571E286EC24071B498C65E4C0F9244AC6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\spatial_quantum_mapper.ts",
+      "size_bytes": 10652,
+      "sha256": "50FDEA2F549E74D6A7395ABDAC8C27B463A4782B1325AF1E5E74831525E945AE",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\stdlib\\OneStdLib.ts",
+      "size_bytes": 12131,
+      "sha256": "0892EE4EC08F912DD58F647722252C8E997A745A8E1DBF36FE043751A36CB075",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\stdlib\\index.ts",
+      "size_bytes": 29,
+      "sha256": "35896168170657CD9D455F94E980A7DB4DB1B471D584BBC0D451525558AC31E5",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\GradCheck.ts",
+      "size_bytes": 8368,
+      "sha256": "FA196945A73DFC9AA6C00A2964F426E469EA597073FBB55EA017615695F9D4FB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\Tensor.ts",
+      "size_bytes": 28025,
+      "sha256": "83BC15785249F1DBC05834DD92B1D08C867E2764D2DFCF6F96B5D9F28F7F3225",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\TensorArena.ts",
+      "size_bytes": 9174,
+      "sha256": "50AD86F99CFF554A728FDA6E2C1819B237206C2B6E7DDF8E67B3656DED9D23D9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\autograd\\AutogradOps.ts",
+      "size_bytes": 13459,
+      "sha256": "A4A41A42F2E302D9ACE5768B0B04D80ED7775A1946AB09F1EA11FF27EA52BBDC",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\autograd\\AutogradTape.ts",
+      "size_bytes": 6447,
+      "sha256": "C35BE39733BFCD99403CDDBECEB1209EF8DFA9459CD7844DECB8BB614B887207",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\autograd\\TapeEntry.ts",
+      "size_bytes": 1221,
+      "sha256": "4809D759D741C324B77FF8F2C491C8E6910FF820C9757595FA2C29F576053C55",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\autograd\\index.ts",
+      "size_bytes": 251,
+      "sha256": "764741EC59C634CA53138114B8C737882C221B6DBDAC8A6BC934FA26F18E148D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\index.ts",
+      "size_bytes": 313,
+      "sha256": "90FD88961FDA8DD379C983840CAFB485394819FFD554E4FE679C8AE36D5DCD83",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\AddKernel.ts",
+      "size_bytes": 4107,
+      "sha256": "A574260C602905DD8582B2B80BCA360AD53905FA0361628C1EDAEC6C0BFE4B1B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\CrossEntropyKernel.ts",
+      "size_bytes": 5142,
+      "sha256": "0C1A90641F6D00F9B2BBD39809F234C53112004A29923C62B087F0448A110988",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\LayerNormKernel.ts",
+      "size_bytes": 6196,
+      "sha256": "BAE1A899B4FDF1488AE93D4DB3182FA05CF8FFA340941DFCD36FEC16052A03AB",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\MatmulKernel.ts",
+      "size_bytes": 5528,
+      "sha256": "C1CE3BA95097C51192DFDB4B3D2B7D8E058A5EB16EAFA2A39264181FF614AF57",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\MulKernel.ts",
+      "size_bytes": 2443,
+      "sha256": "14E88D5FBDD749C597A850605285F69802458DF60C27ED395685856D149D0FB9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\ReduceKernel.ts",
+      "size_bytes": 4804,
+      "sha256": "DF1EBEE47D6DBD6EDF7C31239AE3CF1E7BDAFC3BAD03CBE7B0B79BE8A0800308",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\ReluKernel.ts",
+      "size_bytes": 1886,
+      "sha256": "952A9BD1E091599C2E8B09AFE5DE17B201E00F50E875BFEA0061768056B1C350",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\SoftmaxKernel.ts",
+      "size_bytes": 4202,
+      "sha256": "F845F23D017871751F17D8213D012292CE327C389648D6ABC082371B8351879C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\TransposeKernel.ts",
+      "size_bytes": 2368,
+      "sha256": "64FB68A892325664F3477B14B04A29DA23708B4FBE8EC87FC02DB5A05911FFBF",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tensor\\kernels\\index.ts",
+      "size_bytes": 645,
+      "sha256": "50B44F2A650DEE344DCCCF665CD3D1C749D7E851BA098F441E394432F90696B2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\test_one_language.ts",
+      "size_bytes": 1972,
+      "sha256": "444850B2592286CBDF5E8299DCDFF78C854B170FC9C502F14FB51D875E6E42F1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\INativeTool.ts",
+      "size_bytes": 1238,
+      "sha256": "E2195E15298BD48892B072D014CD6496EA6CC5CDBC6DB027F8C6848BBC95ED7B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\NativeToolRegistry.ts",
+      "size_bytes": 1736,
+      "sha256": "998F0289B45C2515F37CDF8FF6D7C8B350C23B0371804EF179FBCE67954DCE56",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\ToolAdapters.ts",
+      "size_bytes": 15290,
+      "sha256": "491E7AA4B2277EFDD0C130BA81902A8DCCB5777BF16FBE4510FA971AC658C80F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\ToolComposer.ts",
+      "size_bytes": 3619,
+      "sha256": "96606A412444987B16469263E1BC6F9D06969EFAB70084C96EAEC4FE283FA06B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\ToolFastCache.ts",
+      "size_bytes": 3271,
+      "sha256": "DE06E92A7503603A3AD1C3385D583FD41CC07999E85984875F9B461F5131F36F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\tools\\index.ts",
+      "size_bytes": 356,
+      "sha256": "FC4593402C7E3479BF9240AB993849284A0B53A40ACA47EAC592FD4277AA0207",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\AdamW.ts",
+      "size_bytes": 5438,
+      "sha256": "1AF4343143BC99EF4053BA9C7C787E5408685E0BECCD27A8A8667C73023A3D04",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\CUBiO5MModel.ts",
+      "size_bytes": 24727,
+      "sha256": "D0CF696C93B2D19C2EC13E991CC7AED487EDCB1C858B52A5902D08423722E2A3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\CrossEntropyLoss.ts",
+      "size_bytes": 1493,
+      "sha256": "5DCEE23E7CFA2FD6CFB9F443EE91A1297F239E7B8AE28BB6A895BAAB3F5B347F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\FusedAdamWClipping.ts",
+      "size_bytes": 5652,
+      "sha256": "3E33DAF55007CED205EF90D5EBEE49C8AD9D64D0426ADEEE4814E80D58E52312",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\GradientClipping.ts",
+      "size_bytes": 2678,
+      "sha256": "BBDC905ABD4D798BBCF42997F2F3059152C37B65E17859213CC92A2E6C8F0663",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\LRScheduler.ts",
+      "size_bytes": 3768,
+      "sha256": "76A2512AC6CDD94C1A142DDD56313F5FBB8902DF9E73213F00A489C70994F3C1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\OneTrainingEngine.ts",
+      "size_bytes": 4409,
+      "sha256": "FE2067AE7847CA8D4C976CF1E18B29919996C8DE6BB70BEAF1ED1850B4037493",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\OptimizerState.ts",
+      "size_bytes": 2020,
+      "sha256": "86D44BFA5AFE4E17B64A9028FDD8372CD004BC2AF1D2F7C894B01740DAEC52F9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\training\\index.ts",
+      "size_bytes": 433,
+      "sha256": "E6D5A3DDF6EC34A6F411CC6A86988DD15EE479555AF383B7139D601EF946086B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\types\\TypeChecker.ts",
+      "size_bytes": 18115,
+      "sha256": "FB75B01C6B911152A45DCABC25363D68EBD1C016FE4DC6DD1282A7D2152353A1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\types\\TypeSystem.ts",
+      "size_bytes": 4546,
+      "sha256": "B1508C07DD35BD092F75B0975351E8241E39D68C282D531C53945D0958DEDBE7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\types\\TypedNumeric.ts",
+      "size_bytes": 13141,
+      "sha256": "5BD8A643622D3988B4D0EEF92BC8FB54C174269309FE5CDBEAA750B90DCF36BA",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\types\\index.ts",
+      "size_bytes": 93,
+      "sha256": "9C3DB8234A7809FCB7630C8DF413B9BC2C1FF481865C4B309EBD03BCBDB32715",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\vm\\UnifiedVM.ts",
+      "size_bytes": 38165,
+      "sha256": "BE0754D591483C5073BCA74C7F5A47B26C20B2ADDCA546D527C89D6C5BCAA0A9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\vm\\index.ts",
+      "size_bytes": 29,
+      "sha256": "5B9FBC03DBE26C6A4CD7F21D3D30F972F8A87556C599E22F24D46C5C39D8DECF",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\wasm\\WasmSimdMatmul.ts",
+      "size_bytes": 10808,
+      "sha256": "6BE114332DB3EA075DC5567834FF60873F0BA915002A6186552719791F966D0D",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\ParallelTensorEngine.ts",
+      "size_bytes": 6294,
+      "sha256": "C3E24FC821486DBE7FFB7AE2A54C6A900108C695CF2558581DC0D343153502FD",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\ParallelTrainingEngine.ts",
+      "size_bytes": 7614,
+      "sha256": "8B57EB8A78E72FE9F2207CB880504E191E89DB0CAE3D4880073A4401B2623E77",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\SharedMemoryArena.ts",
+      "size_bytes": 13266,
+      "sha256": "FBEE4FFF7E78C31A1BAFEEF97AFDA66F3CAB2A5698A275E1AC7DD485DE9C024E",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\WorkerPool.ts",
+      "size_bytes": 10413,
+      "sha256": "08EF7DFFE2587E424B149F8DC70EA8B64BAC9CC80419179A9364B65ACC5E4FF5",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\WorkerProtocol.ts",
+      "size_bytes": 2812,
+      "sha256": "7849702958CB61CD2DF0D1772FA743F4597A3B91823667752A20331623EE8976",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\WorkerThreadLogic.ts",
+      "size_bytes": 16789,
+      "sha256": "F1AD33D2935EB83DC95D8552091D22A79E8E60BCF6538527FC917CF99511D3C6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one\\workers\\index.ts",
+      "size_bytes": 456,
+      "sha256": "54452A8A241E0CAD564613DFEE8A4073061CD67CC698C02F69434039FEF8CCDC",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one_net\\one_net_mesh.ts",
+      "size_bytes": 16450,
+      "sha256": "DF6056BAA46AC01F9D3737DEB5305E59A1C25540B8DD4EEC0C65EC4E9A14B8F3",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one_render\\one_render_output.ts",
+      "size_bytes": 13703,
+      "sha256": "86942B15854FB1818C971E97195485B078C4453BC47C766E486D85D4D147BC66",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\one_render\\one_render_pipeline.ts",
+      "size_bytes": 23887,
+      "sha256": "C0A836C91DBAF445BB6F915C4E9A268C77BC9CB51FF9753F4256BB434E9110B6",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\agi_one_inspector.ts",
+      "size_bytes": 6803,
+      "sha256": "EFE438335A20A76C4BE741B2A0D25E9EB847A04DBA54189894956FEA31AC53C9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\cell_inspector.ts",
+      "size_bytes": 8320,
+      "sha256": "0ABD29CED4F9A8CB756AA4F0A029EBA218CBC2A30FDCCF7B2B3D26A40A1F05C7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\live_server.ts",
+      "size_bytes": 15037,
+      "sha256": "3BAEDC5EF150842BDFC43C436270AC1F9ABBEC03F00809003B397E110FB54B8F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\native_3d_memory_studio.ts",
+      "size_bytes": 10621,
+      "sha256": "B6804AA42FF918024E3816CA2A1C30E9149FC8EFF91336A45412E77C3D0BA333",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\native_state_bridge.ts",
+      "size_bytes": 6506,
+      "sha256": "6B10872A1B1147E0A7C31C3587DAA1CD1DAA3A2898C1C73E46EF0117204E2AD2",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\spatial_particle_renderer.ts",
+      "size_bytes": 14962,
+      "sha256": "0D5EFA1772FF8481B2811C4A8758B702A549284F2B84582A295C827B3D48F1D7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\spatial_voxel_renderer.ts",
+      "size_bytes": 23158,
+      "sha256": "98B49B5130D61B7697AF30ED70100CD79A63A070370983B5B81E74971B0B5C30",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\studio_navigation.ts",
+      "size_bytes": 4023,
+      "sha256": "BFF86C718FA905F1094717932D91F4EA54ECED377F76DD073354F9E8D05233B9",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\test_native_3d_memory_studio.ts",
+      "size_bytes": 24704,
+      "sha256": "A6784831E7EFB8AA89E7861E93B9CA70ABDB0B118569885EEAA5DC1417543CF5",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\studio\\test_p26_5_e2e_and_failures.ts",
+      "size_bytes": 18725,
+      "sha256": "81CE495191C571AF2506D76AAFA0E27A7DB7F59611596FAE01C9A1463EF7F843",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\test_advanced_features.ts",
+      "size_bytes": 4591,
+      "sha256": "5EDA4735BA4080566D76B92D326904A8175D7EC7708C3502E46D9058BAC1F900",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\test_master_release.ts",
+      "size_bytes": 491,
+      "sha256": "2F52792F08E24220BCE6404C572C0B421E367DDD4A8DBC17E13BD80DBF752B8C",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\test_phase3_streaming.ts",
+      "size_bytes": 1773,
+      "sha256": "8D833794739E1BE3BE99F52943E8A1301EFF3A039D1A925F54C5102AD7D46383",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\test_step1_nextgen.ts",
+      "size_bytes": 4263,
+      "sha256": "7F96F0FC0B527DCCE6C552EBD1770B81D3ED7DE679A4B60FCF2187C02252024B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\bitAgent.ts",
+      "size_bytes": 4692,
+      "sha256": "7ED8121BE3762049F10BD55BC2B5E1854C67E77FA374B819FE5DFF7B4ED2D4E1",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\cubioVM.ts",
+      "size_bytes": 16861,
+      "sha256": "0C06F29B79593E31176ABCF1773B5D9E5C72A5CE562BC9A2FFC47B71C0F5BB0F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\cubioVMPhase3.ts",
+      "size_bytes": 9522,
+      "sha256": "A5086EC9FE1316B7F00FA0A39DC2AF3F9410ADF30AC9EF6ACE1FF8FA5CE56771",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\entropyDispatcher.ts",
+      "size_bytes": 6103,
+      "sha256": "3430741DEB344415680A5FC674777EF46034BCD68CECAAD2BCCDA1AC565C9DE7",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\entropyEngine.ts",
+      "size_bytes": 7777,
+      "sha256": "38C67974DB06160FE9D0106C4FDD145C3F648B169418B05E6FBCCF28FCB600B8",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\gridMemory.ts",
+      "size_bytes": 11139,
+      "sha256": "303B46302BFBC8B91D6F2E56A547AEC8EFE5B7360271B194D15F2D4B4AC4F86F",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\latticeSnapshot.ts",
+      "size_bytes": 9255,
+      "sha256": "0AD45B338E2B1DA7069317B455304B3C3ADC455C15F6BB49D6636F557C7644BC",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "src\\vm\\spatialQuery.ts",
+      "size_bytes": 7585,
+      "sha256": "4376AEC74CD8539571C89555DF7457DC49ED1C3118E19B66DE9E0E01CAC2C31B",
+      "category": "source",
+      "protected": false
+    },
+    {
+      "path_relative": "tsconfig.json",
+      "size_bytes": 308,
+      "sha256": "0CD5854117615C97940B2554BE82D4D3B48F7CCFC6284E45CB03E06C54F541C8",
+      "category": "config",
+      "protected": true
+    }
+  ]
+}

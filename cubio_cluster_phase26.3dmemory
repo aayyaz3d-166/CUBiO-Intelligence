@@ -1,0 +1,24 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v26_DISTRIBUTED_CLUSTER",
+  "gate": "CNL-P26-001",
+  "version": "26.0.0-one-cluster",
+  "pqc_master_seal": "0xPQC_369_4a24d1411710203c0e8d83ec00be9216_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 92.8,
+  "total_fleet_nodes": 3,
+  "quorum_consensus_rate": "100.0% (Quorum Achieved)",
+  "active_generation": "GEN_4_DEAD_CODE_PRUNING",
+  "active_fitness_score": 1.4209,
+  "cumulative_fitness_gain": "+42.09%",
+  "ltm_forgetting_rate": "0.0000%",
+  "quarantined_rogue_packets": 1,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3.33,
+    6.25,
+    9.09
+  ],
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725900000000
+}

@@ -1,0 +1,79 @@
+# ONE LANGUAGE — GATE DEPENDENCY MATRIX (GATES 10–25)
+
+**Gate ID:** `GATE-26-ONE-LANGUAGE-V1-RELEASE`  
+**Date:** 2026-10-11  
+**Repository:** `F:\ONE language`  
+**Baseline:** `F:\ONE language\audit\gate10\`  
+**Mode:** RELEASE QUALIFICATION
+
+---
+
+## 1. Matrix
+
+| Gate | Report Path | Actual Implementation Status | Required for v1.0? | Verdict |
+|------|-------------|------------------------------|--------------------|---------|
+| GATE 10 | `audit/gate10/GATE10_BASELINE_REPORT.md` | Baseline frozen; all 178/178 assertions pass; binary + checkpoint hashes match | **YES (baseline)** | **PASS WITH LIMITATIONS** |
+| GATE 9 | `audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md` | Independent verification: 98/98 assertions pass; parse-only arithmetic gains confirmed | **YES (regression)** | **PASS WITH LIMITATIONS** |
+| GATE 12 | Not present | Heuristics declared in types.ts but not implemented in StateExplorer.nextCandidate() | No | **NOT STARTED / NOT RUN** |
+| GATE 13 | Not present | ReasoningTraceEvent generic + RULE_APPLIED events documented in evidence but not in a gate report | No | **NOT STARTED / NOT RUN** |
+| GATE 14 | Not present | Dialogue state contracts not implemented | No | **NOT STARTED / NOT RUN** |
+| GATE 15 | Not present | ConceptGraph schema improvements not finalized | No | **NOT STARTED / NOT RUN** |
+| GATE 16 | Not present | Native5MAdapter stub-wrapped; isAvailable()=false; not run | No | **NOT STARTED / NOT RUN** |
+| GATE 17 | Not present | Checkpoint hash verified read-only but not run as a gate | No | **NOT STARTED / NOT RUN** |
+| GATE 18 | `src/one_net/ui/` | Explorer UI created (server.ts, index.html, app.css, app.js); test suite blocked by spawn-path issue | No | **PARTIALLY COMPLETED / BLOCKED** |
+| GATE 19 | Not present | API contract map documented; integration not verified | No | **NOT STARTED / NOT RUN** |
+| GATE 20 | `tests/gate20_benchmark.ts` | Versioned benchmark written, compiles cleanly, not executed | No | **NOT STARTED / NOT RUN** |
+| GATE 21 | Not present | Profiling not captured; ESM module-resolution blocker | No | **NOT STARTED / NOT RUN** |
+| GATE 22 | Not present | Security analysis not performed; module-resolution blocker | No | **NOT STARTED / NOT RUN** |
+| GATE 23 | Not present | SDK code not started | No | **NOT STARTED / NOT RUN** |
+| GATE 24 | `src/one_net/ui/` | Release notes created; packaging partial | Yes (delivery) | **PARTIALLY COMPLETED / BLOCKED** |
+| GATE 25 | `GATE25_RESEARCH_PROPOSAL.md` | Research proposal drafted (320 lines); profiling blocked; not finalized | No | **NOT STARTED / NOT RUN** |
+
+---
+
+## 2. Legend
+
+| Verdict | Meaning |
+|---------|---------|
+| **PASS WITH LIMITATIONS** | Core scope works; non-blocking limitations documented and visible |
+| **PARTIALLY COMPLETED / BLOCKED** | Work in progress; a blocker prevents completion |
+| **NOT STARTED / NOT RUN** | No evidence exists; the gate has not been run |
+
+---
+
+## 3. Evidence Summary
+
+### Verified evidence (Gate 10)
+
+- `audit/gate10/GATE10_BASELINE_REPORT.md` — 178/178 assertions pass.
+- `audit/gate10/binary_protocol_manifest.json` — 3 binary protocol files, all hashes MATCH.
+- `audit/gate10/model_checkpoint_manifest.json` — checkpoint 19,594,556 bytes, SHA-256 MATCH.
+- `audit/gate10/test_baseline_report.json` — 178/178 assertions pass.
+
+### Verified evidence (Gate 9)
+
+- `audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md` — 98/98 assertions pass; parse-only arithmetic gains confirmed; no search algorithm changes.
+
+### No evidence (Gates 12–25)
+
+- No gate report or evidence exists in the repository for Gates 12–25.
+- `audit/master_gate10_gate26/` does not exist.
+
+---
+
+## 4. Notes
+
+- Gates 12–25 are explicitly excluded from the v1.0 release scope (see V1_RELEASE_SCOPE.md).
+- Only the evidence in this matrix is used for the v1.0 release decision.
+- Any required gate with unresolved blocking defects prevents a v1.0 PASS. Gates 12–25 are not run, so their status is **NOT RUN** — they are not required for the v1.0 release candidate.
+- The final verdict rule is: `BLOCKED — APPROVAL OR EVIDENCE REQUIRED` (see GATE26_RELEASE_QUALIFICATION_REPORT.md Section 12).
+
+---
+
+## 5. Source Manifest
+
+The source manifest for the repository is at:
+
+- `audit/gate10/source_manifest.json` (279 files, SHA-256 verified)
+
+No protected source files changed during this audit.

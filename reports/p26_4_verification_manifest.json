@@ -1,0 +1,22 @@
+{
+  "protocol_id": "CUBIO-P26.4-NATIVE-3D-MEMORY-STUDIO-001",
+  "timestamp_utc": "2026-09-08T16:27:01Z",
+  "gates_total": 20,
+  "gates_passed": 20,
+  "pass_rate_pct": 100.0,
+  "p26_3_frozen_hash": "4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6",
+  "p26_3_verified_hash": "4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6",
+  "studio_files": {
+    "native_state_bridge.ts": "5dd6e554212fab9bbdd4a3625e6b8470d27f7d1687c7cd3d9ffce6e152b98b44",
+    "spatial_voxel_renderer.ts": "b24de37642d2c1c31e1d7df35ae8190984f628ad7233fc3b6e40d071867b152d",
+    "cell_inspector.ts": "0abd29ced4f9a8cb756aa4f0a029eba218cbc2a30fdccf7b2b3d26a40a1f05c7",
+    "studio_navigation.ts": "bff86c718fa905f1094717932d91f4ea54eced377f76dd073354f9e8d05233b9",
+    "agi_one_inspector.ts": "efe438335a20a76c4be741b2a0d25e9eb847a04dba54189894956fea31ac53c9",
+    "native_3d_memory_studio.ts": "e33feb7c34e42b1260e19ceefb0fedf62b468d0e248788978eb07cafa56f7810"
+  },
+  "performance": {
+    "measured_render_latency_ms": 0.055,
+    "process_rss_mb": 315.87
+  },
+  "classification": "LEVEL_A_CERTIFIED"
+}

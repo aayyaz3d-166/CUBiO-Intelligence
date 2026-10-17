@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-10-11T04:46:36.054993+00:00",
+  "protected_files": [
+    {
+      "file": "src/binary/binaryCodebook.ts",
+      "expected_sha256": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "actual_sha256": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "match": true,
+      "size_bytes": 5516,
+      "status": "UNCHANGED"
+    },
+    {
+      "file": "src/binary/binaryDecoder.ts",
+      "expected_sha256": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "actual_sha256": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "match": true,
+      "size_bytes": 6640,
+      "status": "UNCHANGED"
+    },
+    {
+      "file": "src/binary/binaryEncoder.ts",
+      "expected_sha256": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "actual_sha256": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "match": true,
+      "size_bytes": 3614,
+      "status": "UNCHANGED"
+    },
+    {
+      "file": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+      "expected_sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "actual_sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "match": true,
+      "size_bytes": 19594556,
+      "status": "UNCHANGED"
+    }
+  ]
+}

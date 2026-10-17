@@ -1,0 +1,5 @@
+Metric,Baseline TS Engine,Fast TS Engine (Single),ThreadPool Parallel (4T),Speedup
+Step Latency (ms),10.09,6.13,4.97,1.65x
+Step Throughput (steps/s),99.08,163.15,201.11,2.03x
+Memory Mode,Dynamic Arrays,Float32Array Reusable,ThreadPool Isolated Slices,Zero Allocation
+Total RSS (MB),349.45,349.45,349.45,<= 512 MB

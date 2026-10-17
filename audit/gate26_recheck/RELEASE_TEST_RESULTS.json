@@ -1,0 +1,83 @@
+{
+  "audit_gate": "GATE-26-RELEASE-TESTS",
+  "timestamp": "2026-10-11T19:13:00+05:00",
+  "environment": {
+    "os": "Windows 11",
+    "node": "v24.14.1",
+    "module_system": "ES Modules (package.json type: module)",
+    "command_runner": "npx ts-node --transpile-only"
+  },
+  "summary": {
+    "total_suites_evaluated": 8,
+    "suites_passed": 0,
+    "suites_failed_at_runtime": 0,
+    "suites_blocked_at_resolution": 8,
+    "historical_baseline_assertions_passed": 178
+  },
+  "test_suites": [
+    {
+      "suite": "Phase 1: Architecture Bridge & Spatial Mapping",
+      "command": "npx ts-node --transpile-only tests/phase1_bridge_verification.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/address369_canonical'",
+      "historical_passed": 10
+    },
+    {
+      "suite": "Phase 2: Binary Language Protocol",
+      "command": "npx ts-node --transpile-only tests/binary/phase2_binary_language.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_UNSUPPORTED_DIR_IMPORT: Directory import '...src/binary' is not supported",
+      "historical_passed": 11
+    },
+    {
+      "suite": "Phase 3: Symbolic Reasoning Engine",
+      "command": "npx ts-node --transpile-only tests/reasoning/phase3_reasoning_engine.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/reasoning/types'",
+      "historical_passed": 13
+    },
+    {
+      "suite": "Phase 4: Concept Graph & Memory Layer",
+      "command": "npx ts-node --transpile-only tests/memory/phase4_memory_layer.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/memory/index'",
+      "historical_passed": 5
+    },
+    {
+      "suite": "Phase 5 Gate 4: Native 5M Adapter Integration",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate4_native5m_integration.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/hybrid/Native5MAdapter'",
+      "historical_passed": 15
+    },
+    {
+      "suite": "Phase 5 Gate 6: Conversational Quality Improvements",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate6_conversational_quality.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/hybrid/IntentParser'",
+      "historical_passed": 9
+    },
+    {
+      "suite": "Phase 5 Gate 8: Reasoning Efficiency & Relationships",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate8_reasoning_relationship_conversational.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/hybrid/HybridConversationEngine'",
+      "historical_passed": 38
+    },
+    {
+      "suite": "Phase 5 Gate 2: Hybrid Conversation Engine",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_hybrid_conversation.test.ts",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error": "ERR_MODULE_NOT_FOUND: Cannot find module '...src/one/intelligence/hybrid/IntentParser'",
+      "historical_passed": 39
+    }
+  ]
+}

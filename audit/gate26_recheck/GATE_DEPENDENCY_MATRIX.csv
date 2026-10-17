@@ -1,0 +1,17 @@
+Gate,Report_Path,Implementation_Status,Acceptance_Criteria,Latest_Test_Evidence,Known_Defects_Limitations,Required_For_V1,Status
+GATE 10,audit/gate10/GATE10_BASELINE_REPORT.md,Frozen baseline reference,Frozen artifacts preserved and hashes verified,Historical 178/178 assertions passed (baseline),ESM runner fails extensionless imports in Node v24,YES,PASS WITH LIMITATIONS
+GATE 11,None,Reasoning Engine v2 not implemented,Measurable improvement in search,None,Not started,NO (Targeted for v1.1),NOT RUN
+GATE 12,None,Goal-directed heuristic search not implemented,Reproducible benchmark comparison,None,Not started,NO (Targeted for v1.1),NOT RUN
+GATE 13,None,Explainable reasoning traces not implemented,Replayable derivation traces,None,Not started,NO (Targeted for v1.1),NOT RUN
+GATE 14,None,Multi-turn dialogue context not implemented,Safe session-scoped follow-ups,None,Not started,NO (Targeted for v1.1),NOT RUN
+GATE 15,None,Concept Graph v2 not implemented,Validated pairwise graph queries,None,Not started,NO (Targeted for v1.1),NOT RUN
+GATE 16,None,Neural-symbolic schema validation not implemented,Strict opt-in neural bounds,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 17,None,Native LM held-out evaluation not implemented,Held-out read-only evaluation,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 18,None,Explorer UI prototype unintegrated,Local developer demo with real backend,None,src/one_net/ui isolated and unverified,NO (Targeted for v1.2),NOT RUN
+GATE 19,None,Frontend-backend E2E integration not implemented,End-to-end tests with real backend,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 20,None,Versioned benchmark suite not implemented,Held-out test sets without leakage,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 21,None,Performance profiling and optimization not implemented,Measurable latency/memory gains,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 22,None,Formal threat model and hardening not implemented,Hardened payload and memory boundaries,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 23,None,Developer SDK not implemented,Stable typed client library,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 24,None,Public release packaging not implemented,Clean setup and license verification,None,Not started,NO (Targeted for v1.2),NOT RUN
+GATE 25,None,Continuous learning proposal not implemented,Data governance and contamination checks,None,Not started,NO (Research Track),NOT RUN

@@ -1,0 +1,64 @@
+{
+  "gate_id": "GATE-10-26-MASTER-INTEGRITY",
+  "generated_at": "2026-10-11T23:51:00+05:00",
+  "repository": "F:/ONE language",
+  "mode": "END-TO-END AUDIT — INTEGRITY VERIFICATION",
+  "integrity_rules": [
+    "Do not repair or overwrite mismatched files.",
+    "If current repository contains legitimate changes made by later gates, report them as changes rather than automatically classifying them as corruption.",
+    "Use the actual manifest paths and hashes."
+  ],
+  "reference_manifest": "audit/gate10/binary_protocol_manifest.json, audit/gate10/model_checkpoint_manifest.json, audit/gate10/source_manifest.json",
+  "integrity_checks": [
+    {
+      "artifact": "src/binary/binaryCodebook.ts",
+      "reference_hash": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "current_hash": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "match": "MATCH",
+      "file_exists": true,
+      "file_size_bytes": null,
+      "modification": "None"
+    },
+    {
+      "artifact": "src/binary/binaryDecoder.ts",
+      "reference_hash": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "current_hash": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "match": "MATCH",
+      "file_exists": true,
+      "file_size_bytes": null,
+      "modification": "None"
+    },
+    {
+      "artifact": "src/binary/binaryEncoder.ts",
+      "reference_hash": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "current_hash": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "match": "MATCH",
+      "file_exists": true,
+      "file_size_bytes": null,
+      "modification": "None"
+    },
+    {
+      "artifact": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+      "reference_hash": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "current_hash": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "match": "MATCH",
+      "file_exists": true,
+      "file_size_bytes": 19594556,
+      "modification": "None"
+    }
+  ],
+  "other_configured_files": {
+    "package.json": "VERIFIED",
+    "tsconfig.json": "VERIFIED",
+    "README.md": "VERIFIED",
+    "RESTRICTIONS.md": "VERIFIED"
+  },
+  "later_gate_changes": {
+    "description": "No legitimate changes made by later gates were detected in protected files during this audit.",
+    "detection_method": "Hash comparison against Gate 10 baseline manifest; all protected files MATCH exactly.",
+    "conclusion": "No corrupt or unapproved changes detected in protected artifacts."
+  },
+  "mismatches_found": 0,
+  "repairs_performed": 0,
+  "notes": "No protected files were modified, overwritten, or deleted during this audit. All protected hashes match the Gate 10 baseline manifest exactly. No automatic repair was performed."
+}

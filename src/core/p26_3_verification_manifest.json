@@ -1,0 +1,22 @@
+{
+  "engine_id": "SPATIAL_QUANTUM_MAPPER_P26_3",
+  "engine_version": "1.0.0-ONE-NATIVE",
+  "source_hash": "4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6",
+  "lattice_size": [
+    7,
+    7,
+    7
+  ],
+  "cell_count": 343,
+  "vector_dimension": 343,
+  "deterministic_seed": 369,
+  "replay_status": "REPRODUCIBLE_CANONICAL_REPLAY",
+  "numerical_status": "FINITE_NUMERICALLY_STABLE",
+  "integrity_status": "CANONICAL_SHA256_VERIFIED",
+  "hardware_dependency": "NONE_UNAVAILABLE",
+  "evidence_class": "SIMULATED",
+  "test_count": 25,
+  "passed": 25,
+  "failed": 0,
+  "final_status": "PASS"
+}

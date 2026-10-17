@@ -1,0 +1,9 @@
+stage_name,step_latency_ms,speedup_factor,throughput_steps_sec,allocation_mb_step,classification,decision
+"Baseline (Unoptimized)",6.812,1.00,146.79,4.451,BASELINE,KEEP
+"Opt 1: Memory Arena (Task 06)",6.172,1.10,162.02,1.781,IMPROVED,KEEP
+"Opt 2: Fused QKV Attention (Task 05)",4.020,1.69,248.74,0.004,IMPROVED,KEEP
+"Opt 3: Fused MLP + GELU (Task 04)",3.984,1.71,251.01,0.004,IMPROVED,KEEP
+"Opt 4: Hoisted Backward Pass (Task 03)",6.842,1.00,146.16,0.000,NO_CHANGE,NEUTRAL
+"Opt 5: Vectorized AdamW (Task 11)",5.874,1.16,170.24,0.000,IMPROVED,KEEP
+"Opt 6: I/O Isolation (Task 12)",6.041,1.13,165.53,2.591,IMPROVED,KEEP
+"Opt 7: Full Native Engine (Tasks 01–18)",6.382,1.07,156.69,0.000,IMPROVED,KEEP

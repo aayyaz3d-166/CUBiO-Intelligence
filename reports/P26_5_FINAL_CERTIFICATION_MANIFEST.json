@@ -1,0 +1,258 @@
+{
+  "protocol_id": "CUBIO-P26.5-FINAL-FORENSIC-PRODUCTION-CERT-001",
+  "verification_timestamp": "2026-09-08T17:18:05Z",
+  "P26_2_identity": "CUBIO-P26.2-AGI-ONE-ORCHESTRATOR-001",
+  "P26_3_source_hash": "4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6",
+  "P26_4_source_hash": "b6804aa42ff918024e3816ca2a1c30e9149fc8eff91336a45412e77c3d0ba333",
+  "model_identity": {
+    "modelId": "CUBIO-MODEL-STAGE1-V1",
+    "parameterCount": 148912,
+    "checkpointHash": "43498d9b2c9a58c688bf949cd4016ee76866974257ed64155e7716506a16628c",
+    "lineageRoot": "CUBIO-GENESIS",
+    "format": "float32"
+  },
+  "lattice_dimensions": [
+    7,
+    7,
+    7
+  ],
+  "cell_count": 343,
+  "Address369_range": [
+    26,
+    368
+  ],
+  "dependency_audit": {
+    "React": 0,
+    "Tailwind": 0,
+    "CSS": 0,
+    "HTML": 0,
+    "DOM": 0,
+    "Three.js": 0,
+    "WebGL": 0,
+    "Browser_APIs": 0,
+    "Canvas_APIs": 0,
+    "External_AI_models": 0,
+    "Qwen": 0
+  },
+  "security_status": {
+    "readOnlyStudio": true,
+    "actuationLockout": true,
+    "networkAirGapped": true,
+    "arbitraryCommandExecution": false
+  },
+  "hardware_status": {
+    "physicalSensor": "UNAVAILABLE",
+    "physicalSignal": "UNAVAILABLE"
+  },
+  "physical_frequency_claim": "NONE",
+  "telemetry_status": {
+    "pqcStatus": "UNVERIFIED",
+    "truthLockEnforced": true,
+    "unmeasuredTelemetryPlaceholder": "\u2014"
+  },
+  "performance_measurements": {
+    "measured_render_latency_ms": 0.057,
+    "latency_budget_ms": 20.0,
+    "latency_verdict": "PASS"
+  },
+  "memory_measurements": {
+    "process_rss_mb": 292.75,
+    "rss_ceiling_mb": 512.0,
+    "rss_verdict": "PASS"
+  },
+  "regression_status": {
+    "p26_3_drift_bytes": 0,
+    "int001_targets": 25,
+    "int001_drift_bytes": 0,
+    "int001_checks_passed": "19/19",
+    "verdict": "PASS"
+  },
+  "replay_status": "BIT_IDENTICAL_REPLAY",
+  "test_count": 56,
+  "passed": 56,
+  "failed": 0,
+  "blocked": 0,
+  "gates_total": 25,
+  "gates_passed": 25,
+  "pass_rate_pct": 100.0,
+  "gate_scorecard": [
+    {
+      "gate": "GATE-01",
+      "gate_number": 1,
+      "title": "P26.2 Integrity & AGI ONE Core State Contract",
+      "status": "PASS",
+      "detail": "30/30 acceptance gates verified in P26.2 AGI ONE Orchestrator"
+    },
+    {
+      "gate": "GATE-02",
+      "gate_number": 2,
+      "title": "P26.2 Native IPC Transport & Framing Contracts",
+      "status": "PASS",
+      "detail": "Framing, peer handshake, monotonic sequencing, and bounded queues verified"
+    },
+    {
+      "gate": "GATE-03",
+      "gate_number": 3,
+      "title": "Hardware Truth Gate & Physical Acquisition Isolation",
+      "status": "PASS",
+      "detail": "PHYSICAL_SIGNAL = UNAVAILABLE verified; zero space-charge/RF fabrication from host telemetry"
+    },
+    {
+      "gate": "GATE-04",
+      "gate_number": 4,
+      "title": "P26.3 Mathematical Engine Frozen Source Hash",
+      "status": "PASS",
+      "detail": "Hash: 4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6 (Expected: 4a116f40d4121c081802d5517949366ac0c0537caea08d63dc86cbe3ea5235c6, Drift: 0 bytes)"
+    },
+    {
+      "gate": "GATE-05",
+      "gate_number": 5,
+      "title": "343-Cell HCP Volumetric Lattice Invariant (7x7x7)",
+      "status": "PASS",
+      "detail": "Exact 7x7x7 = 343 discrete cells, center origin node 171 at (3,3,3) verified"
+    },
+    {
+      "gate": "GATE-06",
+      "gate_number": 6,
+      "title": "Address369 Spatial Register Mapping (26..368)",
+      "status": "PASS",
+      "detail": "Address369 = 26 + cellId [26..368], center cell 171 -> Address 197 verified"
+    },
+    {
+      "gate": "GATE-07",
+      "gate_number": 7,
+      "title": "Numerical Safety & Fail-Closed Bounds",
+      "status": "PASS",
+      "detail": "NaN, Infinity, negative dimension, probability bounds strictly fail closed"
+    },
+    {
+      "gate": "GATE-08",
+      "gate_number": 8,
+      "title": "Deterministic Canonical Replay Parity",
+      "status": "PASS",
+      "detail": "BIT_IDENTICAL_REPLAY verified; deterministic PRNG and deep freeze invariance certified"
+    },
+    {
+      "gate": "GATE-09",
+      "gate_number": 9,
+      "title": "Canonical SHA-256 State Integrity & Mutation Detection",
+      "status": "PASS",
+      "detail": "Cryptographic state hashing active; cell mutation alters canonical hash"
+    },
+    {
+      "gate": "GATE-10",
+      "gate_number": 10,
+      "title": "Authoritative P24 Model Identity & Lineage Integrity",
+      "status": "PASS",
+      "detail": "CUBIO-MODEL-STAGE1-V1, 148,912 float32 params, checkpoint 43498d9b2c9a58c6..., lineage CUBIO-GENESIS"
+    },
+    {
+      "gate": "GATE-11",
+      "gate_number": 11,
+      "title": "P26.4 Native 3D Renderer & Isometric Projection",
+      "status": "PASS",
+      "detail": "Native 3D voxel rendering, depth sorting, and read-only frame consumption verified"
+    },
+    {
+      "gate": "GATE-12",
+      "gate_number": 12,
+      "title": "Atomic 8-Stage Snapshot Pipeline & Immutability",
+      "status": "PASS",
+      "detail": "RECEIVE -> VALIDATE -> COUNT -> IDs -> ADDR -> HASH -> FREEZE -> DISPATCH verified"
+    },
+    {
+      "gate": "GATE-13",
+      "gate_number": 13,
+      "title": "Cell Inspector 12-Field Mathematical Completeness",
+      "status": "PASS",
+      "detail": "All 12 mandated fields rendered truthfully from immutable snapshot"
+    },
+    {
+      "gate": "GATE-14",
+      "gate_number": 14,
+      "title": "Telemetry Truth Lock & Anti-Fabrication Rule",
+      "status": "PASS",
+      "detail": "PHYSICAL_SENSOR = UNAVAILABLE, PQC = UNVERIFIED, unmeasured telemetry presented as '\u2014'"
+    },
+    {
+      "gate": "GATE-15",
+      "gate_number": 15,
+      "title": "Hardware Actuation Permanent Lockout (Fail-Closed)",
+      "status": "PASS",
+      "detail": "isActuationBlocked === true; ActuationBlockedError enforced on execution attempt"
+    },
+    {
+      "gate": "GATE-16",
+      "gate_number": 16,
+      "title": "Sovereign Technology Lock (Zero Browser/DOM/WebGL/Canvas)",
+      "status": "PASS",
+      "detail": "Zero React, Tailwind, Three.js, WebGL, Browser Canvas, or DOM dependencies"
+    },
+    {
+      "gate": "GATE-17",
+      "gate_number": 17,
+      "title": "Sovereign AI Model Lock (Zero Active External AI / Qwen)",
+      "status": "PASS",
+      "detail": "Zero active external AI model, HuggingFace, or Qwen runtime dependencies"
+    },
+    {
+      "gate": "GATE-18",
+      "gate_number": 18,
+      "title": "Rendering Performance Baseline (< 20ms Frame Update)",
+      "status": "PASS",
+      "detail": "Measured render latency: 0.057ms (Budget: 20.0ms)"
+    },
+    {
+      "gate": "GATE-19",
+      "gate_number": 19,
+      "title": "Memory Governance Baseline (RSS < 512MB)",
+      "status": "PASS",
+      "detail": "Measured process RSS: 292.8MB (Ceiling: 512.0MB)"
+    },
+    {
+      "gate": "GATE-20",
+      "gate_number": 20,
+      "title": "INT-001 Baseline Regression Integrity (25 Targets)",
+      "status": "PASS",
+      "detail": "19/19 checks PASS; exactly 0 drift bytes (0.0000%) across 25 protected targets in e:\\3D memory studio"
+    },
+    {
+      "gate": "GATE-21",
+      "gate_number": 21,
+      "title": "End-to-End Pipeline & Provenance Chain Verification",
+      "status": "PASS",
+      "detail": "P26.3 -> P26.2 Bridge -> P26.4 Studio -> Inspector verified with zero data loss"
+    },
+    {
+      "gate": "GATE-22",
+      "gate_number": 22,
+      "title": "Fail-Closed Failure Injection Battery (12/12 Scenarios)",
+      "status": "PASS",
+      "detail": "All 12 failure injection cases (FAIL-01 to FAIL-12) confirmed fail closed"
+    },
+    {
+      "gate": "GATE-23",
+      "gate_number": 23,
+      "title": "Native Toolchain & Clean TypeScript Compilation",
+      "status": "PASS",
+      "detail": "tsc ES2022 strict mode compilation passed with 0 errors"
+    },
+    {
+      "gate": "GATE-24",
+      "gate_number": 24,
+      "title": "Harmonic & Render Terminology Epistemic Integrity",
+      "status": "PASS",
+      "detail": "PHYSICAL_FREQUENCY_CLAIM = NONE certified; Native Render Buffer terminology enforced"
+    },
+    {
+      "gate": "GATE-25",
+      "gate_number": 25,
+      "title": "Final Production Readiness & Level A Certification",
+      "status": "PASS",
+      "detail": "All 24 foundational gates PASS; AGI ONE SPATIAL STACK = PRODUCTION VERIFIED"
+    }
+  ],
+  "final_status": "PASS",
+  "production_verdict": "AGI ONE SPATIAL STACK = PRODUCTION VERIFIED",
+  "certification_level": "LEVEL_A_CERTIFIED"
+}

@@ -1,0 +1,11 @@
+Optimization_Level,Description,Step_Latency_ms,Speedup_vs_Baseline,Throughput_steps_per_sec,Memory_Alloc_MB_per_step
+Baseline,Unoptimized dynamic arrays,7.5016,1.00x,133.3,0.00
+Level 1: IR Optimization,Constant folding & dead instruction elimination,5.4793,1.37x,182.5,0.00
+Level 2: Hot-Loop Opt,8x loop unrolling + bounds elimination,6.1588,1.22x,162.4,1.35
+Level 3: Kernel Fusion,Fused QKV projection + Fused MLP-GELU,4.1949,1.79x,238.4,0.00
+Level 4: Numerical Engine,Specialized kernels for H=64, Dff=288, O=40,4.1144,1.82x,243.0,0.00
+Level 5: Memory Arena,TrainingMemoryArena zero-allocation pool,4.2017,1.79x,238.0,0.00
+Level 6: Precomputed Exec,Precomputed scaling, norm inverses, and AdamW bias,4.1964,1.79x,238.3,0.00
+Level 7: Parallel Batching,Deterministic multi-token batch execution,4.0601,1.85x,246.3,0.00
+Level 9: Pipeline Overlap,Double-buffered sequence batch prefetch,4.0488,1.85x,247.0,0.02
+Level 10: I/O Isolation,Ring-buffered asynchronous WAL checkpointing,3.7871,1.98x,264.1,0.02

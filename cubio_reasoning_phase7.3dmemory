@@ -1,0 +1,66 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v7_SPATIAL_REASONING",
+  "gate": "CNL-P7-001",
+  "reasoning_report": {
+    "gate": "CNL-P7-001",
+    "spatialDeductionsCount": 0,
+    "inferredTheoremsCount": 0,
+    "isActuationBlocked": true,
+    "pqcSeal": "0xPQC_369_7423910678a4e6c15d233d42e0a90558_SEAL",
+    "deterministicStateHash": "0x369_076e8a64",
+    "proofTrace": []
+  },
+  "pqc_seal": "0xPQC_369_7423910678a4e6c15d233d42e0a90558_SEAL",
+  "is_actuation_blocked": true,
+  "lineageChain": [
+    {
+      "phase": "P1",
+      "label": "ONE Language Compiler Core (AST & Bytecode)",
+      "merkleHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725180000000
+    },
+    {
+      "phase": "P2",
+      "label": "CubiO Runtime VM & 369 Harmonic Engine",
+      "merkleHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "parentHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725183600000
+    },
+    {
+      "phase": "P3",
+      "label": "Zero-Copy Ring-Buffer Streaming Funnels",
+      "merkleHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "parentHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "timestamp": 1725187200000
+    },
+    {
+      "phase": "P4",
+      "label": "Deterministic WAL Checkpoints & Rollback",
+      "merkleHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "parentHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "timestamp": 1725190800000
+    },
+    {
+      "phase": "P5",
+      "label": "N-Dimensional HyperGrid & Neuro-Symbolic Compilation",
+      "merkleHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "parentHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "timestamp": 1725194400000
+    },
+    {
+      "phase": "P6",
+      "label": "Zero-OS Freestanding Bare-Metal Kernel (\"one-baremetal\")",
+      "merkleHash": "0x369_P6_BARE_METAL_SEAL",
+      "parentHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "timestamp": 1725198000000
+    },
+    {
+      "phase": "P7",
+      "label": "Spatial Reasoning & Knowledge Theorem Prover",
+      "merkleHash": "0x369_P7_SPATIAL_REASONING_SEAL",
+      "parentHash": "0x369_P6_BARE_METAL_SEAL",
+      "timestamp": 1725201600000
+    }
+  ],
+  "timestamp": 1725201600000
+}

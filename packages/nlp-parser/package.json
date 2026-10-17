@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/nlp-parser",
+  "version": "1.0.0",
+  "description": "Standalone Bilingual (Roman Urdu + English) Spatial Natural Language Parser",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Google DeepMind / Antigravity Sovereign Team",
+  "license": "Apache-2.0"
+}

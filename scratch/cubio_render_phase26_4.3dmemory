@@ -1,0 +1,43 @@
+{
+  "gate": "CNL-P26.4",
+  "timestamp": "2026-09-08T16:25:24.626Z",
+  "module": "one_render",
+  "platform": "WINDOWS_GDI",
+  "renderConfig": {
+    "width": 640,
+    "height": 480,
+    "isoScale": 14,
+    "targetFps": 60,
+    "renderHud": true,
+    "depthFalloff": true
+  },
+  "frame": {
+    "index": 0,
+    "width": 640,
+    "height": 480,
+    "cellsRendered": 343,
+    "cellsVisible": 343,
+    "renderLatencyMs": 4.8891,
+    "rgbaBufferBytes": 1228800,
+    "isActuationBlocked": true,
+    "uup": 1
+  },
+  "tgaOutput": {
+    "path": "F:\\ONE language\\scratch\\dist\\frames\\frame_00000.tga",
+    "bytes": 1228818
+  },
+  "compilation": {
+    "cells": 343,
+    "pqcSeal": "0xPQC_369_787aa3885b56ef593a3ac4de94d14323_SEAL",
+    "latencyMs": 1.7582
+  },
+  "pqcRenderSeal": "0xPQC_369_f1b0b33579fb40c73b4ca4c13706929e_SEAL",
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1,
+    "sigmaSq": 0,
+    "csiGrade": "S+",
+    "rssLimitMb": 512,
+    "externalDependencies": 0
+  }
+}

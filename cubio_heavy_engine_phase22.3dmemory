@@ -1,0 +1,17 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v22_HEAVY_METAL_ENGINE",
+  "gate": "CNL-P22-002",
+  "version": "22.0.0-heavy-engine",
+  "streaming_metrics": {
+    "totalLoadedChunks": 27,
+    "activeCellCount": 9261,
+    "allocatedMemoryMb": 64.28,
+    "unloadedChunksCount": 27,
+    "streamThroughputMBs": 142.5,
+    "isMemorySafe": true
+  },
+  "compute_shader_bytes": 2153,
+  "pqc_seal": "0xPQC_369_8ca9acac0657bed77205127b638683de_SEAL",
+  "is_actuation_blocked": true,
+  "timestamp": 1725850000000
+}

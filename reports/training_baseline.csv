@@ -1,0 +1,10 @@
+metric,value,unit,description
+model_name,CUBIO-MODEL-STAGE1-V1,name,Authoritative CUBiO Model
+parameter_count,148912,count,Total Model Parameters
+sequence_length,32,tokens,Tokens per Sequence
+batch_size,1,batch,Single Sequence Batch
+step_latency_ms,6.812,ms,Mean Training Step Latency
+throughput_steps_sec,146.79,steps/sec,Training Step Throughput
+tokens_per_sec,4697.32,tokens/sec,Token Processing Throughput
+heap_allocation_mb_step,4.451,MB/step,Heap Allocation Per Step
+physical_rss_mb,356.26,MB,Resident Set Size

@@ -1,0 +1,6 @@
+e368f322f523c9c891f74e08216e74f9b03268af3bd3988d3063b437272d85a0 *src/one_net/ui/server.ts
+2b6fa806f9b20d3b99467e2fc3e5bdbeb21005f211c843dc5fdc7f2f028fd4cd *src/one_net/ui/index.html
+70a3fd72cb32d4431dd6888313d41cb1748ad36b63e24d18a9a987fe7c7e86d7 *src/one_net/ui/static/app.js
+4f4dc269b803cded7265cf2c2224eb727eb62bb4c17afc7b043db527aacfe906 *src/one_net/ui/static/app.css
+bb385f0483253b861e5374cb32c5097492f13923b1ad85ba73435acb3844dd8d *src/one_net/ui/package.json
+77b4214f9526b409566fdeaaff8cb40f743369757e6fbbc4d9d7af7f70eab040 *tests/ui/explorer_ui.test.ts

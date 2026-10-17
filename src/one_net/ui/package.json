@@ -1,0 +1,18 @@
+{
+  "name": "one-language-explorer-ui",
+  "version": "1.0.0",
+  "description": "ONE Language Explorer UI — backend HTTP service serving the real engine over a minimal REST API. No external dependencies; built on Node.js built-in modules only.",
+  "private": true,
+  "license": "MIT",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node src/one_net/ui/server.ts",
+    "test": "npx tsc --noEmit && npx ts-node --transpile-only tests/ui/explorer_ui.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "manifest_id": "GATE-26-RELEASE-INTEGRITY-MANIFEST",
+  "generated_at": "2026-10-11T19:13:00+05:00",
+  "repository": "F:/ONE language",
+  "protected_artifacts": [
+    {
+      "name": "Model Checkpoint",
+      "path": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+      "size_bytes": 19594556,
+      "sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "status": "VERIFIED_MATCH"
+    },
+    {
+      "name": "Binary Codebook",
+      "path": "F:/ONE language/src/binary/binaryCodebook.ts",
+      "size_bytes": 5516,
+      "sha256": "EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "status": "VERIFIED_MATCH"
+    },
+    {
+      "name": "Binary Decoder",
+      "path": "F:/ONE language/src/binary/binaryDecoder.ts",
+      "size_bytes": 6640,
+      "sha256": "68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "status": "VERIFIED_MATCH"
+    },
+    {
+      "name": "Binary Encoder",
+      "path": "F:/ONE language/src/binary/binaryEncoder.ts",
+      "size_bytes": 3614,
+      "sha256": "43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7",
+      "status": "VERIFIED_MATCH"
+    }
+  ],
+  "configuration_files": [
+    {
+      "name": "package.json",
+      "path": "F:/ONE language/package.json",
+      "size_bytes": 6625,
+      "sha256": "9AE4F8FFCF97AE8657090D3F8C23247C4FD90EBD1C359F1885848386177C076F",
+      "status": "CONTAINS_UNTRANSPILING_ESM_TYPE_FIELD"
+    },
+    {
+      "name": "tsconfig.json",
+      "path": "F:/ONE language/tsconfig.json",
+      "size_bytes": 302,
+      "sha256": "4169557C34D9BEF203C9E27344D1227D60EFD5FEF4906F853761E64DA99B0DA7",
+      "status": "VERIFIED"
+    }
+  ]
+}

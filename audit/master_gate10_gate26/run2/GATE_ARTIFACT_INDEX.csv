@@ -1,0 +1,44 @@
+Artifact_Path,Artifact_Type,Gate_Association,Category,Status,Inspected
+audit/gate10/architecture_baseline.md,Markdown Report,GATE-10,Report,Original Baseline,Yes
+audit/gate10/binary_protocol_manifest.json,JSON Manifest,GATE-10,Manifest,Original Baseline,Yes
+audit/gate10/GATE10_BASELINE_REPORT.md,Markdown Report,GATE-10,Report,Original Baseline,Yes
+audit/gate10/known_limitations.md,Markdown Document,GATE-10,Documentation,Original Baseline,Yes
+audit/gate10/model_checkpoint_manifest.json,JSON Manifest,GATE-10,Manifest,Original Baseline,Yes
+audit/gate10/protected_files_verification.json,JSON Manifest,GATE-10,Manifest,Original Baseline,Yes
+audit/gate10/source_manifest.json,JSON Manifest,GATE-10,Manifest,Original Baseline,Yes
+audit/gate10/test_baseline_report.json,JSON Report,GATE-10,Report,Original Baseline,Yes
+audit/gate10_recheck/GATE10_RECHECK_REPORT.md,Markdown Report,GATE-10,Report,Current Recheck,Yes
+audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md,Markdown Report,GATE-9,Report,Prior Gate,Yes
+audit/gate26/GATE26_RELEASE_QUALIFICATION_REPORT.md,Markdown Report,GATE-26,Report,Prior Gate 26,Yes
+audit/gate26/GATE_DEPENDENCY_MATRIX.csv,CSV Matrix,GATE-26,Matrix,Prior Gate 26,Yes
+audit/gate26/INSTALLATION_AND_RUN.md,Markdown Document,GATE-26,Documentation,Prior Gate 26,Yes
+audit/gate26/KNOWN_LIMITATIONS.md,Markdown Document,GATE-26,Documentation,Prior Gate 26,Yes
+audit/gate26/RELEASE_DECISION.md,Markdown Document,GATE-26,Report,Prior Gate 26,Yes
+audit/gate26/RELEASE_INTEGRITY_MANIFEST.json,JSON Manifest,GATE-26,Manifest,Prior Gate 26,Yes
+audit/gate26/RELEASE_NOTES.md,Markdown Document,GATE-26,Documentation,Prior Gate 26,Yes
+audit/gate26/RELEASE_TEST_RESULTS.json,JSON Report,GATE-26,Report,Prior Gate 26,Yes
+audit/gate26/SECURITY_AND_RELIABILITY_REPORT.md,Markdown Report,GATE-26,Report,Prior Gate 26,Yes
+audit/gate26/V1_RELEASE_SCOPE.md,Markdown Document,GATE-26,Documentation,Prior Gate 26,Yes
+audit/gate26_recheck/GATE26_RELEASE_QUALIFICATION_REPORT.md,Markdown Report,GATE-26,Report,Current Recheck,Yes
+audit/gate26_recheck/GATE_DEPENDENCY_MATRIX.csv,CSV Matrix,GATE-26,Matrix,Current Recheck,Yes
+audit/gate26_recheck/INSTALLATION_AND_RUN.md,Markdown Document,GATE-26,Documentation,Current Recheck,Yes
+audit/gate26_recheck/KNOWN_LIMITATIONS.md,Markdown Document,GATE-26,Documentation,Current Recheck,Yes
+audit/gate26_recheck/RELEASE_DECISION.md,Markdown Document,GATE-26,Report,Current Recheck,Yes
+audit/gate26_recheck/RELEASE_INTEGRITY_MANIFEST.json,JSON Manifest,GATE-26,Manifest,Current Recheck,Yes
+audit/gate26_recheck/RELEASE_NOTES.md,Markdown Document,GATE-26,Documentation,Current Recheck,Yes
+audit/gate26_recheck/RELEASE_TEST_RESULTS.json,JSON Report,GATE-26,Report,Current Recheck,Yes
+audit/gate26_recheck/SECURITY_AND_RELIABILITY_REPORT.md,Markdown Report,GATE-26,Report,Current Recheck,Yes
+audit/gate26_recheck/V1_RELEASE_SCOPE.md,Markdown Document,GATE-26,Documentation,Current Recheck,Yes
+src/binary/binaryCodebook.ts,TypeScript Source,GATE-10/26,Protected Source,Authoritative,Yes
+src/binary/binaryDecoder.ts,TypeScript Source,GATE-10/26,Protected Source,Authoritative,Yes
+src/binary/binaryEncoder.ts,TypeScript Source,GATE-10/26,Protected Source,Authoritative,Yes
+E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel,Binary Checkpoint,GATE-10/26,Protected Model,Authoritative,Yes
+src/one/address369_canonical.ts,TypeScript Source,GATE-10/26,Core Source,Authoritative,Yes
+src/one/spatial/OneAddress369.ts,TypeScript Source,GATE-10/26,Core Source,Authoritative,Yes
+src/one/spatial/SpatialBridge.ts,TypeScript Source,GATE-10/26,Core Source,Authoritative,Yes
+src/one/intelligence/reasoning/ReasoningEngine.ts,TypeScript Source,GATE-10/11/26,Core Source,Authoritative,Yes
+src/one/intelligence/memory/ConceptGraph.ts,TypeScript Source,GATE-10/15/26,Core Source,Authoritative,Yes
+src/one/intelligence/hybrid/HybridConversationEngine.ts,TypeScript Source,GATE-10/16/26,Core Source,Authoritative,Yes
+src/one/intelligence/hybrid/IntentParser.ts,TypeScript Source,GATE-10/26,Core Source,Authoritative,Yes
+package.json,JSON Configuration,GATE-10/26,Configuration,Authoritative,Yes
+tsconfig.json,JSON Configuration,GATE-10/26,Configuration,Authoritative,Yes

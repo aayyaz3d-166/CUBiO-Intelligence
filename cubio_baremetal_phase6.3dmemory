@@ -1,0 +1,62 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v6_BAREMETAL",
+  "gate": "CNL-P6-001",
+  "target": "baremetal",
+  "binary_file": "one-baremetal.bin",
+  "binary_size_bytes": 185,
+  "pqc_seal": "0xPQC_369_6a6147bb91b712e0061ad9c555a10809_SEAL",
+  "is_actuation_blocked": true,
+  "kernel_execution": {
+    "cyclesExecuted": 9,
+    "allocatedNodesCount": 2,
+    "activeMemoryBytes": 134348800,
+    "isActuationBlocked": true,
+    "pqcSealVerified": true,
+    "deterministicVariance": 0,
+    "status": "HALTED_SUCCESS"
+  },
+  "lineageChain": [
+    {
+      "phase": "P1",
+      "label": "ONE Language Compiler Core (AST & Bytecode)",
+      "merkleHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725180000000
+    },
+    {
+      "phase": "P2",
+      "label": "CubiO Runtime VM & 369 Harmonic Engine",
+      "merkleHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "parentHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725183600000
+    },
+    {
+      "phase": "P3",
+      "label": "Zero-Copy Ring-Buffer Streaming Funnels",
+      "merkleHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "parentHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "timestamp": 1725187200000
+    },
+    {
+      "phase": "P4",
+      "label": "Deterministic WAL Checkpoints & Rollback",
+      "merkleHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "parentHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "timestamp": 1725190800000
+    },
+    {
+      "phase": "P5",
+      "label": "N-Dimensional HyperGrid & Neuro-Symbolic Compilation (Gate CNL-P5-001)",
+      "merkleHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "parentHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "timestamp": 1725194400000
+    },
+    {
+      "phase": "P6",
+      "label": "Zero-OS Freestanding Bare-Metal Kernel (\"one-baremetal\", Gate CNL-P6-001)",
+      "merkleHash": "0x369_P6_BARE_METAL_SEAL",
+      "parentHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "timestamp": 1788793113614
+    }
+  ],
+  "timestamp": 1788793113614
+}
