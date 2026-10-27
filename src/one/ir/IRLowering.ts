@@ -10,6 +10,8 @@ import {
   ForStatementNode,
   BlockStatementNode,
   PrintStatementNode,
+  BreakStatementNode,
+  InputStatementNode,
   StructDeclarationNode,
   EnumDeclarationNode,
   DeclarativeSpatialNodeWrapper,
@@ -38,6 +40,7 @@ export class IRLowering {
   private instructions: IRInstruction[] = [];
   private structRegistry: Map<string, StructDeclarationNode> = new Map();
   private enumRegistry: Map<string, EnumDeclarationNode> = new Map();
+  private loopExitStack: IROperand[] = [];
 
   public lower(program: UnifiedProgramNode): UnifiedIRProgram {
     this.regCounter = 1;
@@ -45,6 +48,7 @@ export class IRLowering {
     this.instructions = [];
     this.structRegistry.clear();
     this.enumRegistry.clear();
+    this.loopExitStack = [];
 
     for (const stmt of program.body) {
       this.lowerStatement(stmt);
@@ -120,6 +124,17 @@ export class IRLowering {
 
       case 'PrintStatement':
         this.lowerPrintStatement(stmt);
+        break;
+
+      case 'BreakStatement':
+        if (this.loopExitStack.length > 0) {
+          const exitLabel = this.loopExitStack[this.loopExitStack.length - 1];
+          this.emit('JUMP', exitLabel, []);
+        }
+        break;
+
+      case 'InputStatement':
+        this.emit('INPUT', createVariable(stmt.target), []);
         break;
 
       case 'StructDeclaration':
@@ -225,7 +240,10 @@ export class IRLowering {
     const condReg = this.lowerExpression(node.condition);
     this.emit('JUMP_IF', endLabel, [condReg], { condition: 'false' });
 
+    this.loopExitStack.push(endLabel);
     this.lowerBlockStatement(node.body);
+    this.loopExitStack.pop();
+
     this.emit('JUMP', startLabel, []);
 
     this.emit('CONST', endLabel, [], { isLabel: true });
@@ -246,7 +264,10 @@ export class IRLowering {
     });
     this.emit('STORE', createVariable(node.iterator), [itemReg]);
 
+    this.loopExitStack.push(endLabel);
     this.lowerBlockStatement(node.body);
+    this.loopExitStack.pop();
+
     this.emit('JUMP', startLabel, []);
 
     this.emit('CONST', endLabel, [], { isLabel: true });

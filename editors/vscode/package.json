@@ -2,7 +2,7 @@
   "name": "one-language",
   "displayName": "ONE Language",
   "description": "Rich language support for ONE Language (.one) — syntax highlighting, spatial computing directives, diagnostics, completions, and snippets.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "one-language",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",

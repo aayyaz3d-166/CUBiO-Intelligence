@@ -12,6 +12,8 @@ import {
   BlockStatementNode,
   ExpressionStatementNode,
   PrintStatementNode,
+  BreakStatementNode,
+  InputStatementNode,
   ImportStatementNode,
   ImportSpecifier,
   ExportStatementNode,
@@ -52,6 +54,8 @@ export class ComputationalParser {
   private current: number = 0;
   private errors: string[] = [];
   private anonFnCounter: number = 0;
+  private loopDepth: number = 0;
+  private repeatCounter: number = 1;
 
   constructor(tokens: Token[]) {
     this.tokens = tokens;
@@ -97,6 +101,14 @@ export class ComputationalParser {
 
   private parseStatement(): UnifiedStatementNode {
     const token = this.peek();
+
+    if (token.type === TokenType.KEYWORD_ONES) {
+      return this.parseOnesDeclaration();
+    }
+
+    if (token.type === TokenType.KEYWORD_ONE) {
+      return this.parseOneCommand();
+    }
 
     if (token.type === TokenType.KEYWORD_LET || token.type === TokenType.KEYWORD_CONST) {
       return this.parseVariableDeclaration();
@@ -200,6 +212,404 @@ export class ComputationalParser {
     };
   }
 
+  private parseOnesDeclaration(): VariableDeclarationNode {
+    const startToken = this.advance(); // consume "one's"
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected variable identifier after 'one\\'s' at line ${startToken.line}, column ${startToken.column}`);
+    }
+
+    const idToken = this.advance();
+    let typeAnnotation: string | undefined = undefined;
+    if (this.match(TokenType.COLON)) {
+      typeAnnotation = this.parseTypeAnnotation();
+    }
+
+    this.consume(TokenType.ASSIGN, "Expected '=' in 'one\\'s' declaration");
+    const initializer = this.parseExpression(Precedence.LOWEST);
+    this.match(TokenType.SEMICOLON);
+
+    const endLine = initializer?.span?.end.line || idToken.line;
+    const endCol = initializer?.span?.end.column || idToken.column + idToken.value.length;
+
+    return {
+      kind: 'VariableDeclaration',
+      identifier: idToken.value,
+      isConst: false,
+      typeAnnotation,
+      initializer,
+      span: createSourceSpan(startToken.line, startToken.column, endLine, endCol),
+    };
+  }
+
+  private parseOneCommand(): UnifiedStatementNode {
+    const oneToken = this.advance(); // consume 'one'
+    const next = this.peek();
+
+    switch (next.type) {
+      case TokenType.KEYWORD_SET:
+        return this.parseOneSetStatement(oneToken);
+      case TokenType.KEYWORD_OUT:
+        return this.parseOneOutStatement(oneToken);
+      case TokenType.KEYWORD_IN:
+        return this.parseOneInStatement(oneToken);
+      case TokenType.KEYWORD_UP:
+        return this.parseOneUpDownStatement(oneToken, '+');
+      case TokenType.KEYWORD_DOWN:
+        return this.parseOneUpDownStatement(oneToken, '-');
+      case TokenType.KEYWORD_IF:
+        return this.parseOneIfStatement(oneToken);
+      case TokenType.KEYWORD_REPEAT:
+        return this.parseOneRepeatStatement(oneToken);
+      case TokenType.KEYWORD_STOP:
+        return this.parseOneStopStatement(oneToken);
+      case TokenType.KEYWORD_MAKE:
+        return this.parseOneMakeStatement(oneToken);
+      case TokenType.KEYWORD_WAY:
+        return this.parseOneWayStatement(oneToken);
+      case TokenType.KEYWORD_DONE:
+        return this.parseOneDoneStatement(oneToken);
+      default:
+        if (next.type === TokenType.DOT || next.value === 'dot') {
+          this.advance();
+          throw new Error(`[E1017: Syntax Error] 'one dot' is deferred in v1.0.1 pending explicit spatial point specification at line ${next.line}, column ${next.column}`);
+        }
+        throw new Error(`[E1014: Syntax Error] Unknown one command '${next.value}' at line ${next.line}, column ${next.column}`);
+    }
+  }
+
+  private parseOneSetStatement(oneToken: Token): ExpressionStatementNode {
+    const setToken = this.advance(); // consume 'set'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected variable identifier after 'one set' at line ${setToken.line}, column ${setToken.column}`);
+    }
+    const idToken = this.advance();
+    this.consume(TokenType.ASSIGN, "Expected '=' in 'one set' statement");
+    const valExpr = this.parseExpression(Precedence.LOWEST);
+    this.match(TokenType.SEMICOLON);
+
+    const endLine = valExpr.span?.end.line || idToken.line;
+    const endCol = valExpr.span?.end.column || idToken.column + idToken.value.length;
+
+    const assignExpr: BinaryExpressionNode = {
+      kind: 'BinaryExpression',
+      operator: '=',
+      left: {
+        kind: 'Identifier',
+        name: idToken.value,
+        span: createSourceSpan(idToken.line, idToken.column, idToken.line, idToken.column + idToken.value.length),
+      },
+      right: valExpr,
+      span: createSourceSpan(idToken.line, idToken.column, endLine, endCol),
+    };
+
+    return {
+      kind: 'ExpressionStatement',
+      expression: assignExpr,
+      span: createSourceSpan(oneToken.line, oneToken.column, endLine, endCol),
+    };
+  }
+
+  private parseOneOutStatement(oneToken: Token): PrintStatementNode {
+    const outToken = this.advance(); // consume 'out'
+    const expr = this.parseExpression(Precedence.LOWEST);
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'PrintStatement',
+      expression: expr,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        expr.span?.end.line || outToken.line,
+        expr.span?.end.column || outToken.column + outToken.value.length
+      ),
+    };
+  }
+
+  private parseOneInStatement(oneToken: Token): InputStatementNode {
+    const inToken = this.advance(); // consume 'in'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected variable identifier after 'one in' at line ${inToken.line}, column ${inToken.column}`);
+    }
+    const idToken = this.advance();
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'InputStatement',
+      target: idToken.value,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        idToken.line,
+        idToken.column + idToken.value.length
+      ),
+    };
+  }
+
+  private parseOneUpDownStatement(oneToken: Token, op: '+' | '-'): ExpressionStatementNode {
+    const opToken = this.advance(); // consume 'up' or 'down'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected variable identifier after 'one ${opToken.value}' at line ${opToken.line}, column ${opToken.column}`);
+    }
+    const idToken = this.advance();
+    let stepExpr: ExpressionNode = {
+      kind: 'Literal',
+      literalType: 'number',
+      value: 1,
+      raw: '1',
+      span: createSourceSpan(idToken.line, idToken.column + idToken.value.length, idToken.line, idToken.column + idToken.value.length),
+    };
+
+    if (this.check(TokenType.KEYWORD_BY) || this.peek().value === 'by') {
+      this.advance(); // consume 'by'
+      stepExpr = this.parseExpression(Precedence.LOWEST);
+    }
+
+    this.match(TokenType.SEMICOLON);
+
+    const endLine = stepExpr.span?.end.line || idToken.line;
+    const endCol = stepExpr.span?.end.column || idToken.column + idToken.value.length;
+
+    const idNode: IdentifierNode = {
+      kind: 'Identifier',
+      name: idToken.value,
+      span: createSourceSpan(idToken.line, idToken.column, idToken.line, idToken.column + idToken.value.length),
+    };
+
+    const binOp: BinaryExpressionNode = {
+      kind: 'BinaryExpression',
+      operator: op,
+      left: idNode,
+      right: stepExpr,
+      span: createSourceSpan(idToken.line, idToken.column, endLine, endCol),
+    };
+
+    const assignExpr: BinaryExpressionNode = {
+      kind: 'BinaryExpression',
+      operator: '=',
+      left: idNode,
+      right: binOp,
+      span: createSourceSpan(idToken.line, idToken.column, endLine, endCol),
+    };
+
+    return {
+      kind: 'ExpressionStatement',
+      expression: assignExpr,
+      span: createSourceSpan(oneToken.line, oneToken.column, endLine, endCol),
+    };
+  }
+
+  private parseOneIfStatement(oneToken: Token): IfStatementNode {
+    this.advance(); // consume 'if'
+    const condition = this.parseExpression(Precedence.LOWEST);
+
+    this.consume(TokenType.LBRACE, "Expected '{' after if condition");
+    const consequent = this.parseBlockStatementBody();
+
+    let alternate: BlockStatementNode | IfStatementNode | undefined = undefined;
+
+    // Check for 'one else' or 'else'
+    if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_ELSE || this.peekNext()?.value === 'else')) {
+      this.advance(); // consume 'one'
+      this.advance(); // consume 'else'
+      if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_IF || this.peekNext()?.value === 'if')) {
+        this.advance(); // consume 'one'
+        alternate = this.parseOneIfStatement(this.previous());
+      } else if (this.check(TokenType.KEYWORD_IF)) {
+        alternate = this.parseIfStatement();
+      } else {
+        this.consume(TokenType.LBRACE, "Expected '{' after else");
+        alternate = this.parseBlockStatementBody();
+      }
+    } else if (this.match(TokenType.KEYWORD_ELSE)) {
+      if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_IF || this.peekNext()?.value === 'if')) {
+        this.advance(); // consume 'one'
+        alternate = this.parseOneIfStatement(this.previous());
+      } else if (this.check(TokenType.KEYWORD_IF)) {
+        alternate = this.parseIfStatement();
+      } else {
+        this.consume(TokenType.LBRACE, "Expected '{' after else");
+        alternate = this.parseBlockStatementBody();
+      }
+    }
+
+    return {
+      kind: 'IfStatement',
+      condition,
+      consequent,
+      alternate,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        alternate?.span?.end.line || consequent.span?.end.line || oneToken.line,
+        alternate?.span?.end.column || consequent.span?.end.column || oneToken.column
+      ),
+    };
+  }
+
+  private parseOneRepeatStatement(oneToken: Token): UnifiedStatementNode {
+    this.advance(); // consume 'repeat'
+
+    if (this.match(TokenType.KEYWORD_WHILE) || (this.peek().value === 'while' && this.advance())) {
+      const condition = this.parseExpression(Precedence.LOWEST);
+      this.consume(TokenType.LBRACE, "Expected '{' after while condition");
+      this.loopDepth++;
+      const body = this.parseBlockStatementBody();
+      this.loopDepth--;
+
+      return {
+        kind: 'WhileStatement',
+        condition,
+        body,
+        span: createSourceSpan(
+          oneToken.line,
+          oneToken.column,
+          body.span?.end.line || oneToken.line,
+          body.span?.end.column || oneToken.column
+        ),
+      };
+    }
+
+    // one repeat count { ... }
+    const countExpr = this.parseExpression(Precedence.LOWEST);
+    this.consume(TokenType.LBRACE, "Expected '{' after repeat count");
+    this.loopDepth++;
+    const body = this.parseBlockStatementBody();
+    this.loopDepth--;
+
+    const cntIdx = this.repeatCounter++;
+    const counterName = `__repeat_cnt_${cntIdx}`;
+    const limitName = `__repeat_limit_${cntIdx}`;
+
+    const limitDecl: VariableDeclarationNode = {
+      kind: 'VariableDeclaration',
+      identifier: limitName,
+      isConst: true,
+      initializer: countExpr,
+      span: countExpr.span,
+    };
+
+    const cntDecl: VariableDeclarationNode = {
+      kind: 'VariableDeclaration',
+      identifier: counterName,
+      isConst: false,
+      initializer: {
+        kind: 'Literal',
+        literalType: 'number',
+        value: 0,
+        raw: '0',
+        span: countExpr.span,
+      },
+      span: countExpr.span,
+    };
+
+    const incStmt: ExpressionStatementNode = {
+      kind: 'ExpressionStatement',
+      expression: {
+        kind: 'BinaryExpression',
+        operator: '=',
+        left: { kind: 'Identifier', name: counterName, span: countExpr.span },
+        right: {
+          kind: 'BinaryExpression',
+          operator: '+',
+          left: { kind: 'Identifier', name: counterName, span: countExpr.span },
+          right: { kind: 'Literal', literalType: 'number', value: 1, raw: '1', span: countExpr.span },
+          span: countExpr.span,
+        },
+        span: countExpr.span,
+      },
+      span: countExpr.span,
+    };
+
+    body.statements.push(incStmt);
+
+    const whileStmt: WhileStatementNode = {
+      kind: 'WhileStatement',
+      condition: {
+        kind: 'BinaryExpression',
+        operator: '<',
+        left: { kind: 'Identifier', name: counterName, span: countExpr.span },
+        right: { kind: 'Identifier', name: limitName, span: countExpr.span },
+        span: countExpr.span,
+      },
+      body,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        body.span?.end.line || oneToken.line,
+        body.span?.end.column || oneToken.column
+      ),
+    };
+
+    return {
+      kind: 'BlockStatement',
+      statements: [limitDecl, cntDecl, whileStmt],
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        body.span?.end.line || oneToken.line,
+        body.span?.end.column || oneToken.column
+      ),
+    };
+  }
+
+  private parseOneStopStatement(oneToken: Token): BreakStatementNode {
+    const stopToken = this.advance(); // consume 'stop'
+    if (this.loopDepth <= 0) {
+      throw new Error(`[E1016: Syntax Error] 'one stop' can only be used inside a loop at line ${stopToken.line}, column ${stopToken.column}`);
+    }
+    this.match(TokenType.SEMICOLON);
+    return {
+      kind: 'BreakStatement',
+      span: createSourceSpan(oneToken.line, oneToken.column, stopToken.line, stopToken.column + stopToken.value.length),
+    };
+  }
+
+  private parseOneMakeStatement(oneToken: Token): FunctionDeclarationNode {
+    this.advance(); // consume 'make'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1003: Syntax Error] Expected function name after 'one make' at line ${oneToken.line}, column ${oneToken.column}`);
+    }
+    const nameToken = this.advance();
+    return this.finishFunctionNode(oneToken, nameToken.value, false);
+  }
+
+  private parseOneWayStatement(oneToken: Token): ReturnStatementNode {
+    const wayToken = this.advance(); // consume 'way'
+    let value: ExpressionNode | undefined = undefined;
+    if (!this.check(TokenType.SEMICOLON) && !this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+      value = this.parseExpression(Precedence.LOWEST);
+    }
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'ReturnStatement',
+      value,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        value?.span?.end.line || wayToken.line,
+        value?.span?.end.column || wayToken.column + wayToken.value.length
+      ),
+    };
+  }
+
+  private parseOneDoneStatement(oneToken: Token): ReturnStatementNode {
+    const doneToken = this.advance(); // consume 'done'
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'ReturnStatement',
+      value: undefined,
+      span: createSourceSpan(
+        oneToken.line,
+        oneToken.column,
+        doneToken.line,
+        doneToken.column + doneToken.value.length
+      ),
+    };
+  }
+
   private parseFunctionNode(requireName: boolean, isAsync: boolean = false): FunctionDeclarationNode {
     const startToken = this.advance(); // consume 'function' or 'fn'
 
@@ -212,6 +622,10 @@ export class ComputationalParser {
       name = `__anon_fn_${this.anonFnCounter++}`;
     }
 
+    return this.finishFunctionNode(startToken, name, isAsync);
+  }
+
+  private finishFunctionNode(startToken: Token, name: string, isAsync: boolean = false): FunctionDeclarationNode {
     this.consume(TokenType.LPAREN, "Expected '(' after function name");
 
     const params: ParameterDeclaration[] = [];
@@ -288,8 +702,23 @@ export class ComputationalParser {
     const consequent = this.parseBlockStatementBody();
 
     let alternate: BlockStatementNode | IfStatementNode | undefined = undefined;
-    if (this.match(TokenType.KEYWORD_ELSE)) {
-      if (this.check(TokenType.KEYWORD_IF)) {
+    if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_ELSE || this.peekNext()?.value === 'else')) {
+      this.advance(); // consume 'one'
+      this.advance(); // consume 'else'
+      if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_IF || this.peekNext()?.value === 'if')) {
+        this.advance(); // consume 'one'
+        alternate = this.parseOneIfStatement(this.previous());
+      } else if (this.check(TokenType.KEYWORD_IF)) {
+        alternate = this.parseIfStatement();
+      } else {
+        this.consume(TokenType.LBRACE, "Expected '{' after else");
+        alternate = this.parseBlockStatementBody();
+      }
+    } else if (this.match(TokenType.KEYWORD_ELSE)) {
+      if (this.check(TokenType.KEYWORD_ONE) && (this.peekNext()?.type === TokenType.KEYWORD_IF || this.peekNext()?.value === 'if')) {
+        this.advance(); // consume 'one'
+        alternate = this.parseOneIfStatement(this.previous());
+      } else if (this.check(TokenType.KEYWORD_IF)) {
         alternate = this.parseIfStatement();
       } else {
         this.consume(TokenType.LBRACE, "Expected '{' after else");
@@ -316,7 +745,9 @@ export class ComputationalParser {
     const condition = this.parseExpression(Precedence.LOWEST);
 
     this.consume(TokenType.LBRACE, "Expected '{' after while condition");
+    this.loopDepth++;
     const body = this.parseBlockStatementBody();
+    this.loopDepth--;
 
     return {
       kind: 'WhileStatement',
@@ -347,7 +778,9 @@ export class ComputationalParser {
 
     const iterable = this.parseExpression(Precedence.LOWEST);
     this.consume(TokenType.LBRACE, "Expected '{' after for expression");
+    this.loopDepth++;
     const body = this.parseBlockStatementBody();
+    this.loopDepth--;
 
     return {
       kind: 'ForStatement',
@@ -567,7 +1000,7 @@ export class ComputationalParser {
     const seenFields = new Set<string>();
 
     while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
-      if (!this.check(TokenType.IDENTIFIER)) {
+      if (!this.check(TokenType.IDENTIFIER) && !this.peek().type.startsWith('KEYWORD_')) {
         throw new Error(`[E1001: Syntax Error] Expected field name in struct '${structName}' at line ${this.peek().line}, column ${this.peek().column}`);
       }
       const fieldToken = this.advance();
@@ -803,7 +1236,7 @@ export class ComputationalParser {
             if (!this.check(TokenType.RBRACE)) {
               do {
                 const keyToken = this.advance();
-                if (keyToken.type !== TokenType.IDENTIFIER && keyToken.type !== TokenType.STRING_LITERAL) {
+                if (keyToken.type !== TokenType.IDENTIFIER && keyToken.type !== TokenType.STRING_LITERAL && !keyToken.type.startsWith('KEYWORD_')) {
                   throw new Error('Not struct literal');
                 }
                 this.consume(TokenType.COLON, "Expected ':' after field key");
@@ -877,7 +1310,7 @@ export class ComputationalParser {
         if (!this.check(TokenType.RBRACE)) {
           do {
             const keyToken = this.advance();
-            if (keyToken.type !== TokenType.IDENTIFIER && keyToken.type !== TokenType.STRING_LITERAL) {
+            if (keyToken.type !== TokenType.IDENTIFIER && keyToken.type !== TokenType.STRING_LITERAL && !keyToken.type.startsWith('KEYWORD_')) {
               throw new Error(`[E1010: Syntax Error] Expected object key at line ${keyToken.line}, column ${keyToken.column}`);
             }
             this.consume(TokenType.COLON, "Expected ':' after object key");
@@ -958,7 +1391,7 @@ export class ComputationalParser {
 
     // Member Access: `foo.bar`
     if (token.type === TokenType.DOT) {
-      if (!this.check(TokenType.IDENTIFIER)) {
+      if (!this.check(TokenType.IDENTIFIER) && !this.peek().type.startsWith('KEYWORD_')) {
         throw new Error(`[E1012: Syntax Error] Expected property identifier after '.' at line ${this.peek().line}, column ${this.peek().column}`);
       }
       const propToken = this.advance();
@@ -994,6 +1427,26 @@ export class ComputationalParser {
       };
     }
 
+    // Equality via 'one is': `left one is right`
+    if (token.type === TokenType.KEYWORD_ONE) {
+      if (this.check(TokenType.KEYWORD_IS) || this.peek().value === 'is') {
+        this.advance(); // consume 'is'
+        const right = this.parseExpression(Precedence.EQUALITY);
+        return {
+          kind: 'BinaryExpression',
+          operator: '==',
+          left,
+          right,
+          span: createSourceSpan(
+            left.span?.start.line || token.line,
+            left.span?.start.column || token.column,
+            right.span?.end.line || token.line,
+            right.span?.end.column || token.column + 1
+          ),
+        };
+      }
+    }
+
     // Binary / Assignment Operators
     const precedence = this.getBinaryPrecedence(token.type);
     const right = this.parseExpression(precedence);
@@ -1019,6 +1472,13 @@ export class ComputationalParser {
       case TokenType.DOT:
       case TokenType.LBRACKET:
         return Precedence.MEMBER;
+      case TokenType.KEYWORD_ONE: {
+        const next = this.peekNext();
+        if (next && (next.type === TokenType.KEYWORD_IS || next.value === 'is')) {
+          return Precedence.EQUALITY;
+        }
+        return Precedence.LOWEST;
+      }
 
       default:
         return this.getBinaryPrecedence(token.type);
@@ -1058,6 +1518,13 @@ export class ComputationalParser {
 
   private peek(): Token {
     return this.tokens[this.current] || { type: TokenType.EOF, value: '', line: 0, column: 0 };
+  }
+
+  private peekNext(): Token | undefined {
+    if (this.current + 1 < this.tokens.length) {
+      return this.tokens[this.current + 1];
+    }
+    return undefined;
   }
 
   private previous(): Token {
@@ -1103,6 +1570,8 @@ export class ComputationalParser {
       switch (this.peek().type) {
         case TokenType.KEYWORD_LET:
         case TokenType.KEYWORD_CONST:
+        case TokenType.KEYWORD_ONES:
+        case TokenType.KEYWORD_ONE:
         case TokenType.KEYWORD_FUNCTION:
         case TokenType.KEYWORD_FN:
         case TokenType.KEYWORD_ASYNC:
