@@ -27,7 +27,8 @@ function packageVSCodeExtension(options = {}) {
   const distDir = path.join(repoRoot, 'dist');
   fs.mkdirSync(distDir, { recursive: true });
 
-  const vsixOut = options.out || path.join(distDir, 'one-language-1.0.0.vsix');
+  const vsixOut = options.out ? path.resolve(options.out) : path.join(distDir, 'one-language-1.0.0.vsix');
+  fs.mkdirSync(path.dirname(vsixOut), { recursive: true });
 
   // ── Stage 1: Build Extension Bundle with esbuild ──────────────────────────
   console.log('\n[Stage 1] Bundling VS Code Extension with esbuild...');
@@ -48,11 +49,13 @@ function packageVSCodeExtension(options = {}) {
   const langConfigPath = path.join(editorDir, 'language-configuration.json');
   const tmLanguagePath = path.join(editorDir, 'syntaxes', 'one.tmLanguage.json');
   const snippetsPath = path.join(editorDir, 'snippets', 'one.code-snippets');
+  const iconPath = path.join(editorDir, 'assets', 'ONE-Language-Logo.png');
 
   assert(fs.existsSync(pkgJsonPath), 'Missing package.json in extension directory');
   assert(fs.existsSync(langConfigPath), 'Missing language-configuration.json');
   assert(fs.existsSync(tmLanguagePath), 'Missing syntaxes/one.tmLanguage.json');
   assert(fs.existsSync(snippetsPath), 'Missing snippets/one.code-snippets');
+  assert(fs.existsSync(iconPath), 'Missing extension icon at assets/ONE-Language-Logo.png');
 
   const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
   console.log(`  - Extension: ${pkg.publisher}.${pkg.name} v${pkg.version}`);
@@ -123,7 +126,10 @@ function assert(condition, message) {
 
 if (require.main === module) {
   try {
-    packageVSCodeExtension();
+    const args = process.argv.slice(2);
+    const outIdx = args.indexOf('--out');
+    const customOut = outIdx !== -1 && args[outIdx + 1] ? path.resolve(process.cwd(), args[outIdx + 1]) : undefined;
+    packageVSCodeExtension(customOut ? { out: customOut } : {});
   } catch (err) {
     console.error('\n[FATAL ERROR]:', err.message || err);
     process.exit(1);

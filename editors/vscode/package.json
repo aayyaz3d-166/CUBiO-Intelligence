@@ -6,6 +6,7 @@
   "publisher": "one-language",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
+  "icon": "assets/ONE-Language-Logo.png",
   "engines": {
     "vscode": "^1.80.0"
   },

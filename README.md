@@ -1,115 +1,89 @@
-# 🌌 ONE Language & CubiO Sovereign Computing Architecture
-**Deterministic Spatial Computing, Zero-OS Bare-Metal Execution & Silicon FPGA RTL Synthesis**  
-**Master Cryptographic Lattice Root:** `0xPQC_369_2e4040b29f32abbb5d90d65159b87230_SEAL`  
-**Security Model:** Fail-Closed Hardware Actuation Lock (`assign is_actuation_blocked = 1'b1;`)  
-**Determinism Variance:** $\sigma^2 = 0.0$ ($0.0000\%$ Replay Drift) | **Resource Ceiling:** $\le 512\text{ MB}$ Peak RSS
+<div align="center">
+
+# 🌌 ONE Language
+**Deterministic Spatial Computing, Zero-OS Execution & Sovereign Architecture**
+
+[![License](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Release-v1.0.0-gold.svg)](https://github.com/aayyaz3d-166/ONE-language-/releases)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20x64-lightgrey.svg)](#system-requirements-windows)
+[![VS Code](https://img.shields.io/badge/VS%20Code-Extension%20Available-purple.svg)](#visual-studio-code-extension-installation)
+
+<br/>
+
+<img src="assets/ONE-Language-Logo.png" alt="ONE Language Official Logo" width="220" />
+
+<br/>
+<br/>
+
+</div>
 
 ---
 
-## 🏛️ Architectural Overview
+## 🏛️ What is ONE Language?
 
-**ONE Language** is a next-generation sovereign spatial programming language designed to run directly on bare-metal hardware, decentralized quantum-entangled mesh networks, and physical FPGA silicon chips. It replaces flat linear memory and traditional thread locking with **3-6-9 harmonic actor resonance**, **spatial topology coordinates**, and **post-quantum cryptographic state sealing**.
+**ONE Language** is a next-generation deterministic spatial programming language and sovereign computing architecture. Built from first principles to provide verifiable execution, rigorous safety boundaries, and high-performance computing, ONE replaces uncontrolled mutation and unpredictable concurrency with:
 
-```
-                         ┌──────────────────────────────────────────────┐
-                         │       Bilingual Natural Language Compiler     │  (Phase 9: one-nlp)
-                         │       (Roman Urdu & English Intent ASTs)     │
-                         └──────────────────────┬───────────────────────┘
-                                                │
-                         ┌──────────────────────▼───────────────────────┐
-                         │         ONE Language Core Compiler & AST     │  (Phase 1)
-                         │       (Spatial Slicing, @memview, Types)     │
-                         └──────────────────────┬───────────────────────┘
-                                                │
-                         ┌──────────────────────▼───────────────────────┐
-                         │       CubiO 3-6-9 Harmonic Resonance VM      │  (Phase 2)
-                         │       (3 MHz, 6 MHz, 9 MHz Actor Bands)      │
-                         └──────┬───────────────┬───────────────┬───────┘
-                                │               │               │
-        ┌───────────────────────▼──┐     ┌──────▼────────┐     ┌▼─────────────────────────┐
-        │ Zero-Copy Ring Buffers   │     │ WAL Snapshots │     │ N-D Neuro-Symbolic Logic │ (Phases 3, 4, 5)
-        │ (Shared Memory Funnels)  │     │ (Time-Travel) │     │ (Topological Theorems)   │
-        └──────────────────────────┘     └───────────────┘     └───────────┬──────────────┘
-                                                                           │
-        ┌──────────────────────────────────────────────────────────────────▼──────────────┐
-        │ Spatial Topological Reasoning & Autonomous Multi-Mesh Federation               │ (Phases 7, 8)
-        │ (Instant EPR Bell Pair Quantum Collapse & PQC Gossip Guard)                     │
-        └──────────────────────────┬───────────────────────────────────────┬──────────────┘
-                                   │                                       │
-        ┌──────────────────────────▼──────────────┐     ┌──────────────────▼──────────────┐
-        │ Zero-OS Freestanding Micro-Kernel Binary │     │ Synthesizable IEEE 1364 Verilog │ (Phases 6, 10)
-        │ (`one-baremetal.bin` Bare-Metal Image)  │     │ (`cubio_top.v` Physical Silicon)│
-        └─────────────────────────────────────────┘     └─────────────────────────────────┘
-```
+- **Harmonic Spatial Scheduling:** Structured actor scheduling with deterministic time horizons and strict resource containment.
+- **Fail-Closed Hardware Actuation Lock:** Permanent safety guarantees (`actuationLock: true`) preventing unauthorized external actuation.
+- **Address369 Canonical Memory:** Bounded deterministic spatial memory access strictly constrained to indices `[0..368]`.
+- **Unified Developer Tooling:** Complete developer workflow with single-command scaffolding, static type checking, execution, bytecode compilation, deterministic formatting, and test automation.
+- **Native Visual Studio Code Experience:** Full language server intelligence with real-time diagnostics, completions, hover docs, and syntax highlighting.
 
 ---
 
-## 🛡️ The 4 Core Immutable Guarantees
+## 📦 Official v1.0.0 Release Artifacts
 
-1. **Hardware-Level Actuation Lock:** Hardwired directly to $V_{DD}$ in physical Verilog RTL (`assign is_actuation_blocked = 1'b1;`), ensuring permanent fail-closed protection and zero unauthorized physical actuation breaches.
-2. **Silicon-Level 3-6-9 Harmonics:** Physical clock dividers transforming a $100\text{ MHz}$ master clock into precise $3.33\text{ MHz}$, $6.25\text{ MHz}$, and $9.09\text{ MHz}$ hardware strobes.
-3. **Absolute Deterministic Integrity:** $100/100$ continuous replay cycles verified with zero drift ($\sigma^2 = 0.0$, $0.0000\%$ variance) under the strict $\le 512\text{ MB}$ RSS memory ceiling.
-4. **Post-Quantum Cryptographic Root:** Unbroken 10-phase Merkle parent hash chain anchored by `0xPQC_369_2e4040b29f32abbb5d90d65159b87230_SEAL`.
-
----
-
-## ⚡ The 10-Phase Lineage Matrix
-
-| Phase | Subsystem / Milestone | Artifact | Gate Status |
+| Distribution Asset | Description | Size | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Phase 1** | **Compiler Core Backend** | AST, Lexer, Bytecode generator (`src/one/`) | `PASS (100%)` |
-| **Phase 2** | **CubiO VM Runtime** | 3-6-9 Harmonic resonance scheduler (`src/core/`) | `PASS (100%)` |
-| **Phase 3** | **Streaming Funnels** | Zero-copy shared memory ring-buffers (`src/core/memory/`) | `PASS (100%)` |
-| **Phase 4** | **WAL Snapshots** | Bit-for-bit time-travel rollback (`time_travel_checkpoint.ts`) | `PASS (100%)` |
-| **Phase 5** | **HyperGrids & Neuro-Symbolic** | $N$-D tensor manifolds & symbolic reasoning (`hyper_grid.ts`) | `PASS (100%)` |
-| **Phase 6** | **Zero-OS Bare-Metal** | `one-baremetal.bin` freestanding binary image | `PASS (100%)` |
-| **Phase 7** | **Spatial Reasoning Engine** | Topological theorem prover (`spatial_reasoning_engine.ts`) | `PASS (100%)` |
-| **Phase 8** | **Multi-Mesh Quantum Federation** | P2P Swarm & EPR entanglement sync (`mesh_federation_engine.ts`) | `PASS (100%)` |
-| **Phase 9** | **Bilingual NLP Compiler** | Roman Urdu / English intent compiler (`nlp_spatial_parser.ts`) | `PASS (100%)` |
-| **Phase 10**| **FPGA RTL Silicon Synthesis** | Synthesizable Verilog RTL (`cubio_top.v`, `fpga_rtl_emitter.ts`) | `PASS (100%)` |
+| **`one.exe`** | Standalone Windows x64 CLI Executable | ~97 MB | Zero-dependency command-line compiler and VM |
+| **`one-language-1.0.0.vsix`** | VS Code Extension Package | ~1.95 MB | Complete IDE language support and syntax highlighting |
+| **`one-language-1.0.0-src.zip`** | Official Source Code Archive | ~1.38 MB | Verified, sanitized source release |
+| **`ONE-Language-Logo.png`** | Official High-Resolution Brand Logo | 324 KB | Silver-and-gold triangular seal (1024×1024) |
 
 ---
 
-## 🛠️ Developer Quickstart (v1.0)
+## 💻 System Requirements (Windows)
 
-ONE Language provides a unified developer CLI (`bin/one.cjs` / `bin/one.exe`) supporting compilation, static type checking, execution on UnifiedVM, formatting, and project management.
+- **Operating System:** Windows 10 (64-bit) or Windows 11 (64-bit).
+- **Standalone Mode (`one.exe`):** No external runtimes or prerequisites required.
+- **Developer / Source Mode:** Node.js $\ge$ 18.0.0 LTS and npm installed if building or running directly from TypeScript sources.
+- **Editor (Optional):** Visual Studio Code $\ge$ 1.80.0 for IDE integration.
 
-### Prerequisites
-- Node.js $\ge$ 18.0.0 (or precompiled standalone binary `bin/one.exe`)
+---
 
-### Quickstart Workflow
+## 🚀 Quick-Start Guide
+
+### 1. Running via Standalone Native Binary (`one.exe`)
+
+Download `one.exe` from the [Releases](https://github.com/aayyaz3d-166/ONE-language-/releases) section and verify from PowerShell:
 
 ```powershell
-# 1. Initialize a new ONE project
-node bin/one.cjs init my-app
-cd my-app
+# Verify CLI help
+.\one.exe --help
 
-# 2. Type-check and validate source code
-node bin/one.cjs check src/main.one
-
-# 3. Execute on UnifiedVM
-node bin/one.cjs run src/main.one
-
-# 4. Compile to intermediate representation (IR) artifact
-node bin/one.cjs build src/main.one
-
-# 5. Format source code deterministically (--write for in-place)
-node bin/one.cjs format src/main.one --write
-
-# 6. Execute inline expressions directly
-node bin/one.cjs run -e "let x = 21; let y = 2; print(x * y);"
+# Execute an inline ONE expression immediately
+.\one.exe run -e "let a = 21; let b = 2; print('Result: ' + string(a * b));"
 ```
 
-### Syntax Quick Reference
+### 2. Scaffold a New Project
+
+Scaffold an idiomatic ONE project directory structure:
+
+```powershell
+.\one.exe init my-first-one-app
+cd my-first-one-app
+```
+
+This creates:
+- `one.project.json` — Project configuration manifest
+- `src/main.one` — Entrypoint source file
+
+### 3. Write ONE Language Code
+
+Open `src/main.one` in your editor:
 
 ```one
-// 1. Modules and Enums
 module Geometry {
-  export enum ShapeKind {
-    Circle,
-    Rectangle
-  }
-
   export struct Point {
     x: int,
     y: int
@@ -121,114 +95,107 @@ module Geometry {
   }
 }
 
-// 2. First-class Functions and Closures
-function compute(multiplier: int): int {
-  let double = fn(val: int): int { return val * multiplier; };
-  return double(21);
+function main(): int {
+  let pt = Geometry.createPoint(10, 20);
+  print("Initialized point at x=" + string(pt.x) + ", y=" + string(pt.y));
+  return 0;
 }
 
-// 3. Sovereign Spatial Computing Guarantees
-rss_max = 512;
-actuation_lock = true;
-
-node LatticeRoot {
-  @Space(0.3, 0.6, 0.9);
-}
-
-print("Computed: " + string(compute(2)));
+main();
 ```
 
-### VS Code Extension & Language Server (LSP)
-Install the bundled VS Code extension for full IDE language support:
+### 4. Check and Run
+
 ```powershell
-code --install-extension dist/one-language-1.0.0.vsix
-```
-Features include:
-- Syntax highlighting for all ONE computational and spatial constructs
-- Real-time syntax, semantic, and type diagnostic squiggles
-- Hover tooltips with documentation and type signatures
-- Context-aware auto-completion for keywords (`struct`, `enum`, `async`, `await`, `export`, `module`), standard library built-ins, and declared symbols
+# Perform static type checking and syntax validation without execution
+.\one.exe check src/main.one
 
----
-
-## 🚀 Getting Started & Sovereign CLI Usage
-
-The sovereign toolchain is powered by the standalone native binary `one.exe`:
-
-### 1. Inspect Spatial 3D Orbit Dashboard
-```powershell
-.\one.exe inspect "rss_max = 512; node Sector_01 { @Space(0.3, 0.6, 0.9); checkpoint init; }"
-```
-
-### 2. Compile ONE Language Source to Bytecode
-```powershell
-.\one.exe compile program.one
-```
-
-### 3. Run VM Execution with 369 Harmonic Scheduling
-```powershell
-.\one.exe run program.one
+# Compile and execute on the UnifiedVM
+.\one.exe run src/main.one
 ```
 
 ---
 
-## 🧪 Automated Verification Suite
+## 🛠️ Supported Developer CLI Commands
 
-Run all TypeScript integration test suites:
+The `one` CLI provides six primary developer commands:
+
+| Command | Usage | Description |
+| :--- | :--- | :--- |
+| **`init`** | `one init [dir]` | Scaffolds a new ONE Language project with manifest and starter source. |
+| **`run`** | `one run <file.one>`<br/>`one run -e "<code>"` | Compiles and executes a ONE program on the UnifiedVM, or evaluates inline code. |
+| **`check`** | `one check <file.one>` | Statically verifies syntax, scopes, and types without runtime execution. |
+| **`build`** | `one build <file.one>` | Compiles ONE source code into a packaged Intermediate Representation (IR) artifact. |
+| **`format`** | `one format <file.one>`<br/>`one format <file.one> --write` | Formats ONE source code deterministically (use `--write` to format in-place). |
+| **`test`** | `one test [dir]` | Discovers and executes all `*.test.one` test suites in the target directory. |
+
+---
+
+## 🧩 Visual Studio Code Extension Installation
+
+The ONE Language extension provides rich IDE language support for `.one` files.
+
+### Option A: Install via VS Code Command Line (Recommended)
 ```powershell
-npx ts-node scratch/cubio_neural_lattice/tests/test_phase7_reasoning.ts
-npx ts-node scratch/cubio_neural_lattice/tests/test_phase8_mesh.ts
-npx ts-node scratch/cubio_neural_lattice/tests/test_phase9_nlp.ts
-npx ts-node scratch/cubio_neural_lattice/tests/test_phase10_fpga.ts
+code --install-extension one-language-1.0.0.vsix
 ```
 
-Run independent Python forensic auditors:
+### Option B: Install via Visual Studio Code UI
+1. Launch Visual Studio Code.
+2. Open the Extensions sidebar (`Ctrl+Shift+X`).
+3. Click the **`...`** (Views and More Actions) menu in the top-right corner of the Extensions panel.
+4. Select **Install from VSIX...**
+5. Browse to and select `one-language-1.0.0.vsix`.
+6. Reload or reopen VS Code. The official silver-and-gold ONE Language icon will appear in your installed extensions list.
+
+### Features Included in the Extension
+- **Syntax Highlighting:** TextMate grammar covering statements, declarations, types, modules, directives, and spatial tokens.
+- **Language Intelligence:** In-process Language Server (`OneLanguageServer`) emitting syntax, semantic, and type diagnostics.
+- **Snippets Catalog:** 16 built-in snippet templates for structs, enums, functions, modules, and spatial constructs.
+- **Editor Commands:** `ONE: Run Current File` and `ONE: Check Current File Syntax & Types`.
+
+---
+
+## 🛡️ Core Safety Guarantees & Known Limitations
+
+### 1. Fail-Closed Actuation Lock
+- In accordance with sovereign safety guarantees, physical or external actuation directives (`actuate()`) trigger compile-time and runtime diagnostics fail-closed (`actuationLock: true`).
+
+### 2. Address369 Canonical Boundaries
+- Low-level addressable memory registers in ONE Language are strictly bounded within the range `[0..368]`. Access outside these indices is rejected fail-closed to prevent spatial buffer overrun.
+
+### 3. Windows PowerShell Execution Policies
+- If running development scripts from source using PowerShell, ensure your script execution policy allows local scripts:
+  ```powershell
+  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+  ```
+
+---
+
+## 🧪 Running the Verification Suite (From Source)
+
+For developers contributing to or verifying the ONE Language codebase from source:
+
 ```powershell
-python scratch/cubio_neural_lattice/verifier.py
-python scratch/cubio_neural_lattice/verifier_phase7.py
-python scratch/cubio_neural_lattice/verifier_phase8.py
-python scratch/cubio_neural_lattice/verifier_phase9.py
-python scratch/cubio_neural_lattice/verifier_phase10.py
+# Install development dependencies
+npm install
+
+# Run compiler and semantic lowering verification suite
+node scripts/run-test.cjs tests/compiler/struct_enum_lowering.test.ts
+
+# Package the VS Code extension
+node scripts/package-vscode-extension.cjs
 ```
 
 ---
 
-## 📦 Directory Structure
+## 📄 License & Contributing
 
-```
-f:/ONE language/
-├── one.exe                               # Sovereign Native Compiler & CLI Binary (91.5 MB)
-├── cubio_fpga_phase10.3dmemory           # 10-Phase Sovereign Master Memory Seal
-├── package.json                          # Node.js project configuration
-├── README.md                             # Master Architecture Documentation
-├── src/                                  # ONE Language TypeScript Core Compiler
-│   ├── one/                              # Lexer, Parser, AST Compiler
-│   ├── core/                             # VM, Memory, Crypto, Scheduler
-│   ├── cli/                              # 3D Spatial Visualizer & CLI commands
-│   └── builder/                          # Antigravity Adapter Bridge
-└── scratch/cubio_neural_lattice/         # Sovereign Computing Fabric & Verification
-    ├── cubio_top.v                       # IEEE 1364-2005 Synthesizable Verilog RTL
-    ├── fpga_rtl_emitter.ts               # Hardware-in-the-Loop RTL Synthesizer (P10)
-    ├── nlp_spatial_parser.ts             # Bilingual Natural Language Spatial Parser (P9)
-    ├── mesh_federation_engine.ts         # Autonomous Quantum Mesh Federation (P8)
-    ├── spatial_reasoning_engine.ts       # Spatial Topological Reasoning Engine (P7)
-    ├── baremetal_compiler.ts             # Zero-OS Bare-Metal Binary Compiler (P6)
-    ├── hyper_grid.ts                     # N-Dimensional HyperGrid Engine (P5)
-    ├── cubio_builder.ts                  # 10-Phase Master Lineage Compiler Bridge
-    ├── tests/                            # Automated Multi-Phase Test Suite
-    │   ├── test_phase7_reasoning.ts
-    │   ├── test_phase8_mesh.ts
-    │   ├── test_phase9_nlp.ts
-    │   └── test_phase10_fpga.ts
-    ├── verifier.py                       # Python Bare-Metal Forensic Auditor (P6)
-    ├── verifier_phase7.py                # Python Spatial Reasoning Forensic Auditor (P7)
-    ├── verifier_phase8.py                # Python Quantum Mesh Forensic Auditor (P8)
-    ├── verifier_phase9.py                # Python NLP Spatial Forensic Auditor (P9)
-    ├── verifier_phase10.py               # Python FPGA RTL Silicon Forensic Auditor (P10)
-    └── CUBIO_FPGA_RTL_V10_REPORT.md      # Gate CNL-P10-001 Master Certification Report
-```
+ONE Language is dual-licensed under the **MIT License** and the **Apache License, Version 2.0**:
+- [`LICENSE`](LICENSE) — Dual-license summary
+- [`LICENSE-MIT`](LICENSE-MIT) — MIT License full text
+- [`LICENSE-APACHE`](LICENSE-APACHE) — Apache License 2.0 full text
+- [`NOTICE`](NOTICE) — Attribution and legal notice
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — Contributor Covenant and contribution guidelines
 
----
-**Certified by:** Antigravity AI Engine & Sovereign Verification Authority  
-**Master Cryptographic Root:** `0xPQC_369_2e4040b29f32abbb5d90d65159b87230_SEAL`  
-**All 10/10 Phases Certified:** `Classification A — PASS (100% Verification Rate)`
+Copyright © 2026 Ayyaz3D.
