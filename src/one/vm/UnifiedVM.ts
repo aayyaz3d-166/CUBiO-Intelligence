@@ -155,6 +155,8 @@ export interface VMOptions {
   spatialBridge?: SpatialBridge;
   maxCallDepth?: number;
   maxInstructions?: number;
+  mockInputs?: string[];
+  inputHandler?: () => string;
 }
 
 const MAX_CALL_DEPTH = 512;
@@ -164,6 +166,8 @@ export class UnifiedVM {
   // Configurable resource limits
   private maxCallDepth: number = MAX_CALL_DEPTH;
   private maxInstructions: number = MAX_INSTRUCTIONS;
+  private options?: VMOptions;
+  private mockInputQueue: string[] = [];
 
   // Global variable store (top-level environment)
   private globals: Map<string, VMValue> = new Map();
@@ -217,6 +221,8 @@ export class UnifiedVM {
     // Configure resource limits for this run
     this.maxCallDepth = options?.maxCallDepth ?? MAX_CALL_DEPTH;
     this.maxInstructions = options?.maxInstructions ?? MAX_INSTRUCTIONS;
+    this.options = options;
+    this.mockInputQueue = options?.mockInputs ? [...options.mockInputs] : [];
 
     // Reset runtime state
     this.globals = new Map();
@@ -818,6 +824,26 @@ export class UnifiedVM {
         const value = this.loadOperand(instr.sources[0]);
         const str = this.formatValue(value);
         this.output.push(str);
+        break;
+      }
+
+      // ── INPUT ─────────────────────────────────────────────────────────────
+      case 'INPUT': {
+        if (!instr.destination) break;
+        let inputStr: string;
+        if (this.mockInputQueue.length > 0) {
+          inputStr = this.mockInputQueue.shift()!;
+        } else if (this.options?.inputHandler) {
+          inputStr = this.options.inputHandler();
+        } else {
+          throw new OneVMError(
+            'E5012',
+            `Input stream exhausted: no mock inputs or input handler available`,
+            this.pc - 1,
+            this.getStackTrace()
+          );
+        }
+        this.storeVar(instr.destination, inputStr);
         break;
       }
 

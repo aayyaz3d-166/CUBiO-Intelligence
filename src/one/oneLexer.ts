@@ -56,6 +56,22 @@ export enum TokenType {
   KEYWORD_ASYNC = 'KEYWORD_ASYNC',
   KEYWORD_AWAIT = 'KEYWORD_AWAIT',
 
+  // v1.0.1 Simple Command Syntax Keywords
+  KEYWORD_ONE = 'KEYWORD_ONE',
+  KEYWORD_ONES = 'KEYWORD_ONES',
+  KEYWORD_OUT = 'KEYWORD_OUT',
+  KEYWORD_IN = 'KEYWORD_IN',
+  KEYWORD_UP = 'KEYWORD_UP',
+  KEYWORD_DOWN = 'KEYWORD_DOWN',
+  KEYWORD_REPEAT = 'KEYWORD_REPEAT',
+  KEYWORD_STOP = 'KEYWORD_STOP',
+  KEYWORD_MAKE = 'KEYWORD_MAKE',
+  KEYWORD_WAY = 'KEYWORD_WAY',
+  KEYWORD_DONE = 'KEYWORD_DONE',
+  KEYWORD_SET = 'KEYWORD_SET',
+  KEYWORD_IS = 'KEYWORD_IS',
+  KEYWORD_BY = 'KEYWORD_BY',
+
   // Operators & Symbols
   OP_FUNNEL = 'OP_FUNNEL', // ->
   OP_ALIGN = 'OP_ALIGN',   // =>
@@ -162,6 +178,22 @@ export class OneLexer {
     null: TokenType.KEYWORD_NULL,
     async: TokenType.KEYWORD_ASYNC,
     await: TokenType.KEYWORD_AWAIT,
+
+    // v1.0.1 Simple Command Syntax Keywords
+    one: TokenType.KEYWORD_ONE,
+    "one's": TokenType.KEYWORD_ONES,
+    out: TokenType.KEYWORD_OUT,
+    in: TokenType.KEYWORD_IN,
+    up: TokenType.KEYWORD_UP,
+    down: TokenType.KEYWORD_DOWN,
+    repeat: TokenType.KEYWORD_REPEAT,
+    stop: TokenType.KEYWORD_STOP,
+    make: TokenType.KEYWORD_MAKE,
+    way: TokenType.KEYWORD_WAY,
+    done: TokenType.KEYWORD_DONE,
+    set: TokenType.KEYWORD_SET,
+    is: TokenType.KEYWORD_IS,
+    by: TokenType.KEYWORD_BY,
   };
 
   constructor(source: string) {
@@ -201,6 +233,12 @@ export class OneLexer {
         const startCol = this.column;
         this.advance(1); // skip open quote
         while (this.position < this.source.length && this.source[this.position] !== quote) {
+          if (this.source[this.position] === '\\' && this.position + 1 < this.source.length) {
+            this.advance(1); // skip backslash
+            strVal += this.source[this.position];
+            this.advance(1);
+            continue;
+          }
           strVal += this.source[this.position];
           this.advance(1);
         }
@@ -390,6 +428,17 @@ export class OneLexer {
         ) {
           identStr += this.source[this.position];
           this.advance(1);
+        }
+
+        // Special check for one's without breaking single-quoted strings
+        if (
+          identStr === 'one' &&
+          this.source[this.position] === "'" &&
+          this.source[this.position + 1] === 's' &&
+          (this.position + 2 >= this.source.length || !/[a-zA-Z0-9_]/.test(this.source[this.position + 2]))
+        ) {
+          identStr += "'s";
+          this.advance(2);
         }
 
         const keywordType = OneLexer.KEYWORDS[identStr];

@@ -48,6 +48,8 @@ export class GrammarRouter {
     TokenType.KEYWORD_ENUM,
     TokenType.KEYWORD_CLASS,
     TokenType.KEYWORD_NATIVE,
+    TokenType.KEYWORD_ONE,
+    TokenType.KEYWORD_ONES,
   ]);
 
   /**

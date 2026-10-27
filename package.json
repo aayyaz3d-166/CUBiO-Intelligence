@@ -1,6 +1,6 @@
 {
   "name": "one-language-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ONE Language Core Compiler Backend (Lexer, Parser, Compiler/Validator)",
   "license": "MIT OR Apache-2.0",
   "private": true,
@@ -36,6 +36,8 @@
     "test:async": "node --import ./scripts/esm-register.js tests/compiler/async_await.test.ts",
     "test:modules": "node --import ./scripts/esm-register.js tests/compiler/multi_file_modules.test.ts",
     "test:packing": "node --import ./scripts/esm-register.js tests/compiler/linker_executable_packing.test.ts",
+    "test:v101": "node --import ./scripts/esm-register.js tests/v101/v101_command_syntax.test.ts",
+    "one:dev": "node scripts/one-dev.cjs",
     "test:spec": "ts-node scratch/cubio_neural_lattice/tests/test_phase1_specification_conformance.ts",
     "test:phase2:unified": "ts-node scratch/cubio_neural_lattice/tests/test_phase2_unified_compiler.ts",
     "test:phase3:vm": "ts-node scratch/cubio_neural_lattice/tests/test_phase3_vm.ts",

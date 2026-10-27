@@ -133,5 +133,72 @@
       "export { ${1:symbol} };"
     ],
     "description": "Export declarations from current ONE module"
+  },
+  "One's Variable Declaration": {
+    "prefix": "ones",
+    "body": [
+      "one's ${1:variable} = ${2:value};"
+    ],
+    "description": "Declare a variable using ONE Language v1.0.1 command syntax"
+  },
+  "One Set Mutation": {
+    "prefix": "one-set",
+    "body": [
+      "one set ${1:variable} = ${2:value};"
+    ],
+    "description": "Mutate a variable using ONE Language v1.0.1 command syntax"
+  },
+  "One Out Print": {
+    "prefix": "one-out",
+    "body": [
+      "one out ${1:expression};"
+    ],
+    "description": "Print expression using ONE Language v1.0.1 command syntax"
+  },
+  "One In Input": {
+    "prefix": "one-in",
+    "body": [
+      "one in ${1:variable};"
+    ],
+    "description": "Read input into variable using ONE Language v1.0.1 command syntax"
+  },
+  "One If Conditional": {
+    "prefix": "one-if",
+    "body": [
+      "one if ${1:condition} {",
+      "\t$0",
+      "} one else {",
+      "\t",
+      "}"
+    ],
+    "description": "Conditional branching using ONE Language v1.0.1 command syntax"
+  },
+  "One Repeat Loop": {
+    "prefix": "one-repeat",
+    "body": [
+      "one repeat ${1:count} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Bounded repeat loop using ONE Language v1.0.1 command syntax"
+  },
+  "One Repeat While Loop": {
+    "prefix": "one-while",
+    "body": [
+      "one repeat while ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Conditional while loop using ONE Language v1.0.1 command syntax"
+  },
+  "One Make Function": {
+    "prefix": "one-make",
+    "body": [
+      "one make ${1:name}(${2:params}): ${3:void} {",
+      "\t$0",
+      "\tone done;",
+      "}"
+    ],
+    "description": "Function definition using ONE Language v1.0.1 command syntax"
   }
 }
