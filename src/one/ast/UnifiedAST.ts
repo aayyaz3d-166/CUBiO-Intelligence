@@ -11,6 +11,8 @@ export type ASTNodeKind =
   | 'BlockStatement'
   | 'ExpressionStatement'
   | 'PrintStatement'
+  | 'BreakStatement'
+  | 'InputStatement'
   | 'ImportStatement'
   | 'ExportStatement'
   | 'ModuleDeclaration'
@@ -174,6 +176,15 @@ export interface PrintStatementNode extends BaseASTNode {
   expression: ExpressionNode;
 }
 
+export interface BreakStatementNode extends BaseASTNode {
+  kind: 'BreakStatement';
+}
+
+export interface InputStatementNode extends BaseASTNode {
+  kind: 'InputStatement';
+  target: string;
+}
+
 export interface ImportSpecifier {
   name: string;
   alias?: string;
@@ -247,6 +258,8 @@ export type UnifiedStatementNode =
   | BlockStatementNode
   | ExpressionStatementNode
   | PrintStatementNode
+  | BreakStatementNode
+  | InputStatementNode
   | ImportStatementNode
   | ExportStatementNode
   | ModuleDeclarationNode

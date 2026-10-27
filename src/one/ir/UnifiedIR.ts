@@ -21,6 +21,7 @@ export type IROpcode =
   | 'JUMP_IF'
   | 'JUMP_IF_FALSE'
   | 'PRINT'
+  | 'INPUT'
   | 'SPATIAL_OP'
   | 'FIELD_GET'
   | 'FIELD_SET'

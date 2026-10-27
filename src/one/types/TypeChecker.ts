@@ -11,6 +11,8 @@ import {
   BlockStatementNode,
   ExpressionStatementNode,
   PrintStatementNode,
+  BreakStatementNode,
+  InputStatementNode,
   StructDeclarationNode,
   EnumDeclarationNode,
   CallExpressionNode,
@@ -223,6 +225,13 @@ export class TypeChecker {
 
       case 'DeclarativeSpatialNode':
         // Spatial declarative nodes are governed by spatial invariants
+        break;
+
+      case 'BreakStatement':
+        break;
+
+      case 'InputStatement':
+        this.currentEnv.bind(stmt.target, TypeString);
         break;
     }
   }

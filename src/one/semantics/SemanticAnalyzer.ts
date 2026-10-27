@@ -11,6 +11,8 @@ import {
   BlockStatementNode,
   ExpressionStatementNode,
   PrintStatementNode,
+  BreakStatementNode,
+  InputStatementNode,
   ImportStatementNode,
   ExportStatementNode,
   ModuleDeclarationNode,
@@ -44,6 +46,7 @@ export class SemanticAnalyzer {
   private structRegistry: Map<string, StructDeclarationNode> = new Map();
   private enumRegistry: Map<string, EnumDeclarationNode> = new Map();
   private asyncContextStack: boolean[] = [true];
+  private loopDepth: number = 0;
 
   constructor() {
     this.globalScope = new Scope('global');
@@ -63,6 +66,7 @@ export class SemanticAnalyzer {
     this.structRegistry.clear();
     this.enumRegistry.clear();
     this.asyncContextStack = [true];
+    this.loopDepth = 0;
     this.globalScope = new Scope('global');
     for (const bName of Object.keys(ONE_BUILTIN_FUNCTIONS)) {
       this.globalScope.define({
@@ -222,6 +226,29 @@ export class SemanticAnalyzer {
       case 'DeclarativeSpatialNode':
         this.analyzeDeclarativeSpatialNode(stmt);
         break;
+
+      case 'BreakStatement':
+        if (this.loopDepth <= 0) {
+          this.addDiagnostic(
+            'E3010',
+            `'one stop' statement is not allowed outside of a loop body`,
+            stmt.span?.start.line,
+            stmt.span?.start.column
+          );
+        }
+        break;
+
+      case 'InputStatement':
+        if (!this.currentScope.resolve(stmt.target)) {
+          this.currentScope.define({
+            name: stmt.target,
+            kind: 'variable',
+            typeAnnotation: 'string',
+            scopeLevel: this.currentScope.level,
+            span: stmt.span,
+          });
+        }
+        break;
     }
   }
 
@@ -363,7 +390,9 @@ export class SemanticAnalyzer {
 
   private analyzeWhileStatement(node: WhileStatementNode): void {
     this.analyzeExpression(node.condition);
+    this.loopDepth++;
     this.analyzeBlockStatement(node.body);
+    this.loopDepth--;
   }
 
   private analyzeForStatement(node: ForStatementNode): void {
@@ -380,9 +409,11 @@ export class SemanticAnalyzer {
       span: node.span,
     });
 
+    this.loopDepth++;
     for (const stmt of node.body.statements) {
       this.analyzeStatement(stmt);
     }
+    this.loopDepth--;
 
     this.currentScope = this.currentScope.parent!;
   }

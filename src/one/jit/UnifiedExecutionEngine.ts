@@ -9,7 +9,7 @@
  */
 
 import { UnifiedIRProgram } from '../ir/UnifiedIR';
-import { UnifiedVM, VMExecutionResult } from '../vm/UnifiedVM';
+import { UnifiedVM, VMExecutionResult, VMOptions } from '../vm/UnifiedVM';
 import { JITCompiler, JITCompilerOptions } from './JITCompiler';
 
 export type ExecutionMode = 'jit' | 'interp' | 'auto';
@@ -18,6 +18,7 @@ export interface ExecutionEngineOptions extends JITCompilerOptions {
   mode?: ExecutionMode;
   fallbackOnError?: boolean;
   initialGlobals?: Record<string, any>;
+  vmOptions?: VMOptions;
 }
 
 export interface ParityComparisonResult {
@@ -40,7 +41,7 @@ export class UnifiedExecutionEngine {
 
     if (mode === 'interp') {
       const vm = new UnifiedVM();
-      return vm.execute(program);
+      return vm.execute(program, options.vmOptions);
     }
 
     if (mode === 'jit') {
@@ -55,13 +56,13 @@ export class UnifiedExecutionEngine {
       }
       if (fallback) {
         const vm = new UnifiedVM();
-        return vm.execute(program);
+        return vm.execute(program, options.vmOptions);
       }
       return jitRes;
     } catch {
       if (fallback) {
         const vm = new UnifiedVM();
-        return vm.execute(program);
+        return vm.execute(program, options.vmOptions);
       }
       throw new Error('JIT execution failed and fallback is disabled');
     }

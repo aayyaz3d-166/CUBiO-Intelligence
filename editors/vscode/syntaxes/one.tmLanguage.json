@@ -104,7 +104,7 @@
       "patterns": [
         {
           "name": "storage.type.one",
-          "match": "\\b(let|const|struct|enum|class|constructor|method|function|fn|native|private|public)\\b"
+          "match": "\\b(let|const|struct|enum|class|constructor|method|function|fn|native|private|public|one's|one)\\b"
         }
       ]
     },
@@ -112,7 +112,7 @@
       "patterns": [
         {
           "name": "keyword.control.flow.one",
-          "match": "\\b(if|else|while|for|return|async|await)\\b"
+          "match": "\\b(if|else|while|for|return|async|await|repeat|stop|make|way|done|set|out|in|up|down|is|by)\\b"
         }
       ]
     },

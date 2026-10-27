@@ -2,6 +2,24 @@
 
 All notable changes to the ONE Language Visual Studio Code extension will be documented in this file.
 
+## [1.0.1] - 2026-10-28
+
+### Added
+- Syntax highlighting grammar for ONE Language v1.0.1 commands:
+  - Variable declaration (`one's name = value;`)
+  - Variable mutation (`one set name = value;`)
+  - Output statement (`one out expression;`)
+  - Input statement (`one in target;`)
+  - Increment / Decrement (`one up name [by expr];`, `one down name [by expr];`)
+  - Conditionals (`one if condition { ... } one else { ... }`)
+  - Loops (`one repeat count { ... }`, `one repeat while condition { ... }`)
+  - Loop break (`one stop;`)
+  - Function definitions (`one make name(...) { ... }`)
+  - Return / Completion (`one way expr;`, `one done;`)
+  - Equality operator (`left one is right`)
+- 16 new code snippets for all v1.0.1 command syntax patterns (`ones`, `oneset`, `oneout`, `onein`, `oneup`, `onedown`, `oneif`, `onerepeat`, `onerepeatwhile`, `onestop`, `onemake`, `oneway`, `onedone`, `oneis`).
+- Official ONE Language icon registered in extension manifest.
+
 ## [1.0.0] - 2026-10-26
 
 ### Added

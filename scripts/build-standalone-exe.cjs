@@ -166,9 +166,10 @@ function buildStandaloneExecutable(opts = parseArgs()) {
 
   // ── Stage 6: Build Artifact Manifest and Checksums ─────────────────────
   console.log('\n[Stage 6] Emitting Build Manifest and Integrity Hashes...');
+  const repoPkg = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf-8'));
   const manifest = {
     artifact: path.basename(opts.outPath),
-    version: '1.0.0',
+    version: repoPkg.version || '1.0.1',
     target: 'windows-x64-sea',
     nodeBaseVersion: nodeVer,
     builtAt: new Date().toISOString(),

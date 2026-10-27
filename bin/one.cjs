@@ -31,8 +31,8 @@ function runWithCLI(OneDeveloperCLI) {
   }
 }
 
-// 1. Try bundled distribution artifact first if present
-if (fs.existsSync(bundledCli)) {
+// 1. Try bundled distribution artifact first if present (skipped if ONE_DEV=1)
+if (process.env.ONE_DEV !== '1' && fs.existsSync(bundledCli)) {
   try {
     const cliModule = require(bundledCli);
     const OneDeveloperCLI = cliModule.OneDeveloperCLI || cliModule.default?.OneDeveloperCLI || cliModule;

@@ -26,6 +26,7 @@ export interface UnifiedCompilerOptions {
   checkOnly?: boolean;
   execute?: boolean;
   executionMode?: 'jit' | 'interp' | 'auto';
+  vmOptions?: VMOptions;
 }
 
 export interface UnifiedCompilerResult {
@@ -122,7 +123,10 @@ export class UnifiedCompiler {
     let vmResult: VMExecutionResult | undefined = undefined;
     if (ir && this.options.execute) {
       const { UnifiedExecutionEngine } = require('./jit/UnifiedExecutionEngine');
-      vmResult = UnifiedExecutionEngine.execute(ir, { mode: this.options.executionMode ?? 'interp' });
+      vmResult = UnifiedExecutionEngine.execute(ir, {
+        mode: this.options.executionMode ?? 'interp',
+        vmOptions: this.options.vmOptions,
+      });
     }
 
     const totalTimeMs = performance.now() - totalStart;
