@@ -70,6 +70,87 @@
 
 ---
 
+## 🛠️ Developer Quickstart (v1.0)
+
+ONE Language provides a unified developer CLI (`bin/one.cjs` / `bin/one.exe`) supporting compilation, static type checking, execution on UnifiedVM, formatting, and project management.
+
+### Prerequisites
+- Node.js $\ge$ 18.0.0 (or precompiled standalone binary `bin/one.exe`)
+
+### Quickstart Workflow
+
+```powershell
+# 1. Initialize a new ONE project
+node bin/one.cjs init my-app
+cd my-app
+
+# 2. Type-check and validate source code
+node bin/one.cjs check src/main.one
+
+# 3. Execute on UnifiedVM
+node bin/one.cjs run src/main.one
+
+# 4. Compile to intermediate representation (IR) artifact
+node bin/one.cjs build src/main.one
+
+# 5. Format source code deterministically (--write for in-place)
+node bin/one.cjs format src/main.one --write
+
+# 6. Execute inline expressions directly
+node bin/one.cjs run -e "let x = 21; let y = 2; print(x * y);"
+```
+
+### Syntax Quick Reference
+
+```one
+// 1. Modules and Enums
+module Geometry {
+  export enum ShapeKind {
+    Circle,
+    Rectangle
+  }
+
+  export struct Point {
+    x: int,
+    y: int
+  }
+
+  export function createPoint(x: int, y: int): Point {
+    let p = Point { x: x, y: y };
+    return p;
+  }
+}
+
+// 2. First-class Functions and Closures
+function compute(multiplier: int): int {
+  let double = fn(val: int): int { return val * multiplier; };
+  return double(21);
+}
+
+// 3. Sovereign Spatial Computing Guarantees
+rss_max = 512;
+actuation_lock = true;
+
+node LatticeRoot {
+  @Space(0.3, 0.6, 0.9);
+}
+
+print("Computed: " + string(compute(2)));
+```
+
+### VS Code Extension & Language Server (LSP)
+Install the bundled VS Code extension for full IDE language support:
+```powershell
+code --install-extension dist/one-language-1.0.0.vsix
+```
+Features include:
+- Syntax highlighting for all ONE computational and spatial constructs
+- Real-time syntax, semantic, and type diagnostic squiggles
+- Hover tooltips with documentation and type signatures
+- Context-aware auto-completion for keywords (`struct`, `enum`, `async`, `await`, `export`, `module`), standard library built-ins, and declared symbols
+
+---
+
 ## 🚀 Getting Started & Sovereign CLI Usage
 
 The sovereign toolchain is powered by the standalone native binary `one.exe`:

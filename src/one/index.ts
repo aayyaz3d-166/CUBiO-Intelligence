@@ -26,6 +26,14 @@ export * from './tensor';
 export * from './jit';
 export * from './workers';
 export * from './training';
+export * from './vig';
+export * from './modules/ModuleResolver';
+export * from './modules/ModuleGraph';
+export * from './modules/MultiFileLinker';
+export * from './packer/ExecutableArtifact';
+export * from './packer/ExecutableValidator';
+export * from './packer/ExecutablePacker';
+export * from './packer/ExecutableLinker';
 
 // Disambiguate duplicate ExecutionMode export between ./runtime and ./jit
 export type { ExecutionMode } from './runtime';

@@ -9,10 +9,25 @@
 
 import * as path from 'path';
 import * as fs from 'fs';
+import { createRequire } from 'module';
 
-// Require the bundled CJS runtime
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const runtime = require('./native5m_runtime.cjs');
+// Resolve and require the bundled CJS runtime across both CJS and native ESM contexts
+let runtime: any;
+try {
+  const req = typeof require !== 'undefined' ? require : createRequire(path.resolve(process.cwd(), 'package.json'));
+  const candidateCwd = path.resolve(process.cwd(), 'src/one/intelligence/hybrid/native5m_runtime.cjs');
+  const candidateLocal = typeof __dirname !== 'undefined' ? path.resolve(__dirname, 'native5m_runtime.cjs') : '';
+  
+  if (candidateLocal && fs.existsSync(candidateLocal)) {
+    runtime = req(candidateLocal);
+  } else if (fs.existsSync(candidateCwd)) {
+    runtime = req(candidateCwd);
+  } else {
+    runtime = req('./native5m_runtime.cjs');
+  }
+} catch {
+  runtime = null;
+}
 
 export interface Native5MGenerationOptions {
   maxTokens?: number;

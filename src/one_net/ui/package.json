@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "ONE Language Explorer UI — backend HTTP service serving the real engine over a minimal REST API. No external dependencies; built on Node.js built-in modules only.",
   "private": true,
-  "license": "MIT",
+  "license": "MIT OR Apache-2.0",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",

@@ -15,6 +15,8 @@ import * as path from 'path';
 import { UnifiedCompiler } from '../UnifiedCompiler';
 import { OneFormatter } from '../formatter/OneFormatter';
 import { DiagnosticFormatter } from '../diagnostics/DiagnosticFormatter';
+import { ExecutablePacker } from '../packer/ExecutablePacker';
+import { ExecutableLinker } from '../packer/ExecutableLinker';
 
 export interface DeveloperCLIResult {
   exitCode: number;
@@ -38,12 +40,27 @@ export class OneDeveloperCLI {
     if (cleanArgs.length > 0 && (cleanArgs[0].endsWith('node') || cleanArgs[0].endsWith('node.exe'))) {
       cleanArgs = cleanArgs.slice(1);
     }
-    if (cleanArgs.length > 0 && (cleanArgs[0].endsWith('.ts') || cleanArgs[0].endsWith('.js') || cleanArgs[0] === 'one')) {
+    if (cleanArgs.length > 0 && (
+      cleanArgs[0].endsWith('.ts') || 
+      cleanArgs[0].endsWith('.js') || 
+      cleanArgs[0].endsWith('.cjs') || 
+      cleanArgs[0].endsWith('.mjs') || 
+      cleanArgs[0] === 'one' ||
+      cleanArgs[0].endsWith('/one') ||
+      cleanArgs[0].endsWith('\\one') ||
+      cleanArgs[0].endsWith('one.exe') ||
+      cleanArgs[0].endsWith('one.cmd')
+    )) {
       cleanArgs = cleanArgs.slice(1);
     }
 
-    if (cleanArgs.length === 0 || cleanArgs[0] === '--help' || cleanArgs[0] === '-h') {
+    if (cleanArgs.length === 0 || cleanArgs[0] === '--help' || cleanArgs[0] === '-h' || cleanArgs[0] === 'help') {
       log(this.getHelpText());
+      return { exitCode: 0, stdout: stdoutLines.join('\n'), stderr: '' };
+    }
+
+    if (cleanArgs[0] === '--version' || cleanArgs[0] === '-v' || cleanArgs[0] === 'version') {
+      log('ONE Language Developer CLI v1.0.0');
       return { exitCode: 0, stdout: stdoutLines.join('\n'), stderr: '' };
     }
 
@@ -65,6 +82,7 @@ export class OneDeveloperCLI {
         break;
 
       case 'build':
+      case 'pack':
         res = this.handleBuild(cmdArgs, log, err);
         break;
 
@@ -106,7 +124,7 @@ export class OneDeveloperCLI {
 
     const manifest = {
       name: path.basename(targetDir) || 'one-project',
-      version: '0.1.0',
+      version: '1.0.0',
       entry: 'src/main.one',
       description: 'A sovereign ONE Language computational project',
     };
@@ -129,7 +147,7 @@ print message
     log(`  - Entry:    src/main.one`);
     log(`\nRun your project:\n  one run src/main.one`);
 
-    return { exitCode: 0, stdout: log.name, stderr: '' };
+    return { exitCode: 0, stdout: '', stderr: '' };
   }
 
   // ── 2. one run ────────────────────────────────────────────────────────────
@@ -140,40 +158,72 @@ print message
     }
 
     let source = '';
-    const filePath = path.resolve(args[0]);
+    const firstArg = args[0];
+    const isEval = firstArg === '-e' || firstArg === '--eval';
 
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-      source = fs.readFileSync(filePath, 'utf-8');
+    if (isEval) {
+      if (args.length < 2) {
+        err("\x1b[31mError:\x1b[0m Missing expression for eval. Usage: one run -e <code>");
+        return { exitCode: 1, stdout: '', stderr: 'Missing expression for eval' };
+      }
+      source = args.slice(1).join(' ');
     } else {
-      // Allow passing direct source string for in-memory execution / testing
-      source = args.join(' ');
-    }
-
-    const compiler = new UnifiedCompiler();
-    const result = compiler.execute(source);
-
-    if (!result.compilation.success) {
-      const formatted = DiagnosticFormatter.formatAll(
-        result.compilation.diagnostics as any[],
-        source
-      );
-      err(formatted);
-      return { exitCode: 1, stdout: '', stderr: formatted };
-    }
-
-    if (result.vmResult) {
-      if (!result.vmResult.success && result.vmResult.error) {
-        const errorMsg = `\x1b[31m[${result.vmResult.error.code}] Runtime Error:\x1b[0m ${result.vmResult.error.message}`;
-        err(errorMsg);
-        return { exitCode: 1, stdout: '', stderr: errorMsg };
-      }
-
-      for (const line of result.vmResult.output) {
-        log(line);
+      const filePath = path.resolve(firstArg);
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        const rawBuf = fs.readFileSync(filePath);
+        if (filePath.endsWith('.ox') || (rawBuf.length >= 4 && rawBuf.slice(0, 4).toString('ascii') === 'ONEX')) {
+          const runRes = ExecutableLinker.loadAndRun(rawBuf);
+          if (!runRes.success || !runRes.vmResult) {
+            const errorMsg = `\x1b[31mExecutable Error:\x1b[0m ${runRes.error || runRes.vmResult?.error?.message || 'Execution failed'}`;
+            err(errorMsg);
+            return { exitCode: 1, stdout: '', stderr: errorMsg };
+          }
+          for (const line of runRes.vmResult.output) {
+            log(line);
+          }
+          return { exitCode: 0, stdout: '', stderr: '' };
+        }
+        source = rawBuf.toString('utf-8');
+      } else if (firstArg.endsWith('.one') || firstArg.endsWith('.ir') || (!firstArg.includes(';') && !firstArg.startsWith('let ') && !firstArg.startsWith('const ') && !firstArg.startsWith('fn ') && !firstArg.startsWith('function ') && !firstArg.startsWith('print ') && !firstArg.startsWith('node ') && !firstArg.startsWith('rss_max'))) {
+        const errMsg = `\x1b[31mError:\x1b[0m File not found: ${filePath}`;
+        err(errMsg);
+        return { exitCode: 1, stdout: '', stderr: errMsg };
+      } else {
+        source = args.join(' ');
       }
     }
 
-    return { exitCode: 0, stdout: '', stderr: '' };
+    try {
+      const compiler = new UnifiedCompiler();
+      const result = compiler.execute(source);
+
+      if (!result.compilation.success) {
+        const formatted = DiagnosticFormatter.formatAll(
+          result.compilation.diagnostics as any[],
+          source
+        );
+        err(formatted);
+        return { exitCode: 1, stdout: '', stderr: formatted };
+      }
+
+      if (result.vmResult) {
+        if (!result.vmResult.success && result.vmResult.error) {
+          const errorMsg = `\x1b[31m[${result.vmResult.error.code}] Runtime Error:\x1b[0m ${result.vmResult.error.message}`;
+          err(errorMsg);
+          return { exitCode: 1, stdout: '', stderr: errorMsg };
+        }
+
+        for (const line of result.vmResult.output) {
+          log(line);
+        }
+      }
+
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      const errMsg = `\x1b[31mCompilation Error:\x1b[0m ${e.message || String(e)}`;
+      err(errMsg);
+      return { exitCode: 1, stdout: '', stderr: errMsg };
+    }
   }
 
   // ── 3. one check ──────────────────────────────────────────────────────────
@@ -184,29 +234,50 @@ print message
     }
 
     let source = '';
-    const filePath = path.resolve(args[0]);
+    const firstArg = args[0];
+    const isEval = firstArg === '-e' || firstArg === '--eval';
 
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-      source = fs.readFileSync(filePath, 'utf-8');
+    let targetName = 'source';
+    if (isEval) {
+      if (args.length < 2) {
+        err("\x1b[31mError:\x1b[0m Missing expression for check. Usage: one check -e <code>");
+        return { exitCode: 1, stdout: '', stderr: 'Missing expression for check' };
+      }
+      source = args.slice(1).join(' ');
     } else {
-      source = args.join(' ');
+      const filePath = path.resolve(firstArg);
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        source = fs.readFileSync(filePath, 'utf-8');
+        targetName = path.basename(filePath);
+      } else if (firstArg.endsWith('.one') || firstArg.endsWith('.ir') || (!firstArg.includes(';') && !firstArg.startsWith('let ') && !firstArg.startsWith('const ') && !firstArg.startsWith('fn ') && !firstArg.startsWith('function ') && !firstArg.startsWith('print ') && !firstArg.startsWith('node ') && !firstArg.startsWith('rss_max'))) {
+        const errMsg = `\x1b[31mError:\x1b[0m File not found: ${filePath}`;
+        err(errMsg);
+        return { exitCode: 1, stdout: '', stderr: errMsg };
+      } else {
+        source = args.join(' ');
+      }
     }
 
-    const compiler = new UnifiedCompiler({ checkOnly: true });
-    const result = compiler.compile(source);
+    try {
+      const compiler = new UnifiedCompiler({ checkOnly: true });
+      const result = compiler.compile(source);
 
-    if (!result.success) {
-      const formatted = DiagnosticFormatter.formatAll(
-        result.diagnostics as any[],
-        source
-      );
-      err(formatted);
-      return { exitCode: 1, stdout: '', stderr: formatted };
+      if (!result.success) {
+        const formatted = DiagnosticFormatter.formatAll(
+          result.diagnostics as any[],
+          source
+        );
+        err(formatted);
+        return { exitCode: 1, stdout: '', stderr: formatted };
+      }
+
+      log(`\x1b[32m✔ [Check Passed]\x1b[0m ${targetName} is valid (0 errors, 0 warnings).`);
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      const errMsg = `\x1b[31mCheck Error:\x1b[0m ${e.message || String(e)}`;
+      err(errMsg);
+      return { exitCode: 1, stdout: '', stderr: errMsg };
     }
-
-    const targetName = fs.existsSync(filePath) ? path.basename(filePath) : 'source';
-    log(`\x1b[32m✔ [Check Passed]\x1b[0m ${targetName} is valid (0 errors, 0 warnings).`);
-    return { exitCode: 0, stdout: '', stderr: '' };
   }
 
   // ── 4. one build ──────────────────────────────────────────────────────────
@@ -223,27 +294,39 @@ print message
     }
 
     const source = fs.readFileSync(filePath, 'utf-8');
-    const compiler = new UnifiedCompiler({ emitIR: true });
-    const result = compiler.compile(source);
+    try {
+      const compiler = new UnifiedCompiler({ emitIR: true });
+      const result = compiler.compile(source);
 
-    if (!result.success || !result.ir) {
-      const formatted = DiagnosticFormatter.formatAll(
-        result.diagnostics as any[],
-        source
-      );
-      err(formatted);
-      return { exitCode: 1, stdout: '', stderr: formatted };
+      if (!result.success || !result.ir) {
+        const formatted = DiagnosticFormatter.formatAll(
+          result.diagnostics as any[],
+          source
+        );
+        err(formatted);
+        return { exitCode: 1, stdout: '', stderr: formatted };
+      }
+
+      const outPath = filePath.replace(/\.one$/, '.one.ir');
+      fs.writeFileSync(outPath, result.irText || '', 'utf-8');
+
+      const oxPath = filePath.replace(/\.one$/, '.ox');
+      const packBuffer = ExecutablePacker.pack(result.ir);
+      fs.writeFileSync(oxPath, packBuffer);
+
+      log(`\x1b[32m✔ Build Succeeded:\x1b[0m ${path.basename(filePath)}`);
+      log(`  - Target:       ${outPath}`);
+      log(`  - Executable:   ${oxPath}`);
+      log(`  - Instructions: ${result.ir.instructions.length}`);
+      log(`  - Size:         ${packBuffer.length} bytes`);
+      log(`  - Build time:   ${result.metrics.totalTimeMs.toFixed(2)} ms`);
+
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      const errMsg = `\x1b[31mBuild Error:\x1b[0m ${e.message || String(e)}`;
+      err(errMsg);
+      return { exitCode: 1, stdout: '', stderr: errMsg };
     }
-
-    const outPath = filePath.replace(/\.one$/, '.one.ir');
-    fs.writeFileSync(outPath, result.irText || '', 'utf-8');
-
-    log(`\x1b[32m✔ Build Succeeded:\x1b[0m ${path.basename(filePath)}`);
-    log(`  - Target:       ${outPath}`);
-    log(`  - Instructions: ${result.ir.instructions.length}`);
-    log(`  - Build time:   ${result.metrics.totalTimeMs.toFixed(2)} ms`);
-
-    return { exitCode: 0, stdout: '', stderr: '' };
   }
 
   // ── 5. one format ─────────────────────────────────────────────────────────
@@ -330,19 +413,52 @@ print message
 
   public static getHelpText(): string {
     return `
-ONE Language Developer CLI (v0.1)
+ONE Language Developer CLI (v1.0.0)
 Usage: one <command> [options]
 
 Commands:
   init [dir]         Scaffold a new ONE project with manifest and main.one
-  run <file.one>     Compile and execute a ONE program on UnifiedVM
+  run <file.one>     Compile and execute a ONE program on UnifiedVM (or -e <code>)
   check <file.one>   Check program for syntax and type errors without executing
   build <file.one>   Compile program into an intermediate representation artifact
   format <file.one>  Format ONE source file deterministically (--write for in-place)
   test [dir]         Run all *.test.one files in project
 
 Options:
+  -v, --version      Show version number
   -h, --help         Show this help message
 `;
+  }
+}
+
+// Auto-execute if invoked directly as CLI script or via Node SEA standalone executable
+if (typeof process !== 'undefined' && process.argv && process.argv.length > 1) {
+  let isSea = false;
+  try {
+    const sea = require('node:sea');
+    isSea = typeof sea?.isSea === 'function' && sea.isSea();
+  } catch {}
+
+  const scriptPath = process.argv[1] ? path.resolve(process.argv[1]).replace(/\\/g, '/') : '';
+  const isDirectCLI = isSea ||
+                      scriptPath.endsWith('/OneDeveloperCLI.ts') || 
+                      scriptPath.endsWith('/OneDeveloperCLI.js') || 
+                      scriptPath.endsWith('/cli-bundle.js') || 
+                      scriptPath.endsWith('/cli-bundle.cjs') ||
+                      scriptPath.endsWith('/one.cjs') ||
+                      scriptPath.endsWith('/one') ||
+                      scriptPath.endsWith('/one.exe') ||
+                      scriptPath.endsWith('one.exe') ||
+                      scriptPath.endsWith('/one.cmd') ||
+                      scriptPath.endsWith('/one.ps1');
+  if (isDirectCLI) {
+    const result = OneDeveloperCLI.run(process.argv.slice(2));
+    if (result.stdout) {
+      process.stdout.write(result.stdout + '\n');
+    }
+    if (result.stderr) {
+      process.stderr.write(result.stderr + '\n');
+    }
+    process.exit(result.exitCode);
   }
 }

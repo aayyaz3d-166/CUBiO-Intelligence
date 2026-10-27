@@ -1,37 +1,32 @@
-# ONE Language Explorer UI — MIT License
+# ONE Language Licensing
 
-Copyright (c) 2026 ONE Language Core Contributors
+ONE Language is dual-licensed under:
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+- The **MIT License** (see [LICENSE-MIT](LICENSE-MIT)); and
+- The **Apache License, Version 2.0** (see [LICENSE-APACHE](LICENSE-APACHE)).
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You may, at your option, use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software under the terms of either license.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## Copyright
 
-## Scope of This License
-This MIT license applies only to the Explorer UI backend and frontend source
-in `src/one_net/ui/` and its tests. It does not cover the core ONE Language
-compiler, the binary protocol, or any other part of the repository, which may
-be governed by separate terms.
+Copyright © 2026 Ayyaz3D
 
-## Redistribution Terms
-- You may redistribute this software in source or binary form, with or
-  without modification, provided the copyright notice and this license
-  are included in all copies or substantial portions.
-- The public demo release is limited to: the Explorer UI HTTP service,
-  the UI frontend, and the test suite.
-- Model weights, datasets, and checkpoints are NOT included in this release.
-- Binary protocol files are distributed as read-only SHA-256 manifests; no
-  binary encoding changes are made.
+## Scope of Software License
+
+This dual license covers the ONE Language software source code within this repository, including:
+- Core compiler, parser, AST emitter, type checker, and intermediate representation (IR) lowering;
+- Virtual Machine (UnifiedVM), native runtime, and standard library modules;
+- Developer CLI toolchain (`bin/one.cjs`, `OneDeveloperCLI.ts`) and build/packaging scripts;
+- VS Code editor extension and Language Server (LSP);
+- Core modular packages (`packages/*`);
+- Executable packer (`ExecutablePacker.ts`, `ExecutableLoader.ts`, `*.ox` artifact format);
+- Official test suites and documentation.
+
+## Excluded Assets
+
+This software license does NOT apply to:
+- External neural network weights, model parameters, and checkpoints (including `one_lm_best.cubiomodel`), which reside outside this repository;
+- Model training datasets, corpus data, and private benchmark inputs;
+- External repositories and data volumes (including `F:\3D memory studio\ONE language` and `E:\ONE_language_baseline`).
+
+For further details regarding redistribution, attribution, and contribution rules, refer to [NOTICE](NOTICE), [RESTRICTIONS.md](RESTRICTIONS.md), and [CONTRIBUTING.md](CONTRIBUTING.md).

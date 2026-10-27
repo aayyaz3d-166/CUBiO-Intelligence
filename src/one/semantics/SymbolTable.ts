@@ -6,6 +6,8 @@ export type SymbolKind =
   | 'function'
   | 'parameter'
   | 'module'
+  | 'struct'
+  | 'enum'
   | 'spatial_node';
 
 export interface SymbolEntry {
@@ -14,6 +16,9 @@ export interface SymbolEntry {
   typeAnnotation?: string;
   scopeLevel: number;
   paramCount?: number;
+  structFields?: Map<string, string>;
+  enumVariants?: Map<string, number | string>;
+  isAsync?: boolean;
   span?: SourceSpan;
 }
 
@@ -24,6 +29,7 @@ export class Scope {
   public parent?: Scope;
   public scopeType: ScopeType;
   public level: number;
+  public capturedVars: Set<string> = new Set();
 
   constructor(scopeType: ScopeType = 'global', parent?: Scope) {
     this.scopeType = scopeType;

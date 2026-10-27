@@ -13,6 +13,14 @@ import {
   ExpressionStatementNode,
   PrintStatementNode,
   ImportStatementNode,
+  ImportSpecifier,
+  ExportStatementNode,
+  ExportSpecifier,
+  ModuleDeclarationNode,
+  StructDeclarationNode,
+  StructFieldDeclaration,
+  EnumDeclarationNode,
+  EnumVariantDeclaration,
   LiteralNode,
   IdentifierNode,
   BinaryExpressionNode,
@@ -43,6 +51,7 @@ export class ComputationalParser {
   private tokens: Token[];
   private current: number = 0;
   private errors: string[] = [];
+  private anonFnCounter: number = 0;
 
   constructor(tokens: Token[]) {
     this.tokens = tokens;
@@ -97,6 +106,15 @@ export class ComputationalParser {
       return this.parseFunctionDeclaration();
     }
 
+    if (token.type === TokenType.KEYWORD_ASYNC) {
+      this.advance(); // consume 'async'
+      const next = this.peek();
+      if (next.type === TokenType.KEYWORD_FUNCTION || next.type === TokenType.KEYWORD_FN) {
+        return this.parseFunctionNode(true, true /* isAsync */);
+      }
+      throw new Error(`[E1015: Syntax Error] 'async' modifier can only be followed by a function declaration at line ${token.line}, column ${token.column}`);
+    }
+
     if (token.type === TokenType.KEYWORD_RETURN) {
       return this.parseReturnStatement();
     }
@@ -117,8 +135,24 @@ export class ComputationalParser {
       return this.parsePrintStatement();
     }
 
+    if (token.type === TokenType.KEYWORD_MODULE) {
+      return this.parseModuleDeclaration();
+    }
+
+    if (token.type === TokenType.KEYWORD_EXPORT) {
+      return this.parseExportStatement();
+    }
+
     if (token.type === TokenType.KEYWORD_IMPORT) {
       return this.parseImportStatement();
+    }
+
+    if (token.type === TokenType.KEYWORD_STRUCT) {
+      return this.parseStructDeclaration();
+    }
+
+    if (token.type === TokenType.KEYWORD_ENUM) {
+      return this.parseEnumDeclaration();
     }
 
     if (token.type === TokenType.LBRACE) {
@@ -166,14 +200,18 @@ export class ComputationalParser {
     };
   }
 
-  private parseFunctionDeclaration(): FunctionDeclarationNode {
+  private parseFunctionNode(requireName: boolean, isAsync: boolean = false): FunctionDeclarationNode {
     const startToken = this.advance(); // consume 'function' or 'fn'
 
-    if (!this.check(TokenType.IDENTIFIER)) {
+    let name = '';
+    if (this.check(TokenType.IDENTIFIER)) {
+      name = this.advance().value;
+    } else if (requireName) {
       throw new Error(`[E1003: Syntax Error] Expected function name after '${startToken.value}' at line ${startToken.line}, column ${startToken.column}`);
+    } else {
+      name = `__anon_fn_${this.anonFnCounter++}`;
     }
 
-    const nameToken = this.advance();
     this.consume(TokenType.LPAREN, "Expected '(' after function name");
 
     const params: ParameterDeclaration[] = [];
@@ -207,12 +245,17 @@ export class ComputationalParser {
 
     return {
       kind: 'FunctionDeclaration',
-      name: nameToken.value,
+      name,
+      isAsync,
       params,
       returnTypeAnnotation,
       body,
       span: createSourceSpan(startToken.line, startToken.column, body.span?.end.line || startToken.line, body.span?.end.column || startToken.column),
     };
+  }
+
+  private parseFunctionDeclaration(): FunctionDeclarationNode {
+    return this.parseFunctionNode(true, false);
   }
 
   private parseReturnStatement(): ReturnStatementNode {
@@ -337,14 +380,153 @@ export class ComputationalParser {
     };
   }
 
+  private parseModuleDeclaration(): ModuleDeclarationNode {
+    const startToken = this.advance(); // consume 'module'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1007: Syntax Error] Expected module identifier after 'module' at line ${startToken.line}, column ${startToken.column}`);
+    }
+    let modName = this.advance().value;
+    while (this.match(TokenType.DOT)) {
+      if (!this.check(TokenType.IDENTIFIER)) {
+        throw new Error(`[E1007: Syntax Error] Expected identifier after '.' in module name at line ${this.peek().line}, column ${this.peek().column}`);
+      }
+      modName += '.' + this.advance().value;
+    }
+    const endToken = this.match(TokenType.SEMICOLON) ? this.previous() : this.previous();
+    return {
+      kind: 'ModuleDeclaration',
+      name: modName,
+      span: createSourceSpan(startToken.line, startToken.column, endToken.line, endToken.column + endToken.value.length),
+    };
+  }
+
+  private parseExportStatement(): ExportStatementNode {
+    const startToken = this.advance(); // consume 'export'
+
+    // Case 1: export { a, b as c };
+    if (this.match(TokenType.LBRACE)) {
+      const specifiers: ExportSpecifier[] = [];
+      while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+        if (!this.check(TokenType.IDENTIFIER)) {
+          throw new Error(`[E1007: Syntax Error] Expected identifier in export list at line ${this.peek().line}, column ${this.peek().column}`);
+        }
+        const idToken = this.advance();
+        let alias: string | undefined = undefined;
+        if (this.peek().value === 'as') {
+          this.advance(); // consume 'as'
+          if (!this.check(TokenType.IDENTIFIER)) {
+            throw new Error(`[E1007: Syntax Error] Expected alias after 'as' in export list at line ${this.peek().line}, column ${this.peek().column}`);
+          }
+          alias = this.advance().value;
+        }
+        specifiers.push({
+          name: idToken.value,
+          alias,
+          span: createSourceSpan(idToken.line, idToken.column, this.previous().line, this.previous().column + this.previous().value.length),
+        });
+        if (this.check(TokenType.COMMA)) {
+          this.advance();
+        }
+      }
+      const endToken = this.consume(TokenType.RBRACE, "Expected '}' after export specifiers");
+      this.match(TokenType.SEMICOLON);
+      return {
+        kind: 'ExportStatement',
+        specifiers,
+        span: createSourceSpan(startToken.line, startToken.column, endToken.line, endToken.column + 1),
+      };
+    }
+
+    // Case 2: export <declaration>
+    let decl: UnifiedStatementNode;
+    if (this.check(TokenType.KEYWORD_FN) || this.check(TokenType.KEYWORD_FUNCTION) || this.check(TokenType.KEYWORD_ASYNC)) {
+      decl = this.parseFunctionDeclaration();
+      (decl as any).isExported = true;
+    } else if (this.check(TokenType.KEYWORD_STRUCT)) {
+      decl = this.parseStructDeclaration();
+      (decl as any).isExported = true;
+    } else if (this.check(TokenType.KEYWORD_ENUM)) {
+      decl = this.parseEnumDeclaration();
+      (decl as any).isExported = true;
+    } else if (this.check(TokenType.KEYWORD_LET) || this.check(TokenType.KEYWORD_CONST)) {
+      decl = this.parseVariableDeclaration();
+      (decl as any).isExported = true;
+    } else {
+      throw new Error(`[E1007: Syntax Error] Expected declaration after 'export' at line ${this.peek().line}, column ${this.peek().column}`);
+    }
+
+    return {
+      kind: 'ExportStatement',
+      declaration: decl,
+      span: createSourceSpan(startToken.line, startToken.column, decl.span?.end.line || startToken.line, decl.span?.end.column || startToken.column + 6),
+    };
+  }
+
   private parseImportStatement(): ImportStatementNode {
     const startToken = this.advance(); // consume 'import'
 
-    if (!this.check(TokenType.IDENTIFIER)) {
-      throw new Error(`[E1007: Syntax Error] Expected module identifier after 'import' at line ${startToken.line}, column ${startToken.column}`);
+    // Case 1: Named import: import { a, b as c } from "./math";
+    if (this.match(TokenType.LBRACE)) {
+      const specifiers: ImportSpecifier[] = [];
+      while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+        if (!this.check(TokenType.IDENTIFIER)) {
+          throw new Error(`[E1007: Syntax Error] Expected identifier in import list at line ${this.peek().line}, column ${this.peek().column}`);
+        }
+        const idToken = this.advance();
+        let alias: string | undefined = undefined;
+        if (this.peek().value === 'as') {
+          this.advance(); // consume 'as'
+          if (!this.check(TokenType.IDENTIFIER)) {
+            throw new Error(`[E1008: Syntax Error] Expected alias after 'as' in import list at line ${this.peek().line}, column ${this.peek().column}`);
+          }
+          alias = this.advance().value;
+        }
+        specifiers.push({
+          name: idToken.value,
+          alias,
+          span: createSourceSpan(idToken.line, idToken.column, this.previous().line, this.previous().column + this.previous().value.length),
+        });
+        if (this.check(TokenType.COMMA)) {
+          this.advance();
+        }
+      }
+      this.consume(TokenType.RBRACE, "Expected '}' after import specifiers");
+
+      if (this.peek().value !== 'from') {
+        throw new Error(`[E1007: Syntax Error] Expected 'from' after import specifiers at line ${this.peek().line}, column ${this.peek().column}`);
+      }
+      this.advance(); // consume 'from'
+
+      if (this.peek().type !== TokenType.STRING_LITERAL && this.peek().type !== TokenType.IDENTIFIER) {
+        throw new Error(`[E1007: Syntax Error] Expected module path or identifier after 'from' at line ${this.peek().line}, column ${this.peek().column}`);
+      }
+      const moduleToken = this.advance();
+      this.match(TokenType.SEMICOLON);
+
+      return {
+        kind: 'ImportStatement',
+        moduleName: moduleToken.value,
+        specifiers,
+        span: createSourceSpan(
+          startToken.line,
+          startToken.column,
+          moduleToken.line,
+          moduleToken.column + moduleToken.value.length
+        ),
+      };
+    }
+
+    // Case 2: String literal path or identifier:
+    // import "./math" as Math;
+    // import "./math";
+    // import math as m;
+    // import math;
+    if (this.peek().type !== TokenType.STRING_LITERAL && this.peek().type !== TokenType.IDENTIFIER) {
+      throw new Error(`[E1007: Syntax Error] Expected module identifier or string path after 'import' at line ${startToken.line}, column ${startToken.column}`);
     }
     const moduleToken = this.advance();
     let alias: string | undefined = undefined;
+    let isNamespace = false;
 
     if (this.peek().value === 'as') {
       this.advance(); // consume 'as'
@@ -352,6 +534,7 @@ export class ComputationalParser {
         throw new Error(`[E1008: Syntax Error] Expected alias identifier after 'as' at line ${this.peek().line}, column ${this.peek().column}`);
       }
       alias = this.advance().value;
+      isNamespace = true;
     }
 
     this.match(TokenType.SEMICOLON);
@@ -360,12 +543,128 @@ export class ComputationalParser {
       kind: 'ImportStatement',
       moduleName: moduleToken.value,
       alias,
+      isNamespace,
       span: createSourceSpan(
         startToken.line,
         startToken.column,
         moduleToken.line,
         moduleToken.column + moduleToken.value.length
       ),
+    };
+  }
+
+  private parseStructDeclaration(): StructDeclarationNode {
+    const startToken = this.advance(); // consume 'struct'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected struct name identifier after 'struct' at line ${startToken.line}, column ${startToken.column}`);
+    }
+    const nameToken = this.advance();
+    const structName = nameToken.value;
+
+    this.consume(TokenType.LBRACE, `Expected '{' after struct name '${structName}'`);
+
+    const fields: StructFieldDeclaration[] = [];
+    const seenFields = new Set<string>();
+
+    while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+      if (!this.check(TokenType.IDENTIFIER)) {
+        throw new Error(`[E1001: Syntax Error] Expected field name in struct '${structName}' at line ${this.peek().line}, column ${this.peek().column}`);
+      }
+      const fieldToken = this.advance();
+      const fieldName = fieldToken.value;
+
+      if (seenFields.has(fieldName)) {
+        throw new Error(`[E1002: Syntax Error] Duplicate field '${fieldName}' in struct '${structName}' at line ${fieldToken.line}, column ${fieldToken.column}`);
+      }
+      seenFields.add(fieldName);
+
+      this.consume(TokenType.COLON, `Expected ':' after field name '${fieldName}'`);
+      const typeAnnotation = this.parseTypeAnnotation();
+
+      if (this.check(TokenType.SEMICOLON) || this.check(TokenType.COMMA)) {
+        this.advance();
+      }
+
+      fields.push({
+        name: fieldName,
+        typeAnnotation,
+        span: createSourceSpan(fieldToken.line, fieldToken.column, this.peek().line, this.peek().column),
+      });
+    }
+
+    const endToken = this.consume(TokenType.RBRACE, `Expected '}' after struct '${structName}' fields`);
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'StructDeclaration',
+      name: structName,
+      fields,
+      span: createSourceSpan(startToken.line, startToken.column, endToken.line, endToken.column + 1),
+    };
+  }
+
+  private parseEnumDeclaration(): EnumDeclarationNode {
+    const startToken = this.advance(); // consume 'enum'
+    if (!this.check(TokenType.IDENTIFIER)) {
+      throw new Error(`[E1001: Syntax Error] Expected enum name identifier after 'enum' at line ${startToken.line}, column ${startToken.column}`);
+    }
+    const nameToken = this.advance();
+    const enumName = nameToken.value;
+
+    this.consume(TokenType.LBRACE, `Expected '{' after enum name '${enumName}'`);
+
+    const variants: EnumVariantDeclaration[] = [];
+    const seenVariants = new Set<string>();
+    let nextAutoValue = 0;
+
+    while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+      if (!this.check(TokenType.IDENTIFIER)) {
+        throw new Error(`[E1001: Syntax Error] Expected variant name in enum '${enumName}' at line ${this.peek().line}, column ${this.peek().column}`);
+      }
+      const variantToken = this.advance();
+      const variantName = variantToken.value;
+
+      if (seenVariants.has(variantName)) {
+        throw new Error(`[E1002: Syntax Error] Duplicate variant '${variantName}' in enum '${enumName}' at line ${variantToken.line}, column ${variantToken.column}`);
+      }
+      seenVariants.add(variantName);
+
+      let value: number | string = nextAutoValue;
+      if (this.match(TokenType.ASSIGN)) {
+        const valToken = this.peek();
+        if (valToken.type === TokenType.NUMBER_LITERAL) {
+          this.advance();
+          value = Number(valToken.value);
+          nextAutoValue = value + 1;
+        } else if (valToken.type === TokenType.STRING_LITERAL) {
+          this.advance();
+          value = valToken.value;
+        } else {
+          throw new Error(`[E1001: Syntax Error] Expected number or string literal for enum variant value at line ${valToken.line}, column ${valToken.column}`);
+        }
+      } else {
+        nextAutoValue++;
+      }
+
+      if (this.check(TokenType.COMMA) || this.check(TokenType.SEMICOLON)) {
+        this.advance();
+      }
+
+      variants.push({
+        name: variantName,
+        value,
+        span: createSourceSpan(variantToken.line, variantToken.column, this.peek().line, this.peek().column),
+      });
+    }
+
+    const endToken = this.consume(TokenType.RBRACE, `Expected '}' after enum '${enumName}' variants`);
+    this.match(TokenType.SEMICOLON);
+
+    return {
+      kind: 'EnumDeclaration',
+      name: enumName,
+      variants,
+      span: createSourceSpan(startToken.line, startToken.column, endToken.line, endToken.column + 1),
     };
   }
 
@@ -494,12 +793,45 @@ export class ComputationalParser {
           span: createSourceSpan(token.line, token.column, token.line, token.column + 4),
         };
 
-      case TokenType.IDENTIFIER:
+      case TokenType.IDENTIFIER: {
+        const idSpan = createSourceSpan(token.line, token.column, token.line, token.column + token.value.length);
+        if (this.check(TokenType.LBRACE)) {
+          const savedPos = this.current;
+          try {
+            this.advance(); // consume '{'
+            const properties: Array<{ key: string; value: ExpressionNode; span?: SourceSpan }> = [];
+            if (!this.check(TokenType.RBRACE)) {
+              do {
+                const keyToken = this.advance();
+                if (keyToken.type !== TokenType.IDENTIFIER && keyToken.type !== TokenType.STRING_LITERAL) {
+                  throw new Error('Not struct literal');
+                }
+                this.consume(TokenType.COLON, "Expected ':' after field key");
+                const val = this.parseExpression(Precedence.LOWEST);
+                properties.push({
+                  key: keyToken.value,
+                  value: val,
+                  span: createSourceSpan(keyToken.line, keyToken.column, val.span?.end.line || keyToken.line, val.span?.end.column || keyToken.column),
+                });
+              } while (this.match(TokenType.COMMA) || this.match(TokenType.SEMICOLON));
+            }
+            const endToken = this.consume(TokenType.RBRACE, "Expected '}' after struct fields");
+            return {
+              kind: 'ObjectLiteral',
+              structName: token.value,
+              properties,
+              span: createSourceSpan(token.line, token.column, endToken.line, endToken.column + 1),
+            };
+          } catch {
+            this.current = savedPos; // backtrack
+          }
+        }
         return {
           kind: 'Identifier',
           name: token.value,
-          span: createSourceSpan(token.line, token.column, token.line, token.column + token.value.length),
+          span: idSpan,
         };
+      }
 
       case TokenType.LPAREN: {
         const expr = this.parseExpression(Precedence.LOWEST);
@@ -562,6 +894,35 @@ export class ComputationalParser {
           kind: 'ObjectLiteral',
           properties,
           span: createSourceSpan(token.line, token.column, endToken.line, endToken.column + 1),
+        };
+      }
+
+      case TokenType.KEYWORD_FUNCTION:
+      case TokenType.KEYWORD_FN: {
+        this.current--; // Backtrack so parseFunctionNode advances startToken
+        return this.parseFunctionNode(false);
+      }
+
+      case TokenType.KEYWORD_ASYNC: {
+        if (this.check(TokenType.KEYWORD_FUNCTION) || this.check(TokenType.KEYWORD_FN)) {
+          return this.parseFunctionNode(false, true /* isAsync */);
+        }
+        throw new Error(
+          `[E1015: Syntax Error] 'async' keyword in expression must be followed by 'fn' or 'function' at line ${token.line}, column ${token.column}`
+        );
+      }
+
+      case TokenType.KEYWORD_AWAIT: {
+        const argument = this.parseExpression(Precedence.PREFIX);
+        return {
+          kind: 'AwaitExpression',
+          argument,
+          span: createSourceSpan(
+            token.line,
+            token.column,
+            argument.span?.end.line || token.line,
+            argument.span?.end.column || token.column
+          ),
         };
       }
 
@@ -658,6 +1019,7 @@ export class ComputationalParser {
       case TokenType.DOT:
       case TokenType.LBRACKET:
         return Precedence.MEMBER;
+
       default:
         return this.getBinaryPrecedence(token.type);
     }
@@ -686,6 +1048,7 @@ export class ComputationalParser {
       case TokenType.SLASH:
       case TokenType.PERCENT:
         return Precedence.PRODUCT;
+
       default:
         return Precedence.LOWEST;
     }
@@ -742,6 +1105,7 @@ export class ComputationalParser {
         case TokenType.KEYWORD_CONST:
         case TokenType.KEYWORD_FUNCTION:
         case TokenType.KEYWORD_FN:
+        case TokenType.KEYWORD_ASYNC:
         case TokenType.KEYWORD_IF:
         case TokenType.KEYWORD_WHILE:
         case TokenType.KEYWORD_FOR:

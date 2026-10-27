@@ -11,12 +11,15 @@ import {
   BlockStatementNode,
   ExpressionStatementNode,
   PrintStatementNode,
+  StructDeclarationNode,
+  EnumDeclarationNode,
   CallExpressionNode,
   BinaryExpressionNode,
   UnaryExpressionNode,
   ArrayLiteralNode,
   ObjectLiteralNode,
   MemberExpressionNode,
+  AwaitExpressionNode,
   IdentifierNode,
   LiteralNode,
 } from '../ast/UnifiedAST';
@@ -33,6 +36,9 @@ import {
   TypeAny,
   createArrayType,
   createFunctionType,
+  createPromiseType,
+  createStructType,
+  createEnumType,
   areTypesEqual,
   isTypeAssignable,
   parseTypeString,
@@ -78,18 +84,48 @@ export class TypeChecker {
   private currentEnv: TypeEnv;
   private currentExpectedReturnType?: Type;
   private diagnostics: TypeDiagnostic[] = [];
+  private customTypes: Map<string, Type> = new Map();
 
   constructor() {
     this.currentEnv = new TypeEnv();
   }
 
-  public check(program: UnifiedProgramNode): { isValid: boolean; diagnostics: TypeDiagnostic[] } {
+  public check(
+    program: UnifiedProgramNode,
+    externalTypes?: Map<string, Type>
+  ): { isValid: boolean; diagnostics: TypeDiagnostic[] } {
     this.diagnostics = [];
+    this.customTypes.clear();
     this.currentEnv = new TypeEnv();
     for (const bName of Object.keys(ONE_BUILTIN_FUNCTIONS)) {
       this.currentEnv.bind(bName, TypeAny);
     }
+    if (externalTypes) {
+      for (const [k, v] of externalTypes.entries()) {
+        this.customTypes.set(k, v);
+        this.currentEnv.bind(k, v);
+      }
+    }
     this.currentExpectedReturnType = undefined;
+
+    // Pre-bind top-level function signatures for mutual recursion
+    for (const stmt of program.body) {
+      let fnNode: FunctionDeclarationNode | undefined = undefined;
+      if (stmt.kind === 'FunctionDeclaration') {
+        fnNode = stmt as FunctionDeclarationNode;
+      } else if (stmt.kind === 'ExportStatement' && (stmt as any).declaration?.kind === 'FunctionDeclaration') {
+        fnNode = (stmt as any).declaration as FunctionDeclarationNode;
+      }
+
+      if (fnNode) {
+        const paramTypes = fnNode.params.map((p) => parseTypeString(p.typeAnnotation));
+        const returnType = fnNode.returnTypeAnnotation
+          ? parseTypeString(fnNode.returnTypeAnnotation)
+          : TypeAny;
+        const actualReturnType = fnNode.isAsync ? createPromiseType(returnType) : returnType;
+        this.currentEnv.bind(fnNode.name, createFunctionType(paramTypes, actualReturnType));
+      }
+    }
 
     for (const stmt of program.body) {
       this.checkStatement(stmt);
@@ -142,8 +178,48 @@ export class TypeChecker {
         break;
 
       case 'ImportStatement':
-        this.currentEnv.bind(stmt.alias || stmt.moduleName, TypeAny);
+        if (stmt.specifiers && stmt.specifiers.length > 0) {
+          for (const spec of stmt.specifiers) {
+            this.currentEnv.bind(spec.alias || spec.name, TypeAny);
+          }
+        } else {
+          this.currentEnv.bind(stmt.alias || stmt.moduleName, TypeAny);
+        }
         break;
+
+      case 'ModuleDeclaration':
+        this.currentEnv.bind(stmt.name, TypeAny);
+        break;
+
+      case 'ExportStatement':
+        if (stmt.declaration) {
+          this.checkStatement(stmt.declaration);
+        }
+        break;
+
+      case 'StructDeclaration': {
+        const propMap = new Map<string, Type>();
+        for (const f of stmt.fields) {
+          propMap.set(f.name, parseTypeString(f.typeAnnotation, this.customTypes));
+        }
+        const structType = createStructType(stmt.name, propMap);
+        this.customTypes.set(stmt.name, structType);
+        this.currentEnv.bind(stmt.name, structType);
+        stmt.inferredType = stmt.name;
+        break;
+      }
+
+      case 'EnumDeclaration': {
+        const varMap = new Map<string, number | string>();
+        for (const v of stmt.variants) {
+          varMap.set(v.name, v.value);
+        }
+        const enumType = createEnumType(stmt.name, varMap);
+        this.customTypes.set(stmt.name, enumType);
+        this.currentEnv.bind(stmt.name, enumType);
+        stmt.inferredType = stmt.name;
+        break;
+      }
 
       case 'DeclarativeSpatialNode':
         // Spatial declarative nodes are governed by spatial invariants
@@ -154,7 +230,7 @@ export class TypeChecker {
   private checkVariableDeclaration(node: VariableDeclarationNode): void {
     let declaredType: Type | undefined = undefined;
     if (node.typeAnnotation) {
-      declaredType = parseTypeString(node.typeAnnotation);
+      declaredType = parseTypeString(node.typeAnnotation, this.customTypes);
     }
 
     let initType: Type = TypeAny;
@@ -180,14 +256,17 @@ export class TypeChecker {
     this.currentEnv.bind(node.identifier, effectiveType);
   }
 
-  private checkFunctionDeclaration(node: FunctionDeclarationNode): void {
+  private inferFunctionDeclarationType(node: FunctionDeclarationNode): Type {
     const paramTypes = node.params.map((p) => parseTypeString(p.typeAnnotation));
     const returnType = node.returnTypeAnnotation
       ? parseTypeString(node.returnTypeAnnotation)
       : TypeAny;
 
-    const fnType = createFunctionType(paramTypes, returnType);
-    this.currentEnv.bind(node.name, fnType);
+    const actualReturnType = node.isAsync ? createPromiseType(returnType) : returnType;
+    const fnType = createFunctionType(paramTypes, actualReturnType);
+    if (node.name) {
+      this.currentEnv.bind(node.name, fnType);
+    }
     node.inferredType = typeToString(fnType);
 
     // Enter Function Type Environment
@@ -200,12 +279,30 @@ export class TypeChecker {
       fnEnv.bind(node.params[i].name, paramTypes[i]);
     }
 
+    // Pre-bind nested functions for mutual recursion
+    for (const stmt of node.body.statements) {
+      if (stmt.kind === 'FunctionDeclaration' && stmt.name) {
+        const pTypes = stmt.params.map((p) => parseTypeString(p.typeAnnotation));
+        const rType = stmt.returnTypeAnnotation
+          ? parseTypeString(stmt.returnTypeAnnotation)
+          : TypeAny;
+        const actualRType = stmt.isAsync ? createPromiseType(rType) : rType;
+        fnEnv.bind(stmt.name, createFunctionType(pTypes, actualRType));
+      }
+    }
+
     for (const stmt of node.body.statements) {
       this.checkStatement(stmt);
     }
 
     this.currentExpectedReturnType = prevExpectedReturn;
     this.currentEnv = this.currentEnv.parent!;
+
+    return fnType;
+  }
+
+  private checkFunctionDeclaration(node: FunctionDeclarationNode): void {
+    this.inferFunctionDeclarationType(node);
   }
 
   private checkReturnStatement(node: ReturnStatementNode): void {
@@ -331,6 +428,14 @@ export class TypeChecker {
       case 'MemberExpression':
         resultType = this.inferMemberExpressionType(expr);
         break;
+
+      case 'AwaitExpression':
+        resultType = this.inferAwaitExpressionType(expr);
+        break;
+
+      case 'FunctionDeclaration':
+        resultType = this.inferFunctionDeclarationType(expr);
+        break;
     }
 
     expr.inferredType = typeToString(resultType);
@@ -352,6 +457,14 @@ export class TypeChecker {
       case 'null':
         return TypeNull;
     }
+  }
+
+  private inferAwaitExpressionType(node: AwaitExpressionNode): Type {
+    const argType = this.inferExpressionType(node.argument);
+    if (argType.kind === 'promise' && argType.elementType) {
+      return argType.elementType;
+    }
+    return argType;
   }
 
   private inferIdentifierType(node: IdentifierNode): Type {
@@ -518,6 +631,30 @@ export class TypeChecker {
   private inferCallExpressionType(node: CallExpressionNode): Type {
     if (node.callee.kind === 'Identifier') {
       const fnName = (node.callee as IdentifierNode).name;
+      if (this.customTypes.has(fnName)) {
+        const customType = this.customTypes.get(fnName)!;
+        if (customType.kind === 'struct' && customType.properties) {
+          const propEntries = Array.from(customType.properties.entries());
+          for (let i = 0; i < node.args.length; i++) {
+            const argType = this.inferExpressionType(node.args[i]);
+            if (i < propEntries.length) {
+              const [propName, expectedType] = propEntries[i];
+              if (!isTypeAssignable(expectedType, argType)) {
+                this.addDiagnostic(
+                  'E3001',
+                  `Type mismatch for field '${propName}' of struct '${fnName}'`,
+                  typeToString(expectedType),
+                  typeToString(argType),
+                  node.args[i].span?.start.line,
+                  node.args[i].span?.start.column
+                );
+              }
+            }
+          }
+          return customType;
+        }
+      }
+
       if (fnName === 'i32') {
         for (const arg of node.args) this.inferExpressionType(arg);
         return TypeI32;
@@ -575,10 +712,38 @@ export class TypeChecker {
     for (const prop of node.properties) {
       propMap.set(prop.key, this.inferExpressionType(prop.value));
     }
+    if (node.structName && this.customTypes.has(node.structName)) {
+      const structType = this.customTypes.get(node.structName)!;
+      if (structType.properties) {
+        for (const [key, valType] of propMap.entries()) {
+          const expected = structType.properties.get(key);
+          if (expected && !isTypeAssignable(expected, valType)) {
+            this.addDiagnostic(
+              'E3001',
+              `Type mismatch for field '${key}' of struct '${node.structName}'`,
+              typeToString(expected),
+              typeToString(valType),
+              node.span?.start.line,
+              node.span?.start.column
+            );
+          }
+        }
+      }
+      return structType;
+    }
     return { kind: 'object', properties: propMap, name: 'object' };
   }
 
   private inferMemberExpressionType(node: MemberExpressionNode): Type {
+    if (!node.computed && typeof node.property === 'string') {
+      if (node.object.kind === 'Identifier' && this.customTypes.has(node.object.name)) {
+        const customType = this.customTypes.get(node.object.name)!;
+        if (customType.kind === 'enum') {
+          return customType;
+        }
+      }
+    }
+
     const objType = this.inferExpressionType(node.object);
     if (node.computed) {
       if (typeof node.property !== 'string') {

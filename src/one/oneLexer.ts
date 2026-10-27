@@ -21,6 +21,7 @@ export enum TokenType {
   // Gate CNL-P26.3-COMPILER Keywords & Types
   KEYWORD_MODULE = 'KEYWORD_MODULE',
   KEYWORD_STRUCT = 'KEYWORD_STRUCT',
+  KEYWORD_ENUM = 'KEYWORD_ENUM',
   KEYWORD_CONST = 'KEYWORD_CONST',
   KEYWORD_NATIVE = 'KEYWORD_NATIVE',
   KEYWORD_CLASS = 'KEYWORD_CLASS',
@@ -48,7 +49,12 @@ export enum TokenType {
   KEYWORD_WHILE = 'KEYWORD_WHILE',
   KEYWORD_PRINT = 'KEYWORD_PRINT',
   KEYWORD_IMPORT = 'KEYWORD_IMPORT',
+  KEYWORD_EXPORT = 'KEYWORD_EXPORT',
+  KEYWORD_FROM = 'KEYWORD_FROM',
+  KEYWORD_AS = 'KEYWORD_AS',
   KEYWORD_NULL = 'KEYWORD_NULL',
+  KEYWORD_ASYNC = 'KEYWORD_ASYNC',
+  KEYWORD_AWAIT = 'KEYWORD_AWAIT',
 
   // Operators & Symbols
   OP_FUNNEL = 'OP_FUNNEL', // ->
@@ -124,6 +130,7 @@ export class OneLexer {
     false: TokenType.KEYWORD_FALSE,
     module: TokenType.KEYWORD_MODULE,
     struct: TokenType.KEYWORD_STRUCT,
+    enum: TokenType.KEYWORD_ENUM,
     const: TokenType.KEYWORD_CONST,
     native: TokenType.KEYWORD_NATIVE,
     class: TokenType.KEYWORD_CLASS,
@@ -149,7 +156,12 @@ export class OneLexer {
     while: TokenType.KEYWORD_WHILE,
     print: TokenType.KEYWORD_PRINT,
     import: TokenType.KEYWORD_IMPORT,
+    export: TokenType.KEYWORD_EXPORT,
+    from: TokenType.KEYWORD_FROM,
+    as: TokenType.KEYWORD_AS,
     null: TokenType.KEYWORD_NULL,
+    async: TokenType.KEYWORD_ASYNC,
+    await: TokenType.KEYWORD_AWAIT,
   };
 
   constructor(source: string) {

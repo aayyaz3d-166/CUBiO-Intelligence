@@ -41,3 +41,9 @@ temp_*.3dmemory
 
 # 9. Nested Legacy Clone Workspace (Consolidated into legacy_experiments; preserved locally)
 /ONE language/
+
+# 10. Internal Forensic Audits, Reports & Scratch Sandboxes
+/audit/
+/reports/
+/scratch/
+/PHASE_0_TO_PHASE_3_END_TO_END_FORENSIC_REPORT.md

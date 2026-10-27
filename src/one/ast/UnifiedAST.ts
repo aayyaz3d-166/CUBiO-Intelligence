@@ -12,6 +12,10 @@ export type ASTNodeKind =
   | 'ExpressionStatement'
   | 'PrintStatement'
   | 'ImportStatement'
+  | 'ExportStatement'
+  | 'ModuleDeclaration'
+  | 'StructDeclaration'
+  | 'EnumDeclaration'
   | 'DeclarativeSpatialNode'
   | 'Literal'
   | 'Identifier'
@@ -20,7 +24,8 @@ export type ASTNodeKind =
   | 'CallExpression'
   | 'ArrayLiteral'
   | 'ObjectLiteral'
-  | 'MemberExpression';
+  | 'MemberExpression'
+  | 'AwaitExpression';
 
 export interface BaseASTNode {
   kind: ASTNodeKind;
@@ -76,6 +81,7 @@ export interface ObjectPropertyNode {
 export interface ObjectLiteralNode extends BaseASTNode {
   kind: 'ObjectLiteral';
   properties: ObjectPropertyNode[];
+  structName?: string;
 }
 
 export interface MemberExpressionNode extends BaseASTNode {
@@ -83,6 +89,11 @@ export interface MemberExpressionNode extends BaseASTNode {
   object: ExpressionNode;
   property: string | ExpressionNode;
   computed: boolean;
+}
+
+export interface AwaitExpressionNode extends BaseASTNode {
+  kind: 'AwaitExpression';
+  argument: ExpressionNode;
 }
 
 export type ExpressionNode =
@@ -93,7 +104,9 @@ export type ExpressionNode =
   | CallExpressionNode
   | ArrayLiteralNode
   | ObjectLiteralNode
-  | MemberExpressionNode;
+  | MemberExpressionNode
+  | AwaitExpressionNode
+  | FunctionDeclarationNode;
 
 // ── Statements ──────────────────────────────────────────────────────────────
 
@@ -119,9 +132,11 @@ export interface BlockStatementNode extends BaseASTNode {
 export interface FunctionDeclarationNode extends BaseASTNode {
   kind: 'FunctionDeclaration';
   name: string;
+  isAsync?: boolean;
   params: ParameterDeclaration[];
   returnTypeAnnotation?: string;
   body: BlockStatementNode;
+  capturedVars?: string[];
 }
 
 export interface ReturnStatementNode extends BaseASTNode {
@@ -159,10 +174,59 @@ export interface PrintStatementNode extends BaseASTNode {
   expression: ExpressionNode;
 }
 
+export interface ImportSpecifier {
+  name: string;
+  alias?: string;
+  span?: SourceSpan;
+}
+
 export interface ImportStatementNode extends BaseASTNode {
   kind: 'ImportStatement';
   moduleName: string;
   alias?: string;
+  specifiers?: ImportSpecifier[];
+  isNamespace?: boolean;
+}
+
+export interface ExportSpecifier {
+  name: string;
+  alias?: string;
+  span?: SourceSpan;
+}
+
+export interface ExportStatementNode extends BaseASTNode {
+  kind: 'ExportStatement';
+  declaration?: UnifiedStatementNode;
+  specifiers?: ExportSpecifier[];
+}
+
+export interface ModuleDeclarationNode extends BaseASTNode {
+  kind: 'ModuleDeclaration';
+  name: string;
+}
+
+export interface StructFieldDeclaration {
+  name: string;
+  typeAnnotation: string;
+  span?: SourceSpan;
+}
+
+export interface StructDeclarationNode extends BaseASTNode {
+  kind: 'StructDeclaration';
+  name: string;
+  fields: StructFieldDeclaration[];
+}
+
+export interface EnumVariantDeclaration {
+  name: string;
+  value: number | string;
+  span?: SourceSpan;
+}
+
+export interface EnumDeclarationNode extends BaseASTNode {
+  kind: 'EnumDeclaration';
+  name: string;
+  variants: EnumVariantDeclaration[];
 }
 
 export interface DeclarativeSpatialNodeWrapper extends BaseASTNode {
@@ -174,6 +238,8 @@ export interface DeclarativeSpatialNodeWrapper extends BaseASTNode {
 export type UnifiedStatementNode =
   | VariableDeclarationNode
   | FunctionDeclarationNode
+  | StructDeclarationNode
+  | EnumDeclarationNode
   | ReturnStatementNode
   | IfStatementNode
   | WhileStatementNode
@@ -182,6 +248,8 @@ export type UnifiedStatementNode =
   | ExpressionStatementNode
   | PrintStatementNode
   | ImportStatementNode
+  | ExportStatementNode
+  | ModuleDeclarationNode
   | DeclarativeSpatialNodeWrapper;
 
 // ── Top-Level Program ───────────────────────────────────────────────────────

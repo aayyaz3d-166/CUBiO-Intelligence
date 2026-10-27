@@ -25,7 +25,9 @@ export type IROpcode =
   | 'FIELD_GET'
   | 'FIELD_SET'
   | 'INDEX_GET'
-  | 'INDEX_SET';
+  | 'INDEX_SET'
+  | 'MAKE_CLOSURE'
+  | 'AWAIT';
 
 export type IROperandKind =
   | 'register'

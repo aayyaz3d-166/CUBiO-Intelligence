@@ -1,0 +1,70 @@
+{
+  "name": "one-language",
+  "displayName": "ONE Language",
+  "description": "Rich language support for ONE Language (.one) — syntax highlighting, spatial computing directives, diagnostics, completions, and snippets.",
+  "version": "1.0.0",
+  "publisher": "one-language",
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "one",
+    "one-language",
+    "spatial",
+    "compiler",
+    "cubio"
+  ],
+  "activationEvents": [
+    "onLanguage:one"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "one",
+        "aliases": [
+          "ONE Language",
+          "ONE",
+          "one"
+        ],
+        "extensions": [
+          ".one"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "one",
+        "scopeName": "source.one",
+        "path": "./syntaxes/one.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "one",
+        "path": "./snippets/one.code-snippets"
+      }
+    ],
+    "commands": [
+      {
+        "command": "one.runFile",
+        "title": "ONE: Run Current File"
+      },
+      {
+        "command": "one.checkFile",
+        "title": "ONE: Check Current File Syntax & Types"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.js",
+    "package": "vsce package --out ../../dist/one-language-1.0.0.vsix --no-dependencies --allow-missing-repository"
+  }
+}

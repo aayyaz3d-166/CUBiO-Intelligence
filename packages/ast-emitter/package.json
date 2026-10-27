@@ -4,6 +4,6 @@
   "description": "Type-Checked Deterministic AST Generator & Compiler Pipeline",
   "main": "index.ts",
   "types": "index.ts",
-  "author": "Google DeepMind / Antigravity Sovereign Team",
-  "license": "Apache-2.0"
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
 }

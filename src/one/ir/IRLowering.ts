@@ -10,6 +10,8 @@ import {
   ForStatementNode,
   BlockStatementNode,
   PrintStatementNode,
+  StructDeclarationNode,
+  EnumDeclarationNode,
   DeclarativeSpatialNodeWrapper,
   LiteralNode,
   IdentifierNode,
@@ -32,12 +34,17 @@ import {
 export class IRLowering {
   private regCounter: number = 1;
   private labelCounter: number = 1;
+  private functionDepth: number = 0;
   private instructions: IRInstruction[] = [];
+  private structRegistry: Map<string, StructDeclarationNode> = new Map();
+  private enumRegistry: Map<string, EnumDeclarationNode> = new Map();
 
   public lower(program: UnifiedProgramNode): UnifiedIRProgram {
     this.regCounter = 1;
     this.labelCounter = 1;
     this.instructions = [];
+    this.structRegistry.clear();
+    this.enumRegistry.clear();
 
     for (const stmt of program.body) {
       this.lowerStatement(stmt);
@@ -115,8 +122,26 @@ export class IRLowering {
         this.lowerPrintStatement(stmt);
         break;
 
+      case 'StructDeclaration':
+        this.lowerStructDeclaration(stmt);
+        break;
+
+      case 'EnumDeclaration':
+        this.lowerEnumDeclaration(stmt);
+        break;
+
       case 'DeclarativeSpatialNode':
         this.lowerDeclarativeSpatialNode(stmt);
+        break;
+
+      case 'ExportStatement':
+        if (stmt.declaration) {
+          this.lowerStatement(stmt.declaration);
+        }
+        break;
+
+      case 'ModuleDeclaration':
+      case 'ImportStatement':
         break;
     }
   }
@@ -129,13 +154,19 @@ export class IRLowering {
   }
 
   private lowerFunctionDeclaration(node: FunctionDeclarationNode): void {
+    const isNested = this.functionDepth > 0;
+    this.functionDepth++;
+
     const fnLabel = createLabel(`func_${node.name}`);
     const endLabel = this.nextLabel(`func_end_${node.name}`);
     this.emit('CONST', fnLabel, [], {
       isFunctionHeader: true,
+      isLabel: true,
       name: node.name,
+      isAsync: !!node.isAsync,
       params: node.params.map((p) => p.name),
       endLabel: endLabel.value,
+      capturedVars: node.capturedVars || [],
     });
 
     this.lowerBlockStatement(node.body);
@@ -144,6 +175,16 @@ export class IRLowering {
     this.emit('RETURN', undefined, []);
 
     this.emit('CONST', endLabel, [], { isLabel: true, isFunctionEnd: true, name: node.name });
+
+    this.functionDepth--;
+
+    if (isNested) {
+      this.emit('MAKE_CLOSURE', createVariable(node.name), [], {
+        name: node.name,
+        isAsync: !!node.isAsync,
+        capturedVars: node.capturedVars || [],
+      });
+    }
   }
 
   private lowerReturnStatement(node: ReturnStatementNode): void {
@@ -226,6 +267,26 @@ export class IRLowering {
     this.emit('SPATIAL_OP', undefined, [createSpatialPayload(node.payload)], {
       nodeType: node.nodeType,
     });
+  }
+
+  private lowerStructDeclaration(node: StructDeclarationNode): void {
+    this.structRegistry.set(node.name, node);
+  }
+
+  private lowerEnumDeclaration(node: EnumDeclarationNode): void {
+    this.enumRegistry.set(node.name, node);
+    const dest = this.nextReg('object');
+    const keys: string[] = [];
+    const valRegs: IROperand[] = [];
+    for (const v of node.variants) {
+      keys.push(v.name);
+      const valType = typeof v.value === 'string' ? 'string' : 'number';
+      const valReg = this.nextReg(valType);
+      this.emit('CONST', valReg, [createConstant(v.value, valType)]);
+      valRegs.push(valReg);
+    }
+    this.emit('CONST', dest, valRegs, { isObjectLiteral: true, isEnum: true, enumName: node.name, keys });
+    this.emit('STORE', createVariable(node.name), [dest]);
   }
 
   // ── Expression Lowering ────────────────────────────────────────────────────
@@ -322,6 +383,23 @@ export class IRLowering {
       }
 
       case 'CallExpression': {
+        // Struct constructor call: e.g. Point(10, 20)
+        if (expr.callee.kind === 'Identifier') {
+          const struct = this.structRegistry.get(expr.callee.name);
+          if (struct) {
+            const dest = this.nextReg(struct.name);
+            const keys = struct.fields.map((f) => f.name);
+            const valRegs = expr.args.map((a) => this.lowerExpression(a));
+            this.emit('CONST', dest, valRegs, {
+              isObjectLiteral: true,
+              isStruct: true,
+              structName: struct.name,
+              keys,
+            });
+            return dest;
+          }
+        }
+
         // Method call: callee is a MemberExpression → dispatch as "Object.method"
         if (expr.callee.kind === 'MemberExpression') {
           const calleeNode = expr.callee as MemberExpressionNode;
@@ -342,11 +420,55 @@ export class IRLowering {
           return dest;
         }
 
-        // Normal call: callee is an Identifier
+        // Normal or indirect call: callee can be Identifier or arbitrary expression
         const argRegs = expr.args.map((a) => this.lowerExpression(a));
         const dest = this.nextReg(expr.inferredType);
-        const calleeName = expr.callee.kind === 'Identifier' ? expr.callee.name : 'anon';
-        this.emit('CALL', dest, [createVariable(calleeName), ...argRegs]);
+        if (expr.callee.kind === 'Identifier') {
+          this.emit('CALL', dest, [createVariable(expr.callee.name), ...argRegs]);
+        } else {
+          const calleeReg = this.lowerExpression(expr.callee);
+          this.emit('CALL', dest, [calleeReg, ...argRegs]);
+        }
+        return dest;
+      }
+
+      case 'FunctionDeclaration': {
+        const isNested = this.functionDepth > 0;
+        this.functionDepth++;
+
+        const fnLabel = createLabel(`func_${expr.name}`);
+        const endLabel = this.nextLabel(`func_end_${expr.name}`);
+        this.emit('CONST', fnLabel, [], {
+          isFunctionHeader: true,
+          name: expr.name,
+          isAsync: !!expr.isAsync,
+          params: expr.params.map((p) => p.name),
+          endLabel: endLabel.value,
+          capturedVars: expr.capturedVars || [],
+        });
+
+        this.lowerBlockStatement(expr.body);
+
+        // Default return if not explicit
+        this.emit('RETURN', undefined, []);
+
+        this.emit('CONST', endLabel, [], { isLabel: true, isFunctionEnd: true, name: expr.name });
+
+        this.functionDepth--;
+
+        const dest = this.nextReg('function');
+        this.emit('MAKE_CLOSURE', dest, [], {
+          name: expr.name,
+          isAsync: !!expr.isAsync,
+          capturedVars: expr.capturedVars || [],
+        });
+        return dest;
+      }
+
+      case 'AwaitExpression': {
+        const argReg = this.lowerExpression(expr.argument);
+        const dest = this.nextReg(expr.inferredType);
+        this.emit('AWAIT', dest, [argReg]);
         return dest;
       }
 
@@ -379,7 +501,12 @@ export class IRLowering {
           keys.push(prop.key);
           valRegs.push(this.lowerExpression(prop.value));
         }
-        this.emit('CONST', dest, valRegs, { isObjectLiteral: true, keys });
+        this.emit('CONST', dest, valRegs, {
+          isObjectLiteral: true,
+          isStruct: Boolean(expr.structName),
+          structName: expr.structName,
+          keys,
+        });
         return dest;
       }
 

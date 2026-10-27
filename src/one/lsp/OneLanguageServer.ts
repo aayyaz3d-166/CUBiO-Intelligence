@@ -60,8 +60,31 @@ export class OneLanguageServer {
    * Get syntax, semantic, and type diagnostics for a source file.
    */
   public getDiagnostics(source: string): LSPDiagnostic[] {
-    const res = this.compiler.compile(source);
     const lspDiagnostics: LSPDiagnostic[] = [];
+    let res: any;
+
+    try {
+      res = this.compiler.compile(source);
+    } catch (err: any) {
+      const msg = err.message || String(err);
+      const codeMatch = msg.match(/\[([E0-9]+)(?::\s*([^\]]+))?\]/);
+      const lineColMatch = msg.match(/at line (\d+), column (\d+)/);
+      const code = codeMatch ? codeMatch[1] : 'E1000';
+      const line = lineColMatch ? parseInt(lineColMatch[1], 10) : 1;
+      const column = lineColMatch ? parseInt(lineColMatch[2], 10) : 1;
+
+      lspDiagnostics.push({
+        code,
+        message: msg,
+        severity: 'Error',
+        range: {
+          start: { line, column },
+          end: { line, column: column + 1 },
+        },
+        formattedText: msg,
+      });
+      return lspDiagnostics;
+    }
 
     for (const d of res.diagnostics) {
       const line = d.line || 1;
@@ -102,6 +125,7 @@ export class OneLanguageServer {
       'let', 'const', 'function', 'fn', 'if', 'else', 'while', 'for',
       'in', 'return', 'print', 'import', 'null', 'true', 'false',
       'node', 'funnel', 'channel', 'seal', 'rss_max',
+      'struct', 'enum', 'async', 'await', 'export', 'module',
     ];
     for (const kw of keywords) {
       completions.push({
@@ -122,7 +146,7 @@ export class OneLanguageServer {
       });
     }
 
-    // 3. Document symbols (variables and functions declared in source)
+    // 3. Document symbols (variables, functions, structs, and enums declared in source)
     try {
       const lexer = new OneLexer(source);
       const tokens = lexer.tokenize();
@@ -134,7 +158,9 @@ export class OneLanguageServer {
           (t.type === TokenType.KEYWORD_LET ||
             t.type === TokenType.KEYWORD_CONST ||
             t.type === TokenType.KEYWORD_FUNCTION ||
-            t.type === TokenType.KEYWORD_FN) &&
+            t.type === TokenType.KEYWORD_FN ||
+            t.type === TokenType.KEYWORD_STRUCT ||
+            t.type === TokenType.KEYWORD_ENUM) &&
           i + 1 < tokens.length &&
           tokens[i + 1].type === TokenType.IDENTIFIER
         ) {
@@ -190,6 +216,12 @@ export class OneLanguageServer {
       funnel: 'Establishes streaming pipeline between spatial nodes.',
       channel: 'Configures gossip channel between spatial nodes.',
       seal: 'Emits cryptographic Merkle state seal snapshot.',
+      struct: 'Declares a strongly-typed data structure.',
+      enum: 'Declares an enumerated type with discrete named variants.',
+      async: 'Marks an asynchronous function declaration.',
+      await: 'Suspends execution until an asynchronous promise resolves.',
+      export: 'Exports declarations across module boundaries.',
+      module: 'Declares a modular namespace boundary.',
     };
 
     if (keywords[word]) {

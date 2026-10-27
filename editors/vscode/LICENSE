@@ -1,0 +1,16 @@
+# ONE Language VS Code Extension Licensing
+
+The ONE Language VS Code extension is an integral component of ONE Language and is dual-licensed under:
+
+- The **MIT License** (see [LICENSE-MIT](../../LICENSE-MIT)); and
+- The **Apache License, Version 2.0** (see [LICENSE-APACHE](../../LICENSE-APACHE)).
+
+You may, at your option, use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this extension under the terms of either license.
+
+## Copyright
+
+Copyright © 2026 Ayyaz3D
+
+## Scope
+
+This license covers all extension source files, syntaxes, snippets, configuration files, and LSP integration components within `editors/vscode/`.

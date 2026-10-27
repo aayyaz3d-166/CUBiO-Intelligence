@@ -12,6 +12,10 @@ import {
   ExpressionStatementNode,
   PrintStatementNode,
   ImportStatementNode,
+  ExportStatementNode,
+  ModuleDeclarationNode,
+  StructDeclarationNode,
+  EnumDeclarationNode,
   DeclarativeSpatialNodeWrapper,
   CallExpressionNode,
   IdentifierNode,
@@ -20,8 +24,9 @@ import {
   ArrayLiteralNode,
   ObjectLiteralNode,
   MemberExpressionNode,
+  AwaitExpressionNode,
 } from '../ast/UnifiedAST';
-import { Scope } from './SymbolTable';
+import { Scope, SymbolEntry } from './SymbolTable';
 import { ONE_BUILTIN_FUNCTIONS } from '../stdlib/OneStdLib';
 
 export interface SemanticDiagnostic {
@@ -36,15 +41,28 @@ export class SemanticAnalyzer {
   private globalScope: Scope;
   private diagnostics: SemanticDiagnostic[] = [];
   private importedModules: Set<string> = new Set();
+  private structRegistry: Map<string, StructDeclarationNode> = new Map();
+  private enumRegistry: Map<string, EnumDeclarationNode> = new Map();
+  private asyncContextStack: boolean[] = [true];
 
   constructor() {
     this.globalScope = new Scope('global');
     this.currentScope = this.globalScope;
   }
 
-  public analyze(program: UnifiedProgramNode): { isValid: boolean; diagnostics: SemanticDiagnostic[] } {
+  public analyze(
+    program: UnifiedProgramNode,
+    externalSymbols?: {
+      structs?: StructDeclarationNode[];
+      enums?: EnumDeclarationNode[];
+      functions?: Array<{ name: string; paramCount?: number; returnTypeAnnotation?: string }>;
+    }
+  ): { isValid: boolean; diagnostics: SemanticDiagnostic[] } {
     this.diagnostics = [];
     this.importedModules.clear();
+    this.structRegistry.clear();
+    this.enumRegistry.clear();
+    this.asyncContextStack = [true];
     this.globalScope = new Scope('global');
     for (const bName of Object.keys(ONE_BUILTIN_FUNCTIONS)) {
       this.globalScope.define({
@@ -60,6 +78,72 @@ export class SemanticAnalyzer {
       scopeLevel: 0,
     });
     this.currentScope = this.globalScope;
+
+    if (externalSymbols) {
+      if (externalSymbols.structs) {
+        for (const s of externalSymbols.structs) {
+          this.structRegistry.set(s.name, s);
+          this.globalScope.define({
+            name: s.name,
+            kind: 'struct',
+            scopeLevel: 0,
+            span: s.span,
+          });
+        }
+      }
+      if (externalSymbols.enums) {
+        for (const e of externalSymbols.enums) {
+          this.enumRegistry.set(e.name, e);
+          this.globalScope.define({
+            name: e.name,
+            kind: 'enum',
+            scopeLevel: 0,
+            span: e.span,
+          });
+        }
+      }
+      if (externalSymbols.functions) {
+        for (const fn of externalSymbols.functions) {
+          this.globalScope.define({
+            name: fn.name,
+            kind: 'function',
+            paramCount: fn.paramCount,
+            typeAnnotation: fn.returnTypeAnnotation,
+            scopeLevel: 0,
+          });
+        }
+      }
+    }
+
+    // Pre-register top-level functions to support mutual recursion and forward references
+    for (const stmt of program.body) {
+      let fnNode: FunctionDeclarationNode | undefined = undefined;
+      if (stmt.kind === 'FunctionDeclaration') {
+        fnNode = stmt as FunctionDeclarationNode;
+      } else if (stmt.kind === 'ExportStatement' && (stmt as ExportStatementNode).declaration?.kind === 'FunctionDeclaration') {
+        fnNode = (stmt as ExportStatementNode).declaration as FunctionDeclarationNode;
+      }
+
+      if (fnNode) {
+        const defined = this.globalScope.define({
+          name: fnNode.name,
+          kind: 'function',
+          typeAnnotation: fnNode.returnTypeAnnotation,
+          scopeLevel: 0,
+          paramCount: fnNode.params.length,
+          isAsync: !!fnNode.isAsync,
+          span: fnNode.span,
+        });
+        if (!defined) {
+          this.addDiagnostic(
+            'E3001',
+            `Duplicate declaration of function '${fnNode.name}' in the same scope`,
+            fnNode.span?.start.line,
+            fnNode.span?.start.column
+          );
+        }
+      }
+    }
 
     for (const stmt of program.body) {
       this.analyzeStatement(stmt);
@@ -119,6 +203,22 @@ export class SemanticAnalyzer {
         this.analyzeImportStatement(stmt);
         break;
 
+      case 'ModuleDeclaration':
+        this.analyzeModuleDeclaration(stmt);
+        break;
+
+      case 'ExportStatement':
+        this.analyzeExportStatement(stmt);
+        break;
+
+      case 'StructDeclaration':
+        this.analyzeStructDeclaration(stmt);
+        break;
+
+      case 'EnumDeclaration':
+        this.analyzeEnumDeclaration(stmt);
+        break;
+
       case 'DeclarativeSpatialNode':
         this.analyzeDeclarativeSpatialNode(stmt);
         break;
@@ -151,28 +251,32 @@ export class SemanticAnalyzer {
   }
 
   private analyzeFunctionDeclaration(node: FunctionDeclarationNode): void {
-    // 1. Define function in outer scope
-    const defined = this.currentScope.define({
-      name: node.name,
-      kind: 'function',
-      typeAnnotation: node.returnTypeAnnotation,
-      scopeLevel: this.currentScope.level,
-      paramCount: node.params.length,
-      span: node.span,
-    });
+    // 1. Define function in outer scope if not already pre-registered
+    if (!this.currentScope.resolveLocal(node.name)) {
+      const defined = this.currentScope.define({
+        name: node.name,
+        kind: 'function',
+        typeAnnotation: node.returnTypeAnnotation,
+        scopeLevel: this.currentScope.level,
+        paramCount: node.params.length,
+        isAsync: !!node.isAsync,
+        span: node.span,
+      });
 
-    if (!defined) {
-      this.addDiagnostic(
-        'E3001',
-        `Duplicate declaration of function '${node.name}' in the same scope`,
-        node.span?.start.line,
-        node.span?.start.column
-      );
+      if (!defined) {
+        this.addDiagnostic(
+          'E3001',
+          `Duplicate declaration of function '${node.name}' in the same scope`,
+          node.span?.start.line,
+          node.span?.start.column
+        );
+      }
     }
 
     // 2. Enter Function Scope
     const functionScope = new Scope('function', this.currentScope);
     this.currentScope = functionScope;
+    this.asyncContextStack.push(!!node.isAsync);
 
     // 3. Define parameters
     for (const param of node.params) {
@@ -194,12 +298,37 @@ export class SemanticAnalyzer {
       }
     }
 
+    // Pre-register nested functions in this function scope for mutual recursion
+    for (const bodyStmt of node.body.statements) {
+      if (bodyStmt.kind === 'FunctionDeclaration') {
+        const defined = this.currentScope.define({
+          name: bodyStmt.name,
+          kind: 'function',
+          typeAnnotation: bodyStmt.returnTypeAnnotation,
+          scopeLevel: this.currentScope.level,
+          paramCount: bodyStmt.params.length,
+          isAsync: !!bodyStmt.isAsync,
+          span: bodyStmt.span,
+        });
+        if (!defined) {
+          this.addDiagnostic(
+            'E3001',
+            `Duplicate declaration of function '${bodyStmt.name}' in the same scope`,
+            bodyStmt.span?.start.line,
+            bodyStmt.span?.start.column
+          );
+        }
+      }
+    }
+
     // 4. Analyze Function Body
     for (const bodyStmt of node.body.statements) {
       this.analyzeStatement(bodyStmt);
     }
 
     // 5. Exit Function Scope
+    node.capturedVars = Array.from(functionScope.capturedVars);
+    this.asyncContextStack.pop();
     this.currentScope = this.currentScope.parent!;
   }
 
@@ -289,13 +418,52 @@ export class SemanticAnalyzer {
     }
 
     this.importedModules.add(node.moduleName);
-    const importName = node.alias || node.moduleName;
+    if (node.specifiers && node.specifiers.length > 0) {
+      for (const spec of node.specifiers) {
+        const importName = spec.alias || spec.name;
+        this.currentScope.define({
+          name: importName,
+          kind: 'variable',
+          scopeLevel: this.currentScope.level,
+          span: spec.span,
+        });
+      }
+    } else {
+      const importName = node.alias || node.moduleName;
+      this.currentScope.define({
+        name: importName,
+        kind: 'module',
+        scopeLevel: this.currentScope.level,
+        span: node.span,
+      });
+    }
+  }
+
+  private analyzeModuleDeclaration(node: ModuleDeclarationNode): void {
     this.currentScope.define({
-      name: importName,
+      name: node.name,
       kind: 'module',
       scopeLevel: this.currentScope.level,
       span: node.span,
     });
+  }
+
+  private analyzeExportStatement(node: ExportStatementNode): void {
+    if (node.declaration) {
+      this.analyzeStatement(node.declaration);
+    } else if (node.specifiers) {
+      for (const spec of node.specifiers) {
+        const sym = this.currentScope.resolve(spec.name);
+        if (!sym) {
+          this.addDiagnostic(
+            'E3001',
+            `Export of undeclared identifier '${spec.name}'`,
+            spec.span?.start.line,
+            spec.span?.start.column
+          );
+        }
+      }
+    }
   }
 
   private analyzeDeclarativeSpatialNode(node: DeclarativeSpatialNodeWrapper): void {
@@ -340,26 +508,79 @@ export class SemanticAnalyzer {
         break;
 
       case 'ObjectLiteral':
-        for (const prop of expr.properties) {
-          this.analyzeExpression(prop.value);
-        }
+        this.analyzeObjectLiteral(expr);
         break;
 
       case 'MemberExpression':
-        this.analyzeExpression(expr.object);
-        if (expr.computed && typeof expr.property !== 'string') {
-          this.analyzeExpression(expr.property as ExpressionNode);
-        }
+        this.analyzeMemberExpression(expr);
         break;
 
       case 'Literal':
         // Literals are always semantically valid
         break;
+
+      case 'AwaitExpression':
+        this.analyzeAwaitExpression(expr);
+        break;
+
+      case 'FunctionDeclaration':
+        this.analyzeFunctionDeclaration(expr);
+        break;
     }
   }
 
+  private analyzeAwaitExpression(node: AwaitExpressionNode): void {
+    const isAsync = this.asyncContextStack[this.asyncContextStack.length - 1];
+    if (!isAsync) {
+      this.addDiagnostic(
+        'E3006',
+        `'await' expression is only valid within an async function or at the top level of a module`,
+        node.span?.start.line,
+        node.span?.start.column
+      );
+    }
+    this.analyzeExpression(node.argument);
+  }
+
+  private resolveIdentifierWithCapture(name: string): SymbolEntry | undefined {
+    let foundScope: Scope | undefined = undefined;
+    let curr: Scope | undefined = this.currentScope;
+    while (curr) {
+      if (curr.symbols.has(name)) {
+        foundScope = curr;
+        break;
+      }
+      curr = curr.parent;
+    }
+
+    if (!foundScope) {
+      return undefined;
+    }
+
+    // Top-level global symbols are not captured
+    if (foundScope.scopeType === 'global') {
+      return foundScope.symbols.get(name);
+    }
+
+    // Check if symbol was declared in an enclosing function
+    const enclosingFuncOfDecl = foundScope.getEnclosingFunction();
+    const enclosingFuncOfUse = this.currentScope.getEnclosingFunction();
+
+    if (enclosingFuncOfUse && enclosingFuncOfUse !== enclosingFuncOfDecl) {
+      let s: Scope | undefined = this.currentScope;
+      while (s && s !== foundScope) {
+        if (s.scopeType === 'function') {
+          s.capturedVars.add(name);
+        }
+        s = s.parent;
+      }
+    }
+
+    return foundScope.symbols.get(name);
+  }
+
   private analyzeIdentifier(node: IdentifierNode): void {
-    const symbol = this.currentScope.resolve(node.name);
+    const symbol = this.resolveIdentifierWithCapture(node.name);
     if (!symbol) {
       this.addDiagnostic(
         'E3004',
@@ -374,7 +595,7 @@ export class SemanticAnalyzer {
     // If it's an assignment operator '='
     if (node.operator === '=') {
       if (node.left.kind === 'Identifier') {
-        const symbol = this.currentScope.resolve(node.left.name);
+        const symbol = this.resolveIdentifierWithCapture(node.left.name);
         if (!symbol) {
           this.addDiagnostic(
             'E3004',
@@ -402,11 +623,111 @@ export class SemanticAnalyzer {
     this.analyzeExpression(node.operand);
   }
 
-  private analyzeCallExpression(node: CallExpressionNode): void {
-    this.analyzeExpression(node.callee);
+  private analyzeStructDeclaration(node: StructDeclarationNode): void {
+    if (this.currentScope.resolveLocal(node.name)) {
+      this.addDiagnostic(
+        'E2001',
+        `Duplicate declaration of struct '${node.name}'`,
+        node.span?.start.line,
+        node.span?.start.column
+      );
+      return;
+    }
 
-    // If calling by name, check parameter count
+    const fieldMap = new Map<string, string>();
+    for (const field of node.fields) {
+      if (!this.isKnownType(field.typeAnnotation)) {
+        this.addDiagnostic(
+          'E2002',
+          `Unknown type '${field.typeAnnotation}' for field '${field.name}' in struct '${node.name}'`,
+          field.span?.start.line,
+          field.span?.start.column
+        );
+      }
+      fieldMap.set(field.name, field.typeAnnotation);
+    }
+
+    this.structRegistry.set(node.name, node);
+    this.currentScope.define({
+      name: node.name,
+      kind: 'struct',
+      scopeLevel: this.currentScope.level,
+      paramCount: node.fields.length,
+      structFields: fieldMap,
+      span: node.span,
+    });
+  }
+
+  private analyzeEnumDeclaration(node: EnumDeclarationNode): void {
+    if (this.currentScope.resolveLocal(node.name)) {
+      this.addDiagnostic(
+        'E2001',
+        `Duplicate declaration of enum '${node.name}'`,
+        node.span?.start.line,
+        node.span?.start.column
+      );
+      return;
+    }
+
+    const variantMap = new Map<string, number | string>();
+    for (const v of node.variants) {
+      variantMap.set(v.name, v.value);
+    }
+
+    this.enumRegistry.set(node.name, node);
+    this.currentScope.define({
+      name: node.name,
+      kind: 'enum',
+      scopeLevel: this.currentScope.level,
+      enumVariants: variantMap,
+      span: node.span,
+    });
+  }
+
+  private isKnownType(typeStr?: string): boolean {
+    if (!typeStr) return false;
+    let base = typeStr.trim();
+    if (base.endsWith('[]')) {
+      base = base.slice(0, -2).trim();
+    } else {
+      const match = base.match(/^(.+)\[\d+\]$/);
+      if (match) {
+        base = match[1].trim();
+      }
+    }
+    const primitives = new Set([
+      'i32', 'int32', 'int',
+      'f32', 'float32', 'float',
+      'float64', 'number',
+      'bool', 'boolean',
+      'string',
+      'void',
+      'null',
+      'any'
+    ]);
+    if (primitives.has(base.toLowerCase())) return true;
+    if (this.structRegistry.has(base) || this.enumRegistry.has(base)) return true;
+    return false;
+  }
+
+  private analyzeCallExpression(node: CallExpressionNode): void {
     if (node.callee.kind === 'Identifier') {
+      const struct = this.structRegistry.get(node.callee.name);
+      if (struct) {
+        if (node.args.length !== struct.fields.length) {
+          this.addDiagnostic(
+            'E2006',
+            `Expected ${struct.fields.length} arguments for struct '${node.callee.name}', but got ${node.args.length}`,
+            node.span?.start.line,
+            node.span?.start.column
+          );
+        }
+        for (const arg of node.args) {
+          this.analyzeExpression(arg);
+        }
+        return;
+      }
+
       const symbol = this.currentScope.resolve(node.callee.name);
       if (symbol && symbol.kind === 'function' && symbol.paramCount !== undefined) {
         if (node.args.length !== symbol.paramCount) {
@@ -420,8 +741,95 @@ export class SemanticAnalyzer {
       }
     }
 
+    this.analyzeExpression(node.callee);
     for (const arg of node.args) {
       this.analyzeExpression(arg);
+    }
+  }
+
+  private analyzeObjectLiteral(node: ObjectLiteralNode): void {
+    if (node.structName) {
+      const struct = this.structRegistry.get(node.structName);
+      if (!struct) {
+        this.addDiagnostic(
+          'E2002',
+          `Unknown struct '${node.structName}'`,
+          node.span?.start.line,
+          node.span?.start.column
+        );
+      } else {
+        const allowed = new Set(struct.fields.map((f) => f.name));
+        const provided = new Set<string>();
+
+        for (const prop of node.properties) {
+          if (!allowed.has(prop.key)) {
+            this.addDiagnostic(
+              'E2004',
+              `Invalid field '${prop.key}' on struct '${node.structName}' (structs are sealed)`,
+              prop.span?.start.line,
+              prop.span?.start.column
+            );
+          }
+          provided.add(prop.key);
+        }
+
+        for (const f of struct.fields) {
+          if (!provided.has(f.name)) {
+            this.addDiagnostic(
+              'E2005',
+              `Missing required field '${f.name}' for struct '${node.structName}'`,
+              node.span?.start.line,
+              node.span?.start.column
+            );
+          }
+        }
+      }
+    }
+
+    for (const prop of node.properties) {
+      this.analyzeExpression(prop.value);
+    }
+  }
+
+  private analyzeMemberExpression(node: MemberExpressionNode): void {
+    if (node.object.kind === 'Identifier') {
+      const enumDef = this.enumRegistry.get(node.object.name);
+      if (enumDef) {
+        if (!node.computed && typeof node.property === 'string') {
+          const hasVariant = enumDef.variants.some((v) => v.name === node.property);
+          if (!hasVariant) {
+            this.addDiagnostic(
+              'E2003',
+              `Unknown enum variant '${node.property}' on enum '${node.object.name}'`,
+              node.span?.start.line,
+              node.span?.start.column
+            );
+          }
+        }
+        return; // Enum access validated
+      }
+
+      // Check if variable has a known struct type
+      const varSym = this.currentScope.resolve(node.object.name);
+      if (varSym && varSym.typeAnnotation) {
+        const structDef = this.structRegistry.get(varSym.typeAnnotation);
+        if (structDef && !node.computed && typeof node.property === 'string') {
+          const hasField = structDef.fields.some((f) => f.name === node.property);
+          if (!hasField) {
+            this.addDiagnostic(
+              'E2004',
+              `Field '${node.property}' does not exist on struct '${structDef.name}'`,
+              node.span?.start.line,
+              node.span?.start.column
+            );
+          }
+        }
+      }
+    }
+
+    this.analyzeExpression(node.object);
+    if (node.computed && typeof node.property !== 'string') {
+      this.analyzeExpression(node.property as ExpressionNode);
     }
   }
 

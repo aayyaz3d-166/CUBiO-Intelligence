@@ -12,6 +12,7 @@
  */
 
 import * as assert from 'assert';
+import { BinaryEncoder, BinaryDecoder } from '../../src/binary/index';
 import { IntentParser } from '../../src/one/intelligence/hybrid/IntentParser';
 import {
   HybridConversationEngine,
@@ -365,7 +366,6 @@ suite('D: Safety & Invariants', () => {
 
   test('D-07: Binary Language v1.0 files remain unmodified (spot check)', () => {
     // Verify that binary module can still be imported and roundtrip works (static methods)
-    const { BinaryEncoder, BinaryDecoder } = require('../../src/binary/index');
     const encoded = BinaryEncoder.encode(42);
     const result = BinaryDecoder.decode(encoded);
     // decode() returns { bitsConsumed: number, value: SupportedBinaryValue }

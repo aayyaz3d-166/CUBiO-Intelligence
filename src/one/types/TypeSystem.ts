@@ -8,7 +8,10 @@ export type TypeKind =
   | 'null'
   | 'array'
   | 'object'
+  | 'struct'
+  | 'enum'
   | 'function'
+  | 'promise'
   | 'void'
   | 'any';
 
@@ -17,7 +20,10 @@ export interface Type {
   elementType?: Type; // For arrays
   paramTypes?: Type[]; // For functions
   returnType?: Type; // For functions
-  properties?: Map<string, Type>; // For objects
+  properties?: Map<string, Type>; // For objects and structs
+  structName?: string; // For structs
+  enumName?: string; // For enums
+  enumVariants?: Map<string, number | string>; // For enums
   name?: string; // e.g. i32, f32, bool, number, etc.
 }
 
@@ -43,12 +49,42 @@ export function isIntegerType(t: Type): boolean {
   return t.kind === 'i32';
 }
 
+export function createPromiseType(resolved: Type = TypeAny): Type {
+  return {
+    kind: 'promise',
+    elementType: resolved,
+    name: `Promise<${resolved.name || 'any'}>`,
+  };
+}
+
+export function isPromiseType(t: Type): boolean {
+  return t.kind === 'promise';
+}
+
 export function isFloatType(t: Type): boolean {
   return t.kind === 'f32';
 }
 
 export function createArrayType(elementType: Type): Type {
   return { kind: 'array', elementType, name: `${typeToString(elementType)}[]` };
+}
+
+export function createStructType(name: string, properties: Map<string, Type>): Type {
+  return {
+    kind: 'struct',
+    name,
+    structName: name,
+    properties,
+  };
+}
+
+export function createEnumType(name: string, variants: Map<string, number | string>): Type {
+  return {
+    kind: 'enum',
+    name,
+    enumName: name,
+    enumVariants: variants,
+  };
 }
 
 export function createFunctionType(paramTypes: Type[], returnType: Type): Type {
@@ -76,6 +112,14 @@ export function areTypesEqual(a: Type, b: Type): boolean {
   if (isBooleanType(a) && isBooleanType(b)) return true;
   if (a.kind !== b.kind) return false;
 
+  if (a.kind === 'struct' && b.kind === 'struct') {
+    return a.structName === b.structName;
+  }
+
+  if (a.kind === 'enum' && b.kind === 'enum') {
+    return a.enumName === b.enumName;
+  }
+
   if (a.kind === 'array') {
     if (!a.elementType || !b.elementType) return true;
     return areTypesEqual(a.elementType, b.elementType);
@@ -96,6 +140,24 @@ export function areTypesEqual(a: Type, b: Type): boolean {
 export function isTypeAssignable(target: Type, source: Type): boolean {
   if (target.kind === 'any' || source.kind === 'any') return true;
   if (isBooleanType(target) && isBooleanType(source)) return true;
+
+  if (target.kind === 'struct' && source.kind === 'struct') {
+    return target.structName === source.structName;
+  }
+
+  if (target.kind === 'struct' && source.kind === 'object' && target.properties && source.properties) {
+    for (const [propName, targetPropType] of target.properties.entries()) {
+      const sourcePropType = source.properties.get(propName);
+      if (!sourcePropType || !isTypeAssignable(targetPropType, sourcePropType)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  if (target.kind === 'enum' && source.kind === 'enum') {
+    return target.enumName === source.enumName;
+  }
 
   if (isNumericType(target) && isNumericType(source)) {
     // Exact match
@@ -119,13 +181,17 @@ export function isTypeAssignable(target: Type, source: Type): boolean {
   return areTypesEqual(target, source);
 }
 
-export function parseTypeString(str?: string): Type {
+export function parseTypeString(str?: string, customTypes?: Map<string, Type>): Type {
   if (!str) return TypeAny;
 
   const normalized = str.trim();
   if (normalized.endsWith('[]')) {
     const inner = normalized.slice(0, -2);
-    return createArrayType(parseTypeString(inner));
+    return createArrayType(parseTypeString(inner, customTypes));
+  }
+
+  if (customTypes && customTypes.has(normalized)) {
+    return customTypes.get(normalized)!;
   }
 
   switch (normalized.toLowerCase()) {
@@ -157,7 +223,34 @@ export function parseTypeString(str?: string): Type {
     case 'null':
       return TypeNull;
 
+    case 'function':
+    case 'fn':
+      return createFunctionType([], TypeAny);
+
     default:
-      return TypeAny;
+      if (normalized.startsWith('promise<') && normalized.endsWith('>')) {
+        const inner = normalized.slice(8, -1).trim();
+        const resolved = parseTypeString(inner, customTypes);
+        return createPromiseType(resolved);
+      }
+      if (normalized.includes('=>')) {
+        const parts = normalized.split('=>');
+        const paramsPart = parts[0].trim();
+        const retPart = parts[1].trim();
+        const paramTypes: Type[] = [];
+        if (paramsPart.startsWith('(') && paramsPart.endsWith(')')) {
+          const inner = paramsPart.slice(1, -1).trim();
+          if (inner) {
+            for (const p of inner.split(',')) {
+              paramTypes.push(parseTypeString(p.trim(), customTypes));
+            }
+          }
+        } else if (paramsPart) {
+          paramTypes.push(parseTypeString(paramsPart, customTypes));
+        }
+        const retType = parseTypeString(retPart, customTypes);
+        return createFunctionType(paramTypes, retType);
+      }
+      return { kind: 'any', name: normalized };
   }
 }

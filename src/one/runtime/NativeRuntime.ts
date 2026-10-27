@@ -33,6 +33,7 @@ import {
   createBool,
   createArray,
   createRecord,
+  createClosure,
   isEqual,
   compare,
 } from './NativeValues';
@@ -316,7 +317,7 @@ export class NativeRuntime {
   private dispatch(instr: IRInstruction): void {
     switch (instr.opcode) {
       case 'CONST': {
-        if (instr.metadata?.isLabel) break;
+        if (instr.metadata?.isLabel && !instr.metadata?.isFunctionHeader) break;
 
         if (instr.metadata?.isFunctionHeader) {
           if (instr.metadata.endLabel) {
@@ -347,6 +348,25 @@ export class NativeRuntime {
           const val = this.loadOperand(instr.sources[0]);
           this.setDest(instr.destination, val);
         }
+        break;
+      }
+
+      case 'MAKE_CLOSURE': {
+        if (!instr.destination) break;
+        const name = (instr.metadata?.name as string) || 'anon';
+        const capturedVarNames = (instr.metadata?.capturedVars as string[]) || [];
+        const fnDesc = this.functions.get(name);
+        if (!fnDesc) {
+          throw new OneNativeRuntimeError('E7005', `Cannot create closure for unknown function '${name}'`, this.pc - 1);
+        }
+        const env = new Map<string, NativeValue>();
+        for (const varName of capturedVarNames) {
+          if (this.runtimeState.hasVariable(varName)) {
+            env.set(varName, this.runtimeState.getVariable(varName, this.pc - 1));
+          }
+        }
+        const closure = createClosure(fnDesc.name, fnDesc.paramNames, fnDesc.entryPC, env);
+        this.setDest(instr.destination, closure);
         break;
       }
 
@@ -628,6 +648,34 @@ export class NativeRuntime {
           }
         }
 
+        // Check if callee is a closure in a variable or register
+        let calleeVal: NativeValue | undefined = undefined;
+        if (calleeOp.kind === 'register') {
+          calleeVal = this.loadOperand(calleeOp);
+        } else if (this.runtimeState.hasVariable(calleeName)) {
+          calleeVal = this.runtimeState.getVariable(calleeName, this.pc - 1);
+        }
+
+        if (calleeVal && calleeVal.kind === 'closure') {
+          const cl = calleeVal.value as { name: string; params: string[]; entryPC: number; env?: Map<string, NativeValue> };
+          this.executionModel.checkCallDepth(this.runtimeState.getCallDepth() + 1);
+          const frame = this.runtimeState.pushCallFrame(
+            cl.name,
+            this.pc,
+            instr.destination.kind === 'register' ? String(instr.destination.value) : null
+          );
+          if (cl.env) {
+            for (const [k, v] of cl.env.entries()) {
+              frame.locals.set(k, v);
+            }
+          }
+          for (let i = 0; i < cl.params.length; i++) {
+            frame.locals.set(cl.params[i], args[i] || createNull());
+          }
+          this.pc = cl.entryPC;
+          break;
+        }
+
         // Standard user-defined function
         const fnDesc = this.functions.get(calleeName);
         if (fnDesc) {
@@ -797,6 +845,13 @@ export class NativeRuntime {
 
       case 'SPATIAL_OP': {
         // Preserved declarative spatial instruction (handled by CubiO VM)
+        break;
+      }
+
+      case 'AWAIT': {
+        if (!instr.destination || instr.sources.length === 0) break;
+        const operandVal = this.loadOperand(instr.sources[0]);
+        this.setDest(instr.destination, operandVal);
         break;
       }
 

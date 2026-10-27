@@ -136,6 +136,11 @@ export function runPhase1Pipeline(inputString: string = 'ONE_LANGUAGE_PHASE_1') 
   };
 }
 
-if (require.main === module) {
+if (typeof require !== 'undefined' && require.main === module) {
   runPhase1Pipeline();
+} else if (typeof process !== 'undefined' && process.argv && process.argv[1]) {
+  const scriptPath = process.argv[1].replace(/\\/g, '/');
+  if (scriptPath.endsWith('src/index.ts') || scriptPath.endsWith('src/index.js') || scriptPath.endsWith('dist/index.js')) {
+    runPhase1Pipeline();
+  }
 }
