@@ -1,0 +1,12 @@
+// Qplayer High-Throughput OBI Computational Pipeline
+// Compile to OBI: one build compute.one --target=obi
+// Run with Qplayer: one run compute.one --engine=qplayer
+
+let base = 50;
+let multiplier = 4;
+let offset = 25;
+
+let intermediate = base * multiplier;
+let finalResult = intermediate + offset;
+
+print finalResult;

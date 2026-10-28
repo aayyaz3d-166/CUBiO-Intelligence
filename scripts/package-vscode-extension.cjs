@@ -27,7 +27,9 @@ function packageVSCodeExtension(options = {}) {
   const distDir = path.join(repoRoot, 'dist');
   fs.mkdirSync(distDir, { recursive: true });
 
-  const vsixOut = options.out ? path.resolve(options.out) : path.join(distDir, 'one-language-1.0.0.vsix');
+  const pkgJsonPath = path.join(editorDir, 'package.json');
+  const pkgData = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+  const vsixOut = options.out ? path.resolve(options.out) : path.join(distDir, `one-language-${pkgData.version}.vsix`);
   fs.mkdirSync(path.dirname(vsixOut), { recursive: true });
 
   // ── Stage 1: Build Extension Bundle with esbuild ──────────────────────────
@@ -45,7 +47,6 @@ function packageVSCodeExtension(options = {}) {
 
   // ── Stage 2: Validate Manifest & Assets ────────────────────────────────────
   console.log('\n[Stage 2] Validating Extension Manifest and Assets...');
-  const pkgJsonPath = path.join(editorDir, 'package.json');
   const langConfigPath = path.join(editorDir, 'language-configuration.json');
   const tmLanguagePath = path.join(editorDir, 'syntaxes', 'one.tmLanguage.json');
   const snippetsPath = path.join(editorDir, 'snippets', 'one.code-snippets');

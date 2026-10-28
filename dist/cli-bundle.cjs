@@ -226616,6 +226616,1076 @@ var ReasoningSession = class {
   }
 };
 
+// src/qplayer/graph/QGraph.ts
+var QComputationalGraph = class {
+  nodes = /* @__PURE__ */ new Map();
+  nextId = 0;
+  addNode(kind, dependencies = [], value, variableName, hasSideEffects = false) {
+    const id = this.nextId++;
+    const node = {
+      id,
+      kind,
+      value,
+      variableName,
+      dependencies,
+      hasSideEffects: hasSideEffects || kind === "OUTPUT" || kind === "STORE_VAR" || kind === "HALT"
+    };
+    this.nodes.set(id, node);
+    return node;
+  }
+  getNode(id) {
+    return this.nodes.get(id);
+  }
+  getAllNodes() {
+    return Array.from(this.nodes.values());
+  }
+  /**
+   * Returns topological order of nodes respecting dependencies.
+   */
+  topologicalSort() {
+    const visited = /* @__PURE__ */ new Set();
+    const temp = /* @__PURE__ */ new Set();
+    const order = [];
+    const visit = (nodeId) => {
+      if (temp.has(nodeId)) {
+        throw new Error(`Cycle detected in computational graph at node ${nodeId}`);
+      }
+      if (!visited.has(nodeId)) {
+        temp.add(nodeId);
+        const node = this.nodes.get(nodeId);
+        if (node) {
+          for (const depId of node.dependencies) {
+            visit(depId);
+          }
+          visited.add(nodeId);
+          temp.delete(nodeId);
+          order.push(node);
+        }
+      }
+    };
+    for (const nodeId of this.nodes.keys()) {
+      if (!visited.has(nodeId)) {
+        visit(nodeId);
+      }
+    }
+    return order;
+  }
+};
+
+// src/qplayer/graph/QGraphOptimizer.ts
+var QGraphOptimizer = class {
+  /**
+   * Optimizes the computational graph with constant folding, dead-node elimination,
+   * and virtual register allocation.
+   */
+  static optimize(graph) {
+    this.foldConstants(graph);
+    this.eliminateDeadNodes(graph);
+    this.allocateRegisters(graph);
+    return graph;
+  }
+  /**
+   * Identifies operations where all input operands are constants and folds them.
+   */
+  static foldConstants(graph) {
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const node of graph.getAllNodes()) {
+        if (node.isFolded || node.kind === "CONST" || node.hasSideEffects) continue;
+        if (["ADD", "SUB", "MUL", "DIV", "MOD"].includes(node.kind)) {
+          if (node.dependencies.length === 2) {
+            const left = graph.getNode(node.dependencies[0]);
+            const right = graph.getNode(node.dependencies[1]);
+            if (left && right && left.kind === "CONST" && right.kind === "CONST" && typeof left.value === "number" && typeof right.value === "number") {
+              let foldedVal;
+              switch (node.kind) {
+                case "ADD":
+                  foldedVal = left.value + right.value;
+                  break;
+                case "SUB":
+                  foldedVal = left.value - right.value;
+                  break;
+                case "MUL":
+                  foldedVal = left.value * right.value;
+                  break;
+                case "DIV":
+                  if (right.value === 0) continue;
+                  foldedVal = Math.floor(left.value / right.value);
+                  break;
+                case "MOD":
+                  if (right.value === 0) continue;
+                  foldedVal = left.value % right.value;
+                  break;
+                default:
+                  continue;
+              }
+              node.kind = "CONST";
+              node.value = foldedVal;
+              node.dependencies = [];
+              node.isFolded = true;
+              changed = true;
+            }
+          }
+        }
+      }
+    }
+  }
+  /**
+   * Removes nodes that are unused and have no side effects.
+   */
+  static eliminateDeadNodes(graph) {
+    const liveNodeIds = /* @__PURE__ */ new Set();
+    for (const node of graph.getAllNodes()) {
+      if (node.hasSideEffects) {
+        liveNodeIds.add(node.id);
+      }
+    }
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const liveId of Array.from(liveNodeIds)) {
+        const liveNode = graph.getNode(liveId);
+        if (liveNode) {
+          for (const depId of liveNode.dependencies) {
+            if (!liveNodeIds.has(depId)) {
+              liveNodeIds.add(depId);
+              changed = true;
+            }
+          }
+        }
+      }
+    }
+    for (const node of graph.getAllNodes()) {
+      if (!liveNodeIds.has(node.id)) {
+        graph.nodes.delete(node.id);
+      }
+    }
+  }
+  /**
+   * Linear scan virtual register allocator for sorted nodes.
+   */
+  static allocateRegisters(graph) {
+    const sorted = graph.topologicalSort();
+    let regCounter = 0;
+    for (const node of sorted) {
+      if (node.kind !== "HALT") {
+        node.register = regCounter++;
+      }
+    }
+  }
+};
+
+// src/qplayer/spec/OBISpec.ts
+var OBI_MAGIC = Buffer.from([79, 66, 73, 49]);
+var OBI_HEADER_SIZE = 32;
+var OBI_VERSION_MAJOR = 1;
+var OBI_VERSION_MINOR = 0;
+var OBI_FLAG_ACTUATION_LOCKED = 1 << 0;
+var OBI_FLAG_369_ALIGNED = 1 << 1;
+var OBI_FLAG_OPTIMIZED_DAG = 1 << 2;
+var OBI_FLAG_PQC_SEALED = 1 << 3;
+
+// src/qplayer/graph/QGraphLowering.ts
+var QGraphLowering = class {
+  /**
+   * Constructs an optimized QComputationalGraph from a UnifiedProgramNode AST.
+   */
+  static buildGraphFromAST(ast) {
+    const graph = new QComputationalGraph();
+    const env = /* @__PURE__ */ new Map();
+    for (const stmt of ast.body) {
+      this.lowerStatement(stmt, graph, env);
+    }
+    graph.addNode("HALT", [], void 0, void 0, true);
+    return QGraphOptimizer.optimize(graph);
+  }
+  static lowerStatement(stmt, graph, env) {
+    switch (stmt.kind) {
+      case "InputStatement": {
+        const inp = stmt;
+        const node = graph.addNode("INPUT", [], void 0, inp.target, true);
+        env.set(inp.target, node.id);
+        break;
+      }
+      case "VariableDeclaration": {
+        const decl = stmt;
+        const initExpr = decl.initializer || decl.init;
+        if (initExpr) {
+          const valNodeId = this.lowerExpression(initExpr, graph, env);
+          graph.addNode("STORE_VAR", [valNodeId], void 0, decl.identifier, true);
+          env.set(decl.identifier, valNodeId);
+        }
+        break;
+      }
+      case "PrintStatement": {
+        const printStmt = stmt;
+        const valNodeId = this.lowerExpression(printStmt.expression, graph, env);
+        graph.addNode("OUTPUT", [valNodeId], void 0, void 0, true);
+        break;
+      }
+      default:
+        break;
+    }
+  }
+  static lowerExpression(expr, graph, env) {
+    switch (expr.kind) {
+      case "Literal": {
+        const lit = expr;
+        const node = graph.addNode("CONST", [], lit.value);
+        return node.id;
+      }
+      case "Identifier": {
+        const id = expr;
+        if (env.has(id.name)) {
+          return env.get(id.name);
+        }
+        const loadNode = graph.addNode("LOAD_VAR", [], void 0, id.name);
+        return loadNode.id;
+      }
+      case "BinaryExpression": {
+        const bin = expr;
+        const leftId = this.lowerExpression(bin.left, graph, env);
+        const rightId = this.lowerExpression(bin.right, graph, env);
+        let kind = "ADD";
+        switch (bin.operator) {
+          case "+":
+            kind = "ADD";
+            break;
+          case "-":
+            kind = "SUB";
+            break;
+          case "*":
+            kind = "MUL";
+            break;
+          case "/":
+            kind = "DIV";
+            break;
+          case "%":
+            kind = "MOD";
+            break;
+          case "==":
+            kind = "EQ";
+            break;
+          case "<":
+            kind = "LT";
+            break;
+          case ">":
+            kind = "GT";
+            break;
+          default:
+            kind = "ADD";
+            break;
+        }
+        const binNode = graph.addNode(kind, [leftId, rightId]);
+        return binNode.id;
+      }
+      default:
+        const fallbackNode = graph.addNode("CONST", [], 0);
+        return fallbackNode.id;
+    }
+  }
+  /**
+   * Lowers an optimized QComputationalGraph into an OBIProgram ready for encoding.
+   */
+  static lowerGraphToOBI(graph) {
+    const sortedNodes = graph.topologicalSort();
+    const instructions = [];
+    const constants = [];
+    const getConstIndex = (val) => {
+      let idx = constants.indexOf(val);
+      if (idx === -1) {
+        idx = constants.length;
+        constants.push(val);
+      }
+      return idx;
+    };
+    for (const node of sortedNodes) {
+      const destReg = node.register ?? 0;
+      switch (node.kind) {
+        case "CONST": {
+          const constIdx = getConstIndex(node.value ?? 0);
+          instructions.push({
+            category: 2 /* MEMORY */,
+            opcode: 0 /* LOAD_CONST */,
+            harmonicDest: destReg,
+            srcA: 0,
+            srcB: constIdx,
+            mode: 2 /* REG_CONSTPOOL */
+          });
+          break;
+        }
+        case "INPUT": {
+          instructions.push({
+            category: 5 /* IO */,
+            opcode: 0 /* INPUT */,
+            harmonicDest: destReg,
+            srcA: 0,
+            srcB: 0,
+            mode: 0 /* REG_REG */
+          });
+          break;
+        }
+        case "STORE_VAR": {
+          const srcNode = graph.getNode(node.dependencies[0]);
+          const srcReg = srcNode?.register ?? 0;
+          const varNameIdx = getConstIndex(node.variableName ?? "v");
+          instructions.push({
+            category: 2 /* MEMORY */,
+            opcode: 2 /* STORE_VAR */,
+            harmonicDest: destReg,
+            srcA: srcReg,
+            srcB: varNameIdx,
+            mode: 2 /* REG_CONSTPOOL */
+          });
+          break;
+        }
+        case "LOAD_VAR": {
+          const varNameIdx = getConstIndex(node.variableName ?? "v");
+          instructions.push({
+            category: 2 /* MEMORY */,
+            opcode: 1 /* LOAD_VAR */,
+            harmonicDest: destReg,
+            srcA: 0,
+            srcB: varNameIdx,
+            mode: 2 /* REG_CONSTPOOL */
+          });
+          break;
+        }
+        case "ADD":
+        case "SUB":
+        case "MUL":
+        case "DIV":
+        case "MOD":
+        case "EQ":
+        case "LT":
+        case "GT": {
+          const leftNode = graph.getNode(node.dependencies[0]);
+          const rightNode = graph.getNode(node.dependencies[1]);
+          const srcA = leftNode?.register ?? 0;
+          const srcB = rightNode?.register ?? 0;
+          let op = 0 /* ADD */;
+          switch (node.kind) {
+            case "ADD":
+              op = 0 /* ADD */;
+              break;
+            case "SUB":
+              op = 1 /* SUB */;
+              break;
+            case "MUL":
+              op = 2 /* MUL */;
+              break;
+            case "DIV":
+              op = 3 /* DIV */;
+              break;
+            case "MOD":
+              op = 4 /* MOD */;
+              break;
+            case "EQ":
+              op = 10 /* EQ */;
+              break;
+            case "LT":
+              op = 11 /* LT */;
+              break;
+            case "GT":
+              op = 12 /* GT */;
+              break;
+          }
+          instructions.push({
+            category: 1 /* ARITHMETIC */,
+            opcode: op,
+            harmonicDest: destReg,
+            srcA,
+            srcB,
+            mode: 0 /* REG_REG */
+          });
+          break;
+        }
+        case "OUTPUT": {
+          const srcNode = graph.getNode(node.dependencies[0]);
+          const srcReg = srcNode?.register ?? 0;
+          instructions.push({
+            category: 5 /* IO */,
+            opcode: 1 /* OUTPUT */,
+            harmonicDest: 0,
+            srcA: srcReg,
+            srcB: 0,
+            mode: 0 /* REG_REG */
+          });
+          break;
+        }
+        case "HALT": {
+          instructions.push({
+            category: 0 /* CONTROL */,
+            opcode: 1 /* HALT */,
+            harmonicDest: 0,
+            srcA: 0,
+            srcB: 0,
+            mode: 0 /* REG_REG */
+          });
+          break;
+        }
+      }
+    }
+    const header = {
+      magic: OBI_MAGIC,
+      versionMajor: 1,
+      versionMinor: 0,
+      flags: 1,
+      // ACTUATION_LOCKED
+      instructionCount: instructions.length,
+      constPoolOffset: 32 + instructions.length * 4,
+      constPoolSize: 0,
+      entryPC: 0,
+      checksumCRC32: 0
+    };
+    return {
+      header,
+      instructions,
+      constants
+    };
+  }
+};
+
+// src/qplayer/binary/CRC32.ts
+var CRC32_TABLE = new Uint32Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i;
+  for (let j = 0; j < 8; j++) {
+    c = c & 1 ? 3988292384 ^ c >>> 1 : c >>> 1;
+  }
+  CRC32_TABLE[i] = c >>> 0;
+}
+function computeCRC32(buffer) {
+  let crc = 0 ^ -1;
+  for (let i = 0; i < buffer.length; i++) {
+    crc = crc >>> 8 ^ CRC32_TABLE[(crc ^ buffer[i]) & 255];
+  }
+  return (crc ^ -1) >>> 0;
+}
+
+// src/qplayer/binary/QBinaryEncoder.ts
+var QBinaryEncoder = class {
+  /**
+   * Packs an array of instructions and constant pool into a sealed OBI buffer.
+   */
+  static encode(instructions, constants = [], options = {}) {
+    const constPoolBuf = this.encodeConstantPool(constants);
+    const instrBytesLen = instructions.length * 4;
+    const instrBuf = Buffer.alloc(instrBytesLen);
+    for (let i = 0; i < instructions.length; i++) {
+      const instr = instructions[i];
+      const word = (instr.category & 7 | (instr.opcode & 63) << 3 | (instr.harmonicDest & 511) << 9 | (instr.srcA & 31) << 18 | (instr.srcB & 31) << 23 | (instr.mode & 15) << 28) >>> 0;
+      instrBuf.writeUInt32LE(word, i * 4);
+    }
+    const payload = Buffer.concat([instrBuf, constPoolBuf]);
+    const checksumCRC32 = computeCRC32(payload);
+    const headerBuf = Buffer.alloc(OBI_HEADER_SIZE);
+    OBI_MAGIC.copy(headerBuf, 0, 0, 4);
+    headerBuf.writeUInt16LE(OBI_VERSION_MAJOR, 4);
+    headerBuf.writeUInt16LE(OBI_VERSION_MINOR, 6);
+    const defaultFlags = OBI_FLAG_ACTUATION_LOCKED | OBI_FLAG_369_ALIGNED | OBI_FLAG_OPTIMIZED_DAG;
+    headerBuf.writeUInt32LE(options.flags ?? defaultFlags, 8);
+    headerBuf.writeUInt32LE(instructions.length, 12);
+    const constPoolOffset = OBI_HEADER_SIZE + instrBytesLen;
+    headerBuf.writeUInt32LE(constPoolOffset, 16);
+    headerBuf.writeUInt32LE(constPoolBuf.length, 20);
+    headerBuf.writeUInt32LE(options.entryPC ?? 0, 24);
+    headerBuf.writeUInt32LE(checksumCRC32, 28);
+    return Buffer.concat([headerBuf, instrBuf, constPoolBuf]);
+  }
+  static encodeConstantPool(constants) {
+    const buffers = [];
+    const countBuf = Buffer.alloc(4);
+    countBuf.writeUInt32LE(constants.length, 0);
+    buffers.push(countBuf);
+    for (const c of constants) {
+      if (typeof c === "number") {
+        if (Number.isInteger(c)) {
+          const entry = Buffer.alloc(1 + 4);
+          entry.writeUInt8(1 /* INT32 */, 0);
+          entry.writeInt32LE(c, 1);
+          buffers.push(entry);
+        } else {
+          const entry = Buffer.alloc(1 + 8);
+          entry.writeUInt8(2 /* FLOAT64 */, 0);
+          entry.writeDoubleLE(c, 1);
+          buffers.push(entry);
+        }
+      } else if (typeof c === "string") {
+        const strBytes = Buffer.from(c, "utf8");
+        const entry = Buffer.alloc(1 + 2 + strBytes.length);
+        entry.writeUInt8(3 /* STRING */, 0);
+        entry.writeUInt16LE(strBytes.length, 1);
+        strBytes.copy(entry, 3);
+        buffers.push(entry);
+      } else if (typeof c === "boolean") {
+        const entry = Buffer.alloc(1 + 1);
+        entry.writeUInt8(4 /* BOOLEAN */, 0);
+        entry.writeUInt8(c ? 1 : 0, 1);
+        buffers.push(entry);
+      } else {
+        throw new Error(`Unsupported constant type: ${typeof c}`);
+      }
+    }
+    return Buffer.concat(buffers);
+  }
+};
+
+// src/qplayer/binary/QBinaryDecoder.ts
+var QBinaryDecoderError = class extends Error {
+  code;
+  constructor(code, message) {
+    super(`[${code}] ${message}`);
+    this.name = "QBinaryDecoderError";
+    this.code = code;
+  }
+};
+var QBinaryDecoder = class {
+  /**
+   * Deserializes and validates an OBI binary buffer.
+   */
+  static decode(buffer) {
+    if (buffer.length < OBI_HEADER_SIZE) {
+      throw new QBinaryDecoderError(
+        "E8101",
+        `Truncated OBI stream: length ${buffer.length} < header size ${OBI_HEADER_SIZE}`
+      );
+    }
+    if (buffer[0] !== OBI_MAGIC[0] || buffer[1] !== OBI_MAGIC[1] || buffer[2] !== OBI_MAGIC[2] || buffer[3] !== OBI_MAGIC[3]) {
+      const actual = buffer.slice(0, 4).toString("ascii");
+      throw new QBinaryDecoderError(
+        "E8102",
+        `Invalid OBI magic header: expected 'OBI1', got '${actual}'`
+      );
+    }
+    const versionMajor = buffer.readUInt16LE(4);
+    const versionMinor = buffer.readUInt16LE(6);
+    const flags = buffer.readUInt32LE(8);
+    const instructionCount = buffer.readUInt32LE(12);
+    const constPoolOffset = buffer.readUInt32LE(16);
+    const constPoolSize = buffer.readUInt32LE(20);
+    const entryPC = buffer.readUInt32LE(24);
+    const expectedCRC32 = buffer.readUInt32LE(28);
+    const expectedInstrBytes = instructionCount * 4;
+    const totalExpectedSize = OBI_HEADER_SIZE + expectedInstrBytes + constPoolSize;
+    if (buffer.length < totalExpectedSize) {
+      throw new QBinaryDecoderError(
+        "E8103",
+        `Truncated OBI body: expected ${totalExpectedSize} bytes, got ${buffer.length}`
+      );
+    }
+    const payload = buffer.slice(OBI_HEADER_SIZE, totalExpectedSize);
+    const actualCRC32 = computeCRC32(payload);
+    if (actualCRC32 !== expectedCRC32) {
+      throw new QBinaryDecoderError(
+        "E8104",
+        `OBI Checksum mismatch: expected CRC32 0x${expectedCRC32.toString(16)}, got 0x${actualCRC32.toString(16)}`
+      );
+    }
+    const header = {
+      magic: buffer.slice(0, 4),
+      versionMajor,
+      versionMinor,
+      flags,
+      instructionCount,
+      constPoolOffset,
+      constPoolSize,
+      entryPC,
+      checksumCRC32: expectedCRC32
+    };
+    const instructions = [];
+    let instrOffset = OBI_HEADER_SIZE;
+    for (let i = 0; i < instructionCount; i++) {
+      const word = buffer.readUInt32LE(instrOffset);
+      instrOffset += 4;
+      const category = word & 7;
+      const opcode = word >>> 3 & 63;
+      const harmonicDest = word >>> 9 & 511;
+      const srcA = word >>> 18 & 31;
+      const srcB = word >>> 23 & 31;
+      const mode = word >>> 28 & 15;
+      instructions.push({
+        category,
+        opcode,
+        harmonicDest,
+        srcA,
+        srcB,
+        mode
+      });
+    }
+    const constants = this.decodeConstantPool(buffer.slice(constPoolOffset, constPoolOffset + constPoolSize));
+    return {
+      header,
+      instructions,
+      constants
+    };
+  }
+  static decodeConstantPool(poolBuf) {
+    if (poolBuf.length < 4) return [];
+    const count = poolBuf.readUInt32LE(0);
+    const constants = [];
+    let offset = 4;
+    for (let i = 0; i < count; i++) {
+      if (offset >= poolBuf.length) break;
+      const type = poolBuf.readUInt8(offset);
+      offset += 1;
+      switch (type) {
+        case 1 /* INT32 */: {
+          constants.push(poolBuf.readInt32LE(offset));
+          offset += 4;
+          break;
+        }
+        case 2 /* FLOAT64 */: {
+          constants.push(poolBuf.readDoubleLE(offset));
+          offset += 8;
+          break;
+        }
+        case 3 /* STRING */: {
+          const len = poolBuf.readUInt16LE(offset);
+          offset += 2;
+          const str = poolBuf.slice(offset, offset + len).toString("utf8");
+          constants.push(str);
+          offset += len;
+          break;
+        }
+        case 4 /* BOOLEAN */: {
+          constants.push(poolBuf.readUInt8(offset) !== 0);
+          offset += 1;
+          break;
+        }
+        default:
+          throw new QBinaryDecoderError("E8105", `Unknown constant type tag: ${type}`);
+      }
+    }
+    return constants;
+  }
+};
+
+// src/qplayer/binary/QBinaryValidator.ts
+var QBinaryValidator = class {
+  /**
+   * Performs complete fail-closed structural, cryptographic, and invariant validation.
+   */
+  static validateBuffer(buffer) {
+    if (buffer.length < OBI_HEADER_SIZE) {
+      return {
+        valid: false,
+        errorCode: "E8001",
+        error: `Buffer too small for OBI header (${buffer.length} < ${OBI_HEADER_SIZE})`
+      };
+    }
+    try {
+      const program = QBinaryDecoder.decode(buffer);
+      return this.validateProgram(program);
+    } catch (err) {
+      return {
+        valid: false,
+        errorCode: err.code || "E8002",
+        error: err.message || String(err)
+      };
+    }
+  }
+  /**
+   * Validates internal consistency of decoded OBIProgram.
+   */
+  static validateProgram(program) {
+    if (!(program.header.flags & OBI_FLAG_ACTUATION_LOCKED)) {
+      return {
+        valid: false,
+        errorCode: "E8005",
+        error: "Safety Invariant Violation: OBI binary lacks mandatory ACTUATION_LOCK flag"
+      };
+    }
+    for (let i = 0; i < program.instructions.length; i++) {
+      const instr = program.instructions[i];
+      if (instr.category < 0 || instr.category > 7) {
+        return {
+          valid: false,
+          errorCode: "E8006",
+          error: `Instruction at PC ${i} has invalid category ${instr.category}`
+        };
+      }
+      if (instr.category === 4 /* SPATIAL369 */ || instr.mode === 3 /* SPATIAL_ADDR */) {
+        if (instr.harmonicDest < 0 || instr.harmonicDest > 368) {
+          return {
+            valid: false,
+            errorCode: "E8005",
+            error: `Address369 bounds violation at PC ${i}: address ${instr.harmonicDest} exceeds maximum 368`
+          };
+        }
+      }
+      if (instr.mode === 2 /* REG_CONSTPOOL */) {
+        if (instr.srcB >= program.constants.length) {
+          return {
+            valid: false,
+            errorCode: "E8007",
+            error: `Constant pool index out-of-bounds at PC ${i}: index ${instr.srcB} >= pool size ${program.constants.length}`
+          };
+        }
+      }
+    }
+    return { valid: true };
+  }
+};
+
+// src/qplayer/runtime/QplayerRuntime.ts
+var QplayerRuntime = class {
+  registers = new Array(512).fill(0);
+  globals = /* @__PURE__ */ new Map();
+  callStack = [];
+  spatialMemory369 = new Float64Array(369);
+  // Exact Address369 boundary [0..368]
+  output = [];
+  inputQueue = [];
+  pc = 0;
+  instructionsExecuted = 0;
+  maxInstructions = 1e6;
+  rssLimitMB = 512;
+  constructor(options = {}) {
+    if (options.maxInstructions) {
+      this.maxInstructions = options.maxInstructions;
+    }
+    if (options.mockInputs) {
+      this.inputQueue = [...options.mockInputs];
+    }
+    if (options.rssLimitMB) {
+      this.rssLimitMB = options.rssLimitMB;
+    }
+  }
+  /**
+   * Executes a raw OBI binary buffer.
+   */
+  executeBuffer(buffer) {
+    const valResult = QBinaryValidator.validateBuffer(buffer);
+    if (!valResult.valid) {
+      return {
+        success: false,
+        output: [],
+        instructionsExecuted: 0,
+        executionTimeMs: 0,
+        registers: [],
+        variables: {},
+        spatialMemory369: [],
+        error: {
+          code: valResult.errorCode || "E8002",
+          message: valResult.error || "Binary validation failed",
+          pc: 0
+        }
+      };
+    }
+    const program = QBinaryDecoder.decode(buffer);
+    return this.executeProgram(program);
+  }
+  /**
+   * Executes a decoded OBIProgram.
+   */
+  executeProgram(program) {
+    const startMs = performance.now();
+    this.registers.fill(0);
+    this.globals.clear();
+    this.callStack = [];
+    this.spatialMemory369.fill(0);
+    this.output = [];
+    this.pc = program.header.entryPC || 0;
+    this.instructionsExecuted = 0;
+    const instructions = program.instructions;
+    const constants = program.constants;
+    try {
+      while (this.pc < instructions.length) {
+        if (this.instructionsExecuted >= this.maxInstructions) {
+          throw new Error(`[E5007] Max instruction count exceeded (${this.maxInstructions})`);
+        }
+        const instr = instructions[this.pc];
+        const currentPC = this.pc;
+        this.pc++;
+        this.instructionsExecuted++;
+        switch (instr.category) {
+          // ── Category 0: Control & Functions ───────────────────────────────
+          case 0 /* CONTROL */: {
+            switch (instr.opcode) {
+              case 0 /* NOP */:
+                break;
+              case 1 /* HALT */:
+                return this.buildResult(true, startMs);
+              case 2 /* JUMP */:
+                this.pc = instr.harmonicDest;
+                break;
+              case 3 /* JUMP_IF_ZERO */:
+                if (this.registers[instr.srcA] === 0 || !this.registers[instr.srcA]) {
+                  this.pc = instr.harmonicDest;
+                }
+                break;
+              case 4 /* JUMP_IF_NOT_ZERO */:
+                if (this.registers[instr.srcA] !== 0 && !!this.registers[instr.srcA]) {
+                  this.pc = instr.harmonicDest;
+                }
+                break;
+              case 5 /* CALL */: {
+                if (this.callStack.length >= 512) {
+                  throw new Error(`[E5006] Max call depth exceeded (512) at PC ${currentPC}`);
+                }
+                const targetPC = instr.harmonicDest;
+                const destReg = instr.srcA;
+                this.callStack.push({
+                  returnPC: this.pc,
+                  destReg,
+                  locals: /* @__PURE__ */ new Map()
+                });
+                this.pc = targetPC;
+                break;
+              }
+              case 6 /* RET */: {
+                if (this.callStack.length === 0) {
+                  return this.buildResult(true, startMs);
+                }
+                const frame = this.callStack.pop();
+                const returnVal = this.registers[instr.srcA];
+                this.registers[frame.destReg] = returnVal;
+                this.pc = frame.returnPC;
+                break;
+              }
+              default:
+                throw new Error(`[E5002] Unknown Control Opcode 0x${instr.opcode.toString(16)} at PC ${currentPC}`);
+            }
+            break;
+          }
+          // ── Category 1: Arithmetic & Comparison ───────────────────────────
+          case 1 /* ARITHMETIC */: {
+            let leftVal = this.registers[instr.srcA];
+            let rightVal = this.registers[instr.srcB];
+            if (instr.mode === 1 /* REG_IMM9 */) {
+              this.registers[instr.srcA] = instr.harmonicDest;
+              break;
+            }
+            let resultVal = 0;
+            switch (instr.opcode) {
+              case 0 /* ADD */:
+                resultVal = leftVal + rightVal;
+                break;
+              case 1 /* SUB */:
+                resultVal = leftVal - rightVal;
+                break;
+              case 2 /* MUL */:
+                resultVal = leftVal * rightVal;
+                break;
+              case 3 /* DIV */:
+                if (rightVal === 0) {
+                  throw new Error(`[E5001] Division by zero at PC ${currentPC}`);
+                }
+                resultVal = Math.floor(leftVal / rightVal);
+                break;
+              case 4 /* MOD */:
+                if (rightVal === 0) {
+                  throw new Error(`[E5001] Modulo by zero at PC ${currentPC}`);
+                }
+                resultVal = leftVal % rightVal;
+                break;
+              case 5 /* AND */:
+                resultVal = leftVal & rightVal;
+                break;
+              case 6 /* OR */:
+                resultVal = leftVal | rightVal;
+                break;
+              case 7 /* XOR */:
+                resultVal = leftVal ^ rightVal;
+                break;
+              case 8 /* SHL */:
+                resultVal = leftVal << rightVal;
+                break;
+              case 9 /* SHR */:
+                resultVal = leftVal >> rightVal;
+                break;
+              case 10 /* EQ */:
+                resultVal = leftVal === rightVal ? 1 : 0;
+                break;
+              case 11 /* LT */:
+                resultVal = leftVal < rightVal ? 1 : 0;
+                break;
+              case 12 /* GT */:
+                resultVal = leftVal > rightVal ? 1 : 0;
+                break;
+              default:
+                throw new Error(`[E5002] Unknown Arithmetic Opcode 0x${instr.opcode.toString(16)} at PC ${currentPC}`);
+            }
+            this.registers[instr.harmonicDest] = resultVal;
+            break;
+          }
+          // ── Category 2: Memory & Variables ────────────────────────────────
+          case 2 /* MEMORY */: {
+            switch (instr.opcode) {
+              case 0 /* LOAD_CONST */: {
+                const constVal = constants[instr.srcB];
+                this.registers[instr.harmonicDest] = constVal;
+                break;
+              }
+              case 2 /* STORE_VAR */: {
+                const varName = String(constants[instr.srcB] || `v${instr.srcB}`);
+                const val = this.registers[instr.srcA];
+                if (this.callStack.length > 0) {
+                  this.callStack[this.callStack.length - 1].locals.set(varName, val);
+                } else {
+                  this.globals.set(varName, val);
+                }
+                this.registers[instr.harmonicDest] = val;
+                break;
+              }
+              case 1 /* LOAD_VAR */: {
+                const varName = String(constants[instr.srcB] || `v${instr.srcB}`);
+                let val = 0;
+                if (this.callStack.length > 0 && this.callStack[this.callStack.length - 1].locals.has(varName)) {
+                  val = this.callStack[this.callStack.length - 1].locals.get(varName);
+                } else if (this.globals.has(varName)) {
+                  val = this.globals.get(varName);
+                }
+                this.registers[instr.harmonicDest] = val;
+                break;
+              }
+              case 3 /* MOV */: {
+                this.registers[instr.harmonicDest] = this.registers[instr.srcA];
+                break;
+              }
+              default:
+                throw new Error(`[E5002] Unknown Memory Opcode 0x${instr.opcode.toString(16)} at PC ${currentPC}`);
+            }
+            break;
+          }
+          // ── Category 4: Spatial 369 Memory & Grid ──────────────────────────
+          case 4 /* SPATIAL369 */: {
+            switch (instr.opcode) {
+              case 0 /* SPATIAL_LOAD_369 */: {
+                const addr = instr.harmonicDest;
+                if (addr < 0 || addr > 368) {
+                  throw new Error(`[E8005] Address369 boundary violation: address ${addr} out of range [0..368] at PC ${currentPC}`);
+                }
+                this.registers[instr.srcA] = this.spatialMemory369[addr];
+                break;
+              }
+              case 1 /* SPATIAL_STORE_369 */: {
+                const addr = instr.harmonicDest;
+                if (addr < 0 || addr > 368) {
+                  throw new Error(`[E8005] Address369 boundary violation: address ${addr} out of range [0..368] at PC ${currentPC}`);
+                }
+                const val = this.registers[instr.srcA];
+                this.spatialMemory369[addr] = typeof val === "number" ? val : Number(val) || 0;
+                break;
+              }
+              case 2 /* GRID777_MAP */: {
+                const x = Math.min(6, Math.max(0, Math.floor(this.registers[instr.srcA] || 0)));
+                const y = Math.min(6, Math.max(0, Math.floor(this.registers[instr.srcB] || 0)));
+                const z = Math.min(6, Math.max(0, Math.floor(this.registers[instr.harmonicDest] || 0)));
+                const cellIndex = x * 49 + y * 7 + z;
+                this.registers[instr.srcA] = cellIndex;
+                break;
+              }
+              default:
+                throw new Error(`[E5002] Unknown Spatial Opcode 0x${instr.opcode.toString(16)} at PC ${currentPC}`);
+            }
+            break;
+          }
+          // ── Category 5: Input & Output ────────────────────────────────────
+          case 5 /* IO */: {
+            switch (instr.opcode) {
+              case 0 /* INPUT */: {
+                const nextInput = this.inputQueue.length > 0 ? this.inputQueue.shift() : 0;
+                this.registers[instr.harmonicDest] = nextInput;
+                break;
+              }
+              case 1 /* OUTPUT */: {
+                const outVal = this.registers[instr.srcA];
+                this.output.push(String(outVal));
+                break;
+              }
+              default:
+                throw new Error(`[E5002] Unknown IO Opcode 0x${instr.opcode.toString(16)} at PC ${currentPC}`);
+            }
+            break;
+          }
+          // ── Category 7: Safety & Resource Invariants ──────────────────────
+          case 7 /* SAFETY */: {
+            switch (instr.opcode) {
+              case 0 /* ASSERT_ACTUATION_LOCK */:
+                break;
+              case 1 /* ASSERT_RSS_GUARD */: {
+                const currentMb = process.memoryUsage().heapUsed / (1024 * 1024);
+                if (currentMb > this.rssLimitMB) {
+                  throw new Error(`[E8001] Memory RSS Guard violation: ${currentMb.toFixed(1)}MB exceeds limit of ${this.rssLimitMB}MB`);
+                }
+                break;
+              }
+              default:
+                break;
+            }
+            break;
+          }
+          default:
+            throw new Error(`[E5002] Unknown Opcode Category ${instr.category} at PC ${currentPC}`);
+        }
+      }
+      return this.buildResult(true, startMs);
+    } catch (err) {
+      const msg = err.message || String(err);
+      const codeMatch = msg.match(/\[([A-Z0-9]+)\]/);
+      const code = codeMatch ? codeMatch[1] : "E5000";
+      return {
+        success: false,
+        output: [...this.output],
+        instructionsExecuted: this.instructionsExecuted,
+        executionTimeMs: performance.now() - startMs,
+        registers: [...this.registers.slice(0, 16)],
+        variables: Object.fromEntries(this.globals),
+        spatialMemory369: Array.from(this.spatialMemory369.slice(0, 16)),
+        error: {
+          code,
+          message: msg,
+          pc: this.pc
+        }
+      };
+    }
+  }
+  buildResult(success, startMs) {
+    return {
+      success,
+      output: [...this.output],
+      instructionsExecuted: this.instructionsExecuted,
+      executionTimeMs: performance.now() - startMs,
+      registers: [...this.registers.slice(0, 16)],
+      variables: Object.fromEntries(this.globals),
+      spatialMemory369: Array.from(this.spatialMemory369.slice(0, 16))
+    };
+  }
+};
+
+// src/qplayer/index.ts
+var Qplayer = class {
+  /**
+   * Compiles ONE source code into an optimized One Binary Intelligence (.obi) stream.
+   */
+  static compileToOBI(source) {
+    const lexer = new OneLexer(source);
+    const tokens = lexer.tokenize();
+    const { ast } = GrammarRouter.parse(tokens);
+    const graph = QGraphLowering.buildGraphFromAST(ast);
+    const obiProgram = QGraphLowering.lowerGraphToOBI(graph);
+    return QBinaryEncoder.encode(obiProgram.instructions, obiProgram.constants);
+  }
+  /**
+   * Directly compiles and executes a ONE source program on the Qplayer runtime.
+   */
+  static execute(source, options) {
+    const obiBuffer = this.compileToOBI(source);
+    const runtime = new QplayerRuntime(options);
+    return runtime.executeBuffer(obiBuffer);
+  }
+  /**
+   * Executes a pre-compiled OBI binary buffer on the Qplayer runtime.
+   */
+  static runBinary(buffer, options) {
+    const runtime = new QplayerRuntime(options);
+    return runtime.executeBuffer(buffer);
+  }
+};
+
 // src/one/cli/OneDeveloperCLI.ts
 var OneDeveloperCLI = class {
   /**
@@ -226747,6 +227817,18 @@ Run your project:
           }
           return { exitCode: 0, stdout: "", stderr: "" };
         }
+        if (filePath.endsWith(".obi") || rawBuf.length >= 4 && rawBuf.slice(0, 4).toString("ascii") === "OBI1") {
+          const runRes = Qplayer.runBinary(rawBuf);
+          if (!runRes.success) {
+            const errorMsg = `\x1B[31m[${runRes.error?.code || "E8000"}] Qplayer Error:\x1B[0m ${runRes.error?.message || "Execution failed"}`;
+            err(errorMsg);
+            return { exitCode: 1, stdout: "", stderr: errorMsg };
+          }
+          for (const line of runRes.output) {
+            log(line);
+          }
+          return { exitCode: 0, stdout: "", stderr: "" };
+        }
         source = rawBuf.toString("utf-8");
       } else if (firstArg.endsWith(".one") || firstArg.endsWith(".ir") || !firstArg.includes(";") && !firstArg.startsWith("let ") && !firstArg.startsWith("const ") && !firstArg.startsWith("fn ") && !firstArg.startsWith("function ") && !firstArg.startsWith("print ") && !firstArg.startsWith("node ") && !firstArg.startsWith("rss_max")) {
         const errMsg = `\x1B[31mError:\x1B[0m File not found: ${filePath}`;
@@ -226754,6 +227836,25 @@ Run your project:
         return { exitCode: 1, stdout: "", stderr: errMsg };
       } else {
         source = args.join(" ");
+      }
+    }
+    const useQplayer = args.includes("--engine=qplayer") || args.includes("--qplayer");
+    if (useQplayer) {
+      try {
+        const qRes = Qplayer.execute(source);
+        if (!qRes.success) {
+          const errorMsg = `\x1B[31m[${qRes.error?.code || "E8000"}] Qplayer Error:\x1B[0m ${qRes.error?.message || "Execution failed"}`;
+          err(errorMsg);
+          return { exitCode: 1, stdout: "", stderr: errorMsg };
+        }
+        for (const line of qRes.output) {
+          log(line);
+        }
+        return { exitCode: 0, stdout: "", stderr: "" };
+      } catch (e) {
+        const errorMsg = `\x1B[31mQplayer Error:\x1B[0m ${e.message || String(e)}`;
+        err(errorMsg);
+        return { exitCode: 1, stdout: "", stderr: errorMsg };
       }
     }
     try {
@@ -226844,6 +227945,26 @@ Run your project:
       return { exitCode: 1, stdout: "", stderr: "File not found" };
     }
     const source = fs6.readFileSync(filePath, "utf-8");
+    const isObi = args.includes("--target=obi") || args.includes("--obi");
+    if (isObi) {
+      try {
+        const startMs = performance.now();
+        const obiBuf = Qplayer.compileToOBI(source);
+        const obiPath = filePath.replace(/\.one$/, ".obi");
+        fs6.writeFileSync(obiPath, obiBuf);
+        const duration = performance.now() - startMs;
+        log(`\x1B[32m\u2714 Qplayer Build Succeeded:\x1B[0m ${path7.basename(filePath)}`);
+        log(`  - Target:       ${obiPath}`);
+        log(`  - Format:       One Binary Intelligence (OBI v1.0)`);
+        log(`  - Size:         ${obiBuf.length} bytes`);
+        log(`  - Build time:   ${duration.toFixed(2)} ms`);
+        return { exitCode: 0, stdout: "", stderr: "" };
+      } catch (e) {
+        const errMsg = `\x1B[31mQplayer Build Error:\x1B[0m ${e.message || String(e)}`;
+        err(errMsg);
+        return { exitCode: 1, stdout: "", stderr: errMsg };
+      }
+    }
     try {
       const compiler = new UnifiedCompiler({ emitIR: true });
       const result = compiler.compile(source);

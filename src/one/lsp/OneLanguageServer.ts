@@ -12,6 +12,7 @@ import { UnifiedCompiler } from '../UnifiedCompiler';
 import { DiagnosticFormatter } from '../diagnostics/DiagnosticFormatter';
 import { ONE_BUILTIN_FUNCTIONS } from '../stdlib/OneStdLib';
 import { OneLexer, TokenType } from '../oneLexer';
+import { OneFormatter, FormatterOptions } from '../formatter/OneFormatter';
 
 export interface LSPPosition {
   line: number;
@@ -47,6 +48,43 @@ export interface LSPHoverInfo {
 export interface LSPLocation {
   uri?: string;
   range: LSPRange;
+}
+
+export type LSPSymbolKind =
+  | 'File'
+  | 'Module'
+  | 'Namespace'
+  | 'Package'
+  | 'Class'
+  | 'Method'
+  | 'Property'
+  | 'Field'
+  | 'Constructor'
+  | 'Enum'
+  | 'Interface'
+  | 'Function'
+  | 'Variable'
+  | 'Constant'
+  | 'String'
+  | 'Number'
+  | 'Boolean'
+  | 'Array'
+  | 'Object'
+  | 'Key'
+  | 'Null'
+  | 'EnumMember'
+  | 'Struct'
+  | 'Event'
+  | 'Operator'
+  | 'TypeParameter';
+
+export interface LSPDocumentSymbol {
+  name: string;
+  detail: string;
+  kind: LSPSymbolKind;
+  range: LSPRange;
+  selectionRange: LSPRange;
+  children?: LSPDocumentSymbol[];
 }
 
 export class OneLanguageServer {
@@ -135,7 +173,32 @@ export class OneLanguageServer {
       });
     }
 
-    // 2. Standard Library Functions
+    // 2. Primitive & Spatial Types
+    const types = [
+      'Int', 'Int32', 'Int64', 'Float', 'Float32', 'Float64',
+      'Bool', 'String', 'Void', 'Address369', 'VoxelCoord', 'any', 'number', 'boolean', 'string',
+    ];
+    for (const ty of types) {
+      completions.push({
+        label: ty,
+        kind: 'Variable',
+        detail: `Type: ${ty}`,
+      });
+    }
+
+    // 3. Spatial Directives
+    const spatialDirectives = [
+      '@Space', '@Grid777', '@Slice', '@memview', '@seal', '@gossip', '@assert_rss', '@actuation_lock', '369_ALIGNMENT',
+    ];
+    for (const sd of spatialDirectives) {
+      completions.push({
+        label: sd,
+        kind: 'Constant',
+        detail: `Spatial Directive: ${sd}`,
+      });
+    }
+
+    // 4. Standard Library Functions
     for (const fnName of Object.keys(ONE_BUILTIN_FUNCTIONS)) {
       completions.push({
         label: fnName,
@@ -146,7 +209,7 @@ export class OneLanguageServer {
       });
     }
 
-    // 3. Document symbols (variables, functions, structs, and enums declared in source)
+    // 5. Document symbols (variables, functions, structs, and enums declared in source)
     try {
       const lexer = new OneLexer(source);
       const tokens = lexer.tokenize();
@@ -251,6 +314,35 @@ export class OneLanguageServer {
           ],
         };
       }
+      if (stmt.kind === 'StructDeclaration' && (stmt as any).name === word) {
+        const fields = ((stmt as any).fields || []).map((f: any) => `  ${f.name}: ${f.typeAnnotation};`).join('\n');
+        return {
+          contents: [
+            `\`\`\`one\nstruct ${(stmt as any).name} {\n${fields}\n}\n\`\`\``,
+            `User-defined data structure.`,
+          ],
+        };
+      }
+      if (stmt.kind === 'EnumDeclaration' && (stmt as any).name === word) {
+        const variants = ((stmt as any).variants || []).map((v: any) => `  ${v.name} = ${v.value}`).join(',\n');
+        return {
+          contents: [
+            `\`\`\`one\nenum ${(stmt as any).name} {\n${variants}\n}\n\`\`\``,
+            `User-defined enumerated type.`,
+          ],
+        };
+      }
+      if (stmt.kind === 'DeclarativeSpatialNode') {
+        const p = (stmt as any).payload;
+        if (p?.id === word) {
+          return {
+            contents: [
+              `\`\`\`one\nspatial ${(stmt as any).nodeType} ${p.id}\n\`\`\``,
+              `Spatial computing ${(stmt as any).nodeType} entity.`,
+            ],
+          };
+        }
+      }
     }
 
     return null;
@@ -289,9 +381,134 @@ export class OneLanguageServer {
           };
         }
       }
+
+      if ((stmt.kind === 'StructDeclaration' || stmt.kind === 'EnumDeclaration') && (stmt as any).name === word) {
+        const span = (stmt as any).span;
+        if (span) {
+          return {
+            range: {
+              start: { line: span.start.line, column: span.start.column },
+              end: { line: span.end.line, column: span.end.column },
+            },
+          };
+        }
+      }
     }
 
     return null;
+  }
+
+  /**
+   * Provide document outline / symbols for active document.
+   */
+  public getDocumentSymbols(source: string): LSPDocumentSymbol[] {
+    const symbols: LSPDocumentSymbol[] = [];
+    try {
+      const res = this.compiler.compile(source);
+      if (!res.ast?.body) return symbols;
+
+      for (const stmt of res.ast.body) {
+        const span = (stmt as any).span || {
+          start: { line: 1, column: 1 },
+          end: { line: 1, column: 1 },
+        };
+        const range: LSPRange = {
+          start: { line: span.start.line, column: span.start.column },
+          end: { line: span.end.line, column: span.end.column },
+        };
+
+        if (stmt.kind === 'FunctionDeclaration') {
+          const fnParams = (stmt as any).params?.map((p: any) => p.name).join(', ') || '';
+          symbols.push({
+            name: (stmt as any).name,
+            detail: `(${fnParams}) -> ${(stmt as any).returnTypeAnnotation || 'void'}`,
+            kind: 'Function',
+            range,
+            selectionRange: range,
+          });
+        } else if (stmt.kind === 'VariableDeclaration') {
+          symbols.push({
+            name: (stmt as any).identifier,
+            detail: (stmt as any).typeAnnotation || (stmt as any).inferredType || ((stmt as any).isConst ? 'const' : 'let'),
+            kind: (stmt as any).isConst ? 'Constant' : 'Variable',
+            range,
+            selectionRange: range,
+          });
+        } else if (stmt.kind === 'StructDeclaration') {
+          const children: LSPDocumentSymbol[] = [];
+          if (Array.isArray((stmt as any).fields)) {
+            for (const f of (stmt as any).fields) {
+              const fSpan = f.span || span;
+              const fRange: LSPRange = {
+                start: { line: fSpan.start.line, column: fSpan.start.column },
+                end: { line: fSpan.end.line, column: fSpan.end.column },
+              };
+              children.push({
+                name: f.name,
+                detail: f.typeAnnotation || 'field',
+                kind: 'Field',
+                range: fRange,
+                selectionRange: fRange,
+              });
+            }
+          }
+          symbols.push({
+            name: (stmt as any).name,
+            detail: 'struct',
+            kind: 'Struct',
+            range,
+            selectionRange: range,
+            children,
+          });
+        } else if (stmt.kind === 'EnumDeclaration') {
+          const children: LSPDocumentSymbol[] = [];
+          if (Array.isArray((stmt as any).variants)) {
+            for (const v of (stmt as any).variants) {
+              const vSpan = v.span || span;
+              const vRange: LSPRange = {
+                start: { line: vSpan.start.line, column: vSpan.start.column },
+                end: { line: vSpan.end.line, column: vSpan.end.column },
+              };
+              children.push({
+                name: v.name,
+                detail: String(v.value),
+                kind: 'EnumMember',
+                range: vRange,
+                selectionRange: vRange,
+              });
+            }
+          }
+          symbols.push({
+            name: (stmt as any).name,
+            detail: 'enum',
+            kind: 'Enum',
+            range,
+            selectionRange: range,
+            children,
+          });
+        } else if (stmt.kind === 'DeclarativeSpatialNode') {
+          const payload = (stmt as any).payload;
+          const nodeType = (stmt as any).nodeType || 'Node';
+          symbols.push({
+            name: payload?.id || `${nodeType}`,
+            detail: `spatial ${nodeType}`,
+            kind: nodeType === 'Node' ? 'Class' : 'Interface',
+            range,
+            selectionRange: range,
+          });
+        }
+      }
+    } catch {
+      // In case of syntax errors, return partial symbols or fallback
+    }
+    return symbols;
+  }
+
+  /**
+   * Deterministically formats ONE Language source code.
+   */
+  public formatDocument(source: string, options?: FormatterOptions): string {
+    return OneFormatter.format(source, options);
   }
 
   /**

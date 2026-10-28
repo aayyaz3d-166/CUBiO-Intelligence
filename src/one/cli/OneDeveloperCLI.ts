@@ -18,6 +18,7 @@ import { DiagnosticFormatter } from '../diagnostics/DiagnosticFormatter';
 import { ExecutablePacker } from '../packer/ExecutablePacker';
 import { ExecutableLinker } from '../packer/ExecutableLinker';
 import { ReasoningSession } from '../intelligence/reasoning/ReasoningSession';
+import { Qplayer } from '../../qplayer/index';
 
 export interface DeveloperCLIResult {
   exitCode: number;
@@ -188,6 +189,18 @@ print message
           }
           return { exitCode: 0, stdout: '', stderr: '' };
         }
+        if (filePath.endsWith('.obi') || (rawBuf.length >= 4 && rawBuf.slice(0, 4).toString('ascii') === 'OBI1')) {
+          const runRes = Qplayer.runBinary(rawBuf);
+          if (!runRes.success) {
+            const errorMsg = `\x1b[31m[${runRes.error?.code || 'E8000'}] Qplayer Error:\x1b[0m ${runRes.error?.message || 'Execution failed'}`;
+            err(errorMsg);
+            return { exitCode: 1, stdout: '', stderr: errorMsg };
+          }
+          for (const line of runRes.output) {
+            log(line);
+          }
+          return { exitCode: 0, stdout: '', stderr: '' };
+        }
         source = rawBuf.toString('utf-8');
       } else if (firstArg.endsWith('.one') || firstArg.endsWith('.ir') || (!firstArg.includes(';') && !firstArg.startsWith('let ') && !firstArg.startsWith('const ') && !firstArg.startsWith('fn ') && !firstArg.startsWith('function ') && !firstArg.startsWith('print ') && !firstArg.startsWith('node ') && !firstArg.startsWith('rss_max'))) {
         const errMsg = `\x1b[31mError:\x1b[0m File not found: ${filePath}`;
@@ -195,6 +208,26 @@ print message
         return { exitCode: 1, stdout: '', stderr: errMsg };
       } else {
         source = args.join(' ');
+      }
+    }
+
+    const useQplayer = args.includes('--engine=qplayer') || args.includes('--qplayer');
+    if (useQplayer) {
+      try {
+        const qRes = Qplayer.execute(source);
+        if (!qRes.success) {
+          const errorMsg = `\x1b[31m[${qRes.error?.code || 'E8000'}] Qplayer Error:\x1b[0m ${qRes.error?.message || 'Execution failed'}`;
+          err(errorMsg);
+          return { exitCode: 1, stdout: '', stderr: errorMsg };
+        }
+        for (const line of qRes.output) {
+          log(line);
+        }
+        return { exitCode: 0, stdout: '', stderr: '' };
+      } catch (e: any) {
+        const errorMsg = `\x1b[31mQplayer Error:\x1b[0m ${e.message || String(e)}`;
+        err(errorMsg);
+        return { exitCode: 1, stdout: '', stderr: errorMsg };
       }
     }
 
@@ -299,6 +332,30 @@ print message
     }
 
     const source = fs.readFileSync(filePath, 'utf-8');
+    const isObi = args.includes('--target=obi') || args.includes('--obi');
+
+    if (isObi) {
+      try {
+        const startMs = performance.now();
+        const obiBuf = Qplayer.compileToOBI(source);
+        const obiPath = filePath.replace(/\.one$/, '.obi');
+        fs.writeFileSync(obiPath, obiBuf);
+        const duration = performance.now() - startMs;
+
+        log(`\x1b[32m✔ Qplayer Build Succeeded:\x1b[0m ${path.basename(filePath)}`);
+        log(`  - Target:       ${obiPath}`);
+        log(`  - Format:       One Binary Intelligence (OBI v1.0)`);
+        log(`  - Size:         ${obiBuf.length} bytes`);
+        log(`  - Build time:   ${duration.toFixed(2)} ms`);
+
+        return { exitCode: 0, stdout: '', stderr: '' };
+      } catch (e: any) {
+        const errMsg = `\x1b[31mQplayer Build Error:\x1b[0m ${e.message || String(e)}`;
+        err(errMsg);
+        return { exitCode: 1, stdout: '', stderr: errMsg };
+      }
+    }
+
     try {
       const compiler = new UnifiedCompiler({ emitIR: true });
       const result = compiler.compile(source);

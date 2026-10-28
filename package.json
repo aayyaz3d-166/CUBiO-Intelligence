@@ -1,7 +1,7 @@
 {
   "name": "one-language",
-  "version": "1.1.0",
-  "description": "ONE Language Official Release v1.1.0 Stable - Unified High-Performance Compiler, Virtual Machine, Binary Reasoning Intelligence Substrate, and Neural Lattice Framework",
+  "version": "1.2.0",
+  "description": "ONE Language Official Release v1.2.0 Stable - Unified High-Performance Compiler, Virtual Machine, Qplayer Runtime with One Binary Intelligence, Binary Reasoning Intelligence Substrate, and Neural Lattice Framework",
   "license": "MIT OR Apache-2.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,7 @@
   "exports": {
     ".": "./dist/one/index.js",
     "./vig": "./dist/one/vig/index.js",
+    "./qplayer": "./dist/qplayer/index.js",
     "./register": "./scripts/esm-register.js",
     "./package.json": "./package.json",
     "./binary-reasoning": "./packages/binary-reasoning/dist/index.js"
@@ -111,11 +112,12 @@
     "test:cli": "node scripts/run-test.cjs tests/cli/developer_cli.test.ts",
     "test:standalone": "node --import ./scripts/esm-register.js tests/cli/standalone_exe_packaging.test.ts",
     "test:vscode": "node --import ./scripts/esm-register.js tests/editor/vscode_extension.test.ts",
+    "test:qplayer": "node --import ./scripts/esm-register.js tests/qplayer/binary_roundtrip.test.ts && node --import ./scripts/esm-register.js tests/qplayer/poc_execution.test.ts && node --import ./scripts/esm-register.js tests/qplayer/general_computation.test.ts && node --import ./scripts/esm-register.js tests/qplayer/differential_benchmark.test.ts",
     "certify": "node --import ./scripts/esm-register.js src/test_master_release.ts",
     "test": "node --import ./scripts/esm-register.js src/one/test_one_language.ts && node --import ./scripts/esm-register.js src/core/test_phase2_execution.ts && node --import ./scripts/esm-register.js src/test_phase3_streaming.ts && node --import ./scripts/esm-register.js src/core/test_phase4_checkpointing.ts && node --import ./scripts/esm-register.js src/mesh/test_phase5_mesh.ts && node --import ./scripts/esm-register.js src/cli/test_phase6_cli.ts && node --import ./scripts/esm-register.js src/core/training/test_step63_64.ts && node --import ./scripts/esm-register.js src/core/training/test_step65_66.ts && node --import ./scripts/esm-register.js src/core/training/test_step67_68.ts && node --import ./scripts/esm-register.js src/test_master_release.ts && node --import ./scripts/esm-register.js src/test_advanced_features.ts && node --import ./scripts/esm-register.js src/test_step1_nextgen.ts",
     "start": "node --import ./scripts/esm-register.js src/test_step1_nextgen.ts",
     "test:binary-reasoning": "node packages/binary-reasoning/scripts/test_runner.cjs",
-    "test:all": "npm test && npm run test:binary-reasoning && npm run test:task26"
+    "test:all": "npm test && npm run test:qplayer && npm run test:binary-reasoning && npm run test:task26"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

@@ -1,8 +1,8 @@
 {
   "name": "one-language",
   "displayName": "ONE Language",
-  "description": "Rich language support for ONE Language (.one) — syntax highlighting, spatial computing directives, diagnostics, completions, and snippets.",
-  "version": "1.1.0",
+  "description": "Professional development experience for ONE Language (.one) — compiler diagnostics, autocomplete, hover docs, go-to-definition, document outline, formatting, and one-click execution.",
+  "version": "1.2.0",
   "publisher": "one-language",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
@@ -12,14 +12,18 @@
   },
   "categories": [
     "Programming Languages",
-    "Snippets"
+    "Snippets",
+    "Linters",
+    "Formatters"
   ],
   "keywords": [
     "one",
     "one-language",
     "spatial",
     "compiler",
-    "cubio"
+    "cubio",
+    "reasoning",
+    "intelligence"
   ],
   "activationEvents": [
     "onLanguage:one"
@@ -56,16 +60,177 @@
     "commands": [
       {
         "command": "one.runFile",
-        "title": "ONE: Run Current File"
+        "title": "ONE: Run Current File",
+        "icon": "$(play)"
       },
       {
         "command": "one.checkFile",
-        "title": "ONE: Check Current File Syntax & Types"
+        "title": "ONE: Check Current File Syntax & Types",
+        "icon": "$(check)"
+      },
+      {
+        "command": "one.buildFile",
+        "title": "ONE: Build Current File (.ox)",
+        "icon": "$(package)"
+      },
+      {
+        "command": "one.runQplayer",
+        "title": "ONE: Run with Qplayer Engine (Fast OBI)",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "one.buildObi",
+        "title": "ONE: Build One Binary Intelligence (.obi)",
+        "icon": "$(archive)"
+      },
+      {
+        "command": "one.runObiFile",
+        "title": "ONE: Run Compiled .obi File",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "one.runOxFile",
+        "title": "ONE: Run Compiled .ox File",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "one.formatFile",
+        "title": "ONE: Format Current Document",
+        "icon": "$(symbol-event)"
+      },
+      {
+        "command": "one.selectCli",
+        "title": "ONE: Select ONE CLI Path",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "one.showOutput",
+        "title": "ONE: Show Runtime Output",
+        "icon": "$(output)"
+      },
+      {
+        "command": "one.showMenu",
+        "title": "ONE: Quick Action Menu",
+        "icon": "$(zap)"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "one.runFile",
+          "when": "editorLangId == one",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.checkFile",
+          "when": "editorLangId == one",
+          "group": "navigation@2"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "editorLangId == one",
+          "group": "navigation@3"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "one.runFile",
+          "when": "editorLangId == one",
+          "group": "1_one@1"
+        },
+        {
+          "command": "one.checkFile",
+          "when": "editorLangId == one",
+          "group": "1_one@2"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "editorLangId == one",
+          "group": "1_one@3"
+        },
+        {
+          "command": "one.formatFile",
+          "when": "editorLangId == one",
+          "group": "1_one@4"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "one.runFile",
+          "when": "resourceExtname == .one",
+          "group": "1_one@1"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "resourceExtname == .one",
+          "group": "1_one@2"
+        },
+        {
+          "command": "one.runOxFile",
+          "when": "resourceExtname == .ox",
+          "group": "1_one@3"
+        },
+        {
+          "command": "one.runObiFile",
+          "when": "resourceExtname == .obi",
+          "group": "1_one@4"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "one.runFile",
+        "key": "ctrl+f5",
+        "mac": "cmd+f5",
+        "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.checkFile",
+        "key": "shift+f5",
+        "mac": "shift+f5",
+        "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.buildFile",
+        "key": "ctrl+shift+b",
+        "mac": "cmd+shift+b",
+        "when": "editorTextFocus && editorLangId == one"
+      }
+    ],
+    "configuration": {
+      "title": "ONE Language",
+      "properties": {
+        "one.cliPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to ONE Developer CLI executable (one.exe or one.cjs). If empty, auto-detects from workspace."
+        },
+        "one.defaultEngine": {
+          "type": "string",
+          "enum": ["unifiedvm", "qplayer"],
+          "default": "unifiedvm",
+          "description": "Default execution engine for ONE files (unifiedvm or qplayer)."
+        },
+        "one.checkOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically run compiler syntax & type checks when saving a .one file."
+        },
+        "one.formatOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run deterministic formatter when saving a .one file."
+        },
+        "one.traceReasoning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Emit full binary trace telemetry envelopes during discrete reasoning sessions."
+        }
+      }
+    }
   },
   "scripts": {
     "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.js",
-    "package": "vsce package --out ../../dist/one-language-1.0.0.vsix --no-dependencies --allow-missing-repository"
+    "package": "node ../../scripts/package-vscode-extension.cjs --out ../../dist/one-language-1.1.0.vsix"
   }
 }

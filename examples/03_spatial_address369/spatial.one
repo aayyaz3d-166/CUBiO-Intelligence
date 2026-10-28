@@ -1,0 +1,8 @@
+// ONE Language — Address369 Spatial Computing
+// Spatial memory addresses are sovereign and validated within range [0..368].
+
+let originAddress = 0;
+let boundaryAddress = 368;
+
+print originAddress;
+print boundaryAddress;

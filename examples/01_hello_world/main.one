@@ -1,0 +1,7 @@
+// ONE Language v1.2 — Hello World
+function greet(name: string): string {
+    return "Hello, " + name + "! Welcome to ONE Language v1.2.";
+}
+
+let message = greet("Developer");
+print message;

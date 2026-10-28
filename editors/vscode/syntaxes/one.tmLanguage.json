@@ -3,22 +3,54 @@
   "name": "ONE Language",
   "scopeName": "source.one",
   "patterns": [
-    { "include": "#comments" },
-    { "include": "#strings" },
-    { "include": "#numbers" },
-    { "include": "#spatial-directives" },
-    { "include": "#declarations" },
-    { "include": "#control-flow" },
-    { "include": "#modules" },
-    { "include": "#constants" },
-    { "include": "#types" },
-    { "include": "#builtin-functions" },
-    { "include": "#stdlib-functions" },
-    { "include": "#function-definitions" },
-    { "include": "#type-definitions" },
-    { "include": "#function-calls" },
-    { "include": "#operators" },
-    { "include": "#delimiters" }
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#spatial-directives"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#control-flow"
+    },
+    {
+      "include": "#modules"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#builtin-functions"
+    },
+    {
+      "include": "#stdlib-functions"
+    },
+    {
+      "include": "#function-definitions"
+    },
+    {
+      "include": "#type-definitions"
+    },
+    {
+      "include": "#function-calls"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#delimiters"
+    }
   ],
   "repository": {
     "comments": {
@@ -92,7 +124,7 @@
       "patterns": [
         {
           "name": "entity.name.tag.directive.spatial.one",
-          "match": "(@Space|@Grid777|@Slice|@memview|@seal|@gossip|@assert_rss|@actuation_lock)\\b"
+          "match": "(@Space|@Grid777|@Slice|@memview|@seal|@gossip|@assert_rss|@actuation_lock|@369_ALIGNMENT|369_ALIGNMENT)\\b"
         },
         {
           "name": "keyword.control.spatial.one",
@@ -128,7 +160,7 @@
       "patterns": [
         {
           "name": "support.type.primitive.one",
-          "match": "\\b(Int|Int32|Float32|Bool|Void|string|number|boolean|any)\\b"
+          "match": "\\b(Int|Int32|Int64|UInt32|UInt8|Byte|Float|Float32|Float64|Bool|Void|Address369|VoxelCoord|string|number|boolean|any)\\b"
         }
       ]
     },
@@ -153,7 +185,9 @@
         {
           "match": "\\b(?:function|fn)\\s+([A-Za-z_][A-Za-z0-9_]*)",
           "captures": {
-            "1": { "name": "entity.name.function.one" }
+            "1": {
+              "name": "entity.name.function.one"
+            }
           }
         }
       ]
@@ -163,7 +197,9 @@
         {
           "match": "\\b(?:struct|enum|class)\\s+([A-Za-z_][A-Za-z0-9_]*)",
           "captures": {
-            "1": { "name": "entity.name.type.class.one" }
+            "1": {
+              "name": "entity.name.type.class.one"
+            }
           }
         }
       ]
@@ -173,7 +209,9 @@
         {
           "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\s*(?=\\()",
           "captures": {
-            "1": { "name": "entity.name.function.call.one" }
+            "1": {
+              "name": "entity.name.function.call.one"
+            }
           }
         }
       ]

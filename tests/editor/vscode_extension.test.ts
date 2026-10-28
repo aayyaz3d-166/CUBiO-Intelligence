@@ -17,6 +17,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as cp from 'child_process';
 import { OneLanguageServer } from '../../src/one/lsp/OneLanguageServer';
+import { OneDeveloperCLI } from '../../src/one/cli/OneDeveloperCLI';
 
 function assert(condition: boolean, message: string): void {
   if (!condition) {
@@ -32,16 +33,16 @@ export async function runVSCodeExtensionTests(): Promise<void> {
   const repoRoot = path.resolve(__dirname, '../..');
   const editorDir = path.join(repoRoot, 'editors', 'vscode');
   const distDir = path.join(repoRoot, 'dist');
-  const vsixPath = path.join(distDir, 'one-language-1.0.0.vsix');
-
-  // ── Suite 1: Extension Manifest & Directory Layout ────────────────────────
-  console.log('[Suite 1] Extension Manifest and Structure Validation...');
   const pkgPath = path.join(editorDir, 'package.json');
   assert(fs.existsSync(pkgPath), 'package.json must exist in editors/vscode');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+  const vsixPath = path.join(distDir, `one-language-${pkg.version}.vsix`);
+
+  // ── Suite 1: Extension Manifest & Directory Layout ────────────────────────
+  console.log('[Suite 1] Extension Manifest and Structure Validation...');
 
   assert(pkg.name === 'one-language', `Expected name 'one-language', got '${pkg.name}'`);
-  assert(pkg.version === '1.0.1' || pkg.version === '1.0.0', `Expected version 1.0.1 or 1.0.0, got ${pkg.version}`);
+  assert(pkg.version === '1.2.0' || pkg.version === '1.1.0' || pkg.version === '1.0.1' || pkg.version === '1.0.0', `Expected version 1.2.0, 1.1.0, 1.0.1 or 1.0.0, got ${pkg.version}`);
   assert(pkg.publisher === 'one-language', `Expected publisher 'one-language', got '${pkg.publisher}'`);
   assert(pkg.engines && pkg.engines.vscode, 'Missing engines.vscode declaration');
   assert(pkg.main === './dist/extension.js', `Expected main './dist/extension.js', got '${pkg.main}'`);
@@ -57,7 +58,35 @@ export async function runVSCodeExtensionTests(): Promise<void> {
 
   const snippetContrib = pkg.contributes?.snippets?.[0];
   assert(snippetContrib && snippetContrib.language === 'one', 'Snippet language must be "one"');
-  console.log(`  ✓ Manifest validated: ${pkg.publisher}.${pkg.name} v${pkg.version} (VS Code ${pkg.engines.vscode}).`);
+
+  // Verify all essential commands are declared
+  const commandIds = (pkg.contributes?.commands || []).map((c: any) => c.command);
+  const requiredCommands = [
+    'one.runFile',
+    'one.checkFile',
+    'one.buildFile',
+    'one.runOxFile',
+    'one.formatFile',
+    'one.selectCli',
+    'one.showOutput',
+    'one.showMenu',
+  ];
+  for (const cmd of requiredCommands) {
+    assert(commandIds.includes(cmd), `Missing required command declaration: ${cmd}`);
+  }
+
+  // Verify menus
+  assert(pkg.contributes?.menus?.['editor/title']?.length >= 3, 'Editor title menu must have run, check, and build');
+  assert(pkg.contributes?.menus?.['editor/context']?.length >= 4, 'Editor context menu must have actions');
+  assert(pkg.contributes?.menus?.['explorer/context']?.length >= 3, 'Explorer context menu must have actions');
+
+  // Verify configuration properties
+  const configProps = pkg.contributes?.configuration?.properties;
+  assert(configProps && configProps['one.cliPath'], 'Configuration property one.cliPath missing');
+  assert(configProps && configProps['one.checkOnSave'], 'Configuration property one.checkOnSave missing');
+  assert(configProps && configProps['one.formatOnSave'], 'Configuration property one.formatOnSave missing');
+
+  console.log(`  ✓ Manifest validated: ${pkg.publisher}.${pkg.name} v${pkg.version} (VS Code ${pkg.engines.vscode}) with ${commandIds.length} commands.`);
 
   // ── Suite 2: Language Configuration Validation ────────────────────────────
   console.log('[Suite 2] Language Configuration (Brackets, Comments, Pairs)...');
@@ -264,7 +293,20 @@ export async function runVSCodeExtensionTests(): Promise<void> {
   // 10e. Go-to-Definition
   const def = lsp.getDefinition(validCode, { line: 2, column: 12 }); // over 'add'
   assert(def !== null, 'Definition should be resolved for symbol "add"');
-  console.log('  ✓ Language Server intelligence (diagnostics, completions, hover, definition) verified.');
+
+  // 10f. Document Symbols
+  const symbols = lsp.getDocumentSymbols(validCode);
+  assert(symbols.length >= 2, `Expected at least 2 symbols, got ${symbols.length}`);
+  assert(symbols.some((s) => s.name === 'add' && s.kind === 'Function'), 'Must detect function symbol add');
+  assert(symbols.some((s) => s.name === 'ans' && s.kind === 'Variable'), 'Must detect variable symbol ans');
+
+  // 10g. Document Formatting
+  const unformatted = 'function   calc( a:Int32,b:Int32 ):Int32{return a+b;}';
+  const formatted = lsp.formatDocument(unformatted);
+  assert(formatted.includes('function calc('), 'Formatter must standardize keyword spacing');
+  assert(formatted.includes('a: Int32, b: Int32'), 'Formatter must standardize parameter spacing');
+  assert(formatted.includes('return a + b;'), 'Formatter must standardize operator spacing');
+  console.log('  ✓ Language Server intelligence (diagnostics, completions, hover, definition, symbols, formatting) verified.');
 
   // ── Suite 11: Fail-Closed Safety Invariants ──────────────────────────────
   console.log('[Suite 11] Actuation Lockout and Address369 Safety Invariants...');
@@ -286,8 +328,54 @@ export async function runVSCodeExtensionTests(): Promise<void> {
   assert(fs.existsSync(path.join(repoRoot, 'bin', 'one.cjs')), 'one.cjs launcher remains intact');
   console.log('  ✓ Extension packaging operates cleanly without touching existing compiler baselines.');
 
+  // ── Suite 13: Command Execution & Compilation Workflows ───────────────────
+  console.log('[Suite 13] Command Execution & Compilation Workflows...');
+  const tempTestFile = path.join(repoRoot, 'dist', 'temp_vscode_exec_test.one');
+  const tempTestOx = path.join(repoRoot, 'dist', 'temp_vscode_exec_test.ox');
+  const testSource = 'function calculate(x: Int32): Int32 {\n  return x * 2;\n}\nlet result = calculate(21);\nprint result;\n';
+  fs.writeFileSync(tempTestFile, testSource, 'utf-8');
+
+  try {
+    // 13a. one check command workflow
+    const checkRes = OneDeveloperCLI.run(['check', tempTestFile]);
+    assert(checkRes.exitCode === 0, `one check must succeed on valid file, got code ${checkRes.exitCode}: ${checkRes.stderr}`);
+    assert(checkRes.stdout.includes('Check Passed'), 'one check must output check passed confirmation');
+
+    // 13b. one run command workflow
+    const runRes = OneDeveloperCLI.run(['run', tempTestFile]);
+    assert(runRes.exitCode === 0, `one run must succeed, got code ${runRes.exitCode}: ${runRes.stderr}`);
+    assert(runRes.stdout.includes('42'), `one run output must contain 42, got: ${runRes.stdout}`);
+
+    // 13c. one build command workflow (.one -> .ox)
+    const buildRes = OneDeveloperCLI.run(['build', tempTestFile]);
+    assert(buildRes.exitCode === 0, `one build must succeed, got code ${buildRes.exitCode}: ${buildRes.stderr}`);
+    assert(fs.existsSync(tempTestOx), 'one build must produce .ox binary executable');
+    const oxBytes = fs.readFileSync(tempTestOx);
+    assert(oxBytes.slice(0, 4).toString('ascii') === 'ONEX', 'Built executable must have ONEX magic header');
+
+    // 13d. one run on compiled .ox file workflow
+    const runOxRes = OneDeveloperCLI.run(['run', tempTestOx]);
+    assert(runOxRes.exitCode === 0, `one run on .ox must succeed, got code ${runOxRes.exitCode}: ${runOxRes.stderr}`);
+    assert(runOxRes.stdout.includes('42'), `one run on .ox output must contain 42, got: ${runOxRes.stdout}`);
+
+    // 13e. Fail-closed error handling on invalid source
+    const invalidFile = path.join(repoRoot, 'dist', 'temp_vscode_invalid_test.one');
+    fs.writeFileSync(invalidFile, 'function broken( { let x = ;', 'utf-8');
+    const checkInvalidRes = OneDeveloperCLI.run(['check', invalidFile]);
+    assert(checkInvalidRes.exitCode !== 0, 'one check must return non-zero exit code on invalid syntax');
+    assert(checkInvalidRes.stderr.length > 0, 'one check must emit error diagnostics to stderr');
+    if (fs.existsSync(invalidFile)) fs.unlinkSync(invalidFile);
+
+    console.log('  ✓ CLI compilation and execution workflows (check, run, build, ox execution, fail-closed handling) verified.');
+  } finally {
+    if (fs.existsSync(tempTestFile)) fs.unlinkSync(tempTestFile);
+    if (fs.existsSync(tempTestOx)) fs.unlinkSync(tempTestOx);
+    const tempTestIr = path.join(repoRoot, 'dist', 'temp_vscode_exec_test.one.ir');
+    if (fs.existsSync(tempTestIr)) fs.unlinkSync(tempTestIr);
+  }
+
   console.log('\n================================================================================');
-  console.log('  ALL 12 VS CODE EXTENSION VERIFICATION SUITES PASSED (100%)');
+  console.log('  ALL 13 VS CODE EXTENSION VERIFICATION SUITES PASSED (100%)');
   console.log('================================================================================\n');
 }
 
