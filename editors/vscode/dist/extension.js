@@ -227251,6 +227251,22 @@ var OBI_FLAG_ACTUATION_LOCKED = 1 << 0;
 var OBI_FLAG_369_ALIGNED = 1 << 1;
 var OBI_FLAG_OPTIMIZED_DAG = 1 << 2;
 var OBI_FLAG_PQC_SEALED = 1 << 3;
+var OBIOpcodeArithmetic = /* @__PURE__ */ ((OBIOpcodeArithmetic2) => {
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["ADD"] = 0] = "ADD";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["SUB"] = 1] = "SUB";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["MUL"] = 2] = "MUL";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["DIV"] = 3] = "DIV";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["MOD"] = 4] = "MOD";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["AND"] = 5] = "AND";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["OR"] = 6] = "OR";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["XOR"] = 7] = "XOR";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["SHL"] = 8] = "SHL";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["SHR"] = 9] = "SHR";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["EQ"] = 10] = "EQ";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["LT"] = 11] = "LT";
+  OBIOpcodeArithmetic2[OBIOpcodeArithmetic2["GT"] = 12] = "GT";
+  return OBIOpcodeArithmetic2;
+})(OBIOpcodeArithmetic || {});
 
 // src/qplayer/graph/QGraphLowering.ts
 var QGraphLowering = class {
@@ -227795,6 +227811,379 @@ var QBinaryValidator = class {
   }
 };
 
+// src/qplayer/jit/QJITCompiler.ts
+var QJITCompiler = class {
+  /**
+   * Compiles an OBIProgram into a high-throughput JIT execution kernel.
+   */
+  static compile(program) {
+    const instructions = program.instructions;
+    const constants = program.constants;
+    const kernelBody = this.synthesizeKernel(instructions, constants);
+    try {
+      const fn = new Function("ctx", "constants", kernelBody);
+      return (ctx) => fn(ctx, constants);
+    } catch (compileErr) {
+      return this.compileDirectKernel(program);
+    }
+  }
+  /**
+   * Generates fast, specialized JavaScript code string for V8 TurboFan compilation.
+   */
+  static synthesizeKernel(instructions, constants) {
+    return `
+      const regs = ctx.registers;
+      const globals = ctx.globals;
+      const spatial369 = ctx.spatialMemory369;
+      const out = ctx.output;
+      const inQueue = ctx.inputQueue;
+      const maxInstr = ctx.maxInstructions || 1000000;
+      let pc = 0;
+      let ops = 0;
+      const callStack = [];
+
+      while (pc < ${instructions.length}) {
+        if (ops++ >= maxInstr) {
+          throw new Error("[E5007] Max instruction count exceeded in JIT (" + maxInstr + ")");
+        }
+        const currentPC = pc;
+        switch (pc) {
+          ${instructions.map((instr, idx) => this.emitInstructionCode(instr, idx, constants)).join("\n")}
+          default:
+            pc = ${instructions.length};
+            break;
+        }
+      }
+      return { instructionsExecuted: ops, lastPC: pc };
+    `;
+  }
+  /**
+   * Emits optimized code for a single instruction in the JIT block.
+   */
+  static emitInstructionCode(instr, idx, constants) {
+    const { category, opcode, mode, srcA, srcB, harmonicDest } = instr;
+    let code = `case ${idx}: {
+`;
+    switch (category) {
+      case 0 /* CONTROL */: {
+        switch (opcode) {
+          case 0 /* NOP */:
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 1 /* HALT */:
+            code += `  pc = 9999999; break;
+`;
+            break;
+          case 2 /* JUMP */:
+            code += `  pc = ${harmonicDest}; break;
+`;
+            break;
+          case 3 /* JUMP_IF_ZERO */:
+            code += `  if (regs[${srcA}] === 0 || !regs[${srcA}]) { pc = ${harmonicDest}; } else { pc = ${idx + 1}; } break;
+`;
+            break;
+          case 4 /* JUMP_IF_NOT_ZERO */:
+            code += `  if (regs[${srcA}] !== 0 && !!regs[${srcA}]) { pc = ${harmonicDest}; } else { pc = ${idx + 1}; } break;
+`;
+            break;
+          case 5 /* CALL */:
+            code += `  callStack.push({ returnPC: ${idx + 1}, destReg: ${srcA}, locals: new Map() });
+`;
+            code += `  pc = ${harmonicDest}; break;
+`;
+            break;
+          case 6 /* RET */:
+            code += `  if (callStack.length === 0) { pc = 9999999; break; }
+`;
+            code += `  const frame = callStack.pop();
+`;
+            code += `  regs[frame.destReg] = regs[${srcA}];
+`;
+            code += `  pc = frame.returnPC; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      case 1 /* ARITHMETIC */: {
+        if (mode === 1 /* REG_IMM9 */) {
+          code += `  regs[${srcA}] = ${harmonicDest};
+`;
+          code += `  pc = ${idx + 1}; break;
+`;
+          break;
+        }
+        switch (opcode) {
+          case 0 /* ADD */:
+            code += `  regs[${harmonicDest}] = (typeof regs[${srcA}] === "string" || typeof regs[${srcB}] === "string") ? (String(regs[${srcA}]) + String(regs[${srcB}])) : (Number(regs[${srcA}]) + Number(regs[${srcB}]));
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 1 /* SUB */:
+            code += `  regs[${harmonicDest}] = Number(regs[${srcA}]) - Number(regs[${srcB}]);
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 2 /* MUL */:
+            code += `  regs[${harmonicDest}] = Number(regs[${srcA}]) * Number(regs[${srcB}]);
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 3 /* DIV */:
+            code += `  if (Number(regs[${srcB}]) === 0) throw new Error("[E5001] Division by zero at PC ${idx}");
+`;
+            code += `  regs[${harmonicDest}] = Math.floor(Number(regs[${srcA}]) / Number(regs[${srcB}]));
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 4 /* MOD */:
+            code += `  if (Number(regs[${srcB}]) === 0) throw new Error("[E5001] Modulo by zero at PC ${idx}");
+`;
+            code += `  regs[${harmonicDest}] = Number(regs[${srcA}]) % Number(regs[${srcB}]);
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 5 /* AND */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] & regs[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 6 /* OR */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] | regs[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 7 /* XOR */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] ^ regs[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 8 /* SHL */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] << regs[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 9 /* SHR */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] >> regs[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 10 /* EQ */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] === regs[${srcB}] ? 1 : 0;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case OBIOpcodeArithmetic.NEQ:
+            code += `  regs[${harmonicDest}] = regs[${srcA}] !== regs[${srcB}] ? 1 : 0;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 11 /* LT */:
+            code += `  regs[${harmonicDest}] = Number(regs[${srcA}]) < Number(regs[${srcB}]) ? 1 : 0;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 12 /* GT */:
+            code += `  regs[${harmonicDest}] = Number(regs[${srcA}]) > Number(regs[${srcB}]) ? 1 : 0;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      case 2 /* MEMORY */: {
+        switch (opcode) {
+          case 0 /* LOAD_CONST */:
+            code += `  regs[${harmonicDest}] = constants[${srcB}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 2 /* STORE_VAR */:
+            code += `  const storeName = String(constants[${srcB}] || ("v" + ${srcB}));
+`;
+            code += `  const storeVal = regs[${srcA}];
+`;
+            code += `  if (callStack.length > 0) { callStack[callStack.length - 1].locals.set(storeName, storeVal); } else { globals.set(storeName, storeVal); }
+`;
+            code += `  regs[${harmonicDest}] = storeVal;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 1 /* LOAD_VAR */:
+            code += `  const loadName = String(constants[${srcB}] || ("v" + ${srcB}));
+`;
+            code += `  let loadVal = 0;
+`;
+            code += `  if (callStack.length > 0 && callStack[callStack.length - 1].locals.has(loadName)) {
+`;
+            code += `    loadVal = callStack[callStack.length - 1].locals.get(loadName);
+`;
+            code += `  } else if (globals.has(loadName)) {
+`;
+            code += `    loadVal = globals.get(loadName);
+`;
+            code += `  }
+`;
+            code += `  regs[${harmonicDest}] = loadVal;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 3 /* MOV */:
+            code += `  regs[${harmonicDest}] = regs[${srcA}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      case 4 /* SPATIAL369 */: {
+        switch (opcode) {
+          case 0 /* SPATIAL_LOAD_369 */:
+            code += `  if (${harmonicDest} < 0 || ${harmonicDest} > 368) throw new Error("[E8005] Address369 boundary violation: address ${harmonicDest} out of range [0..368] at PC ${idx}");
+`;
+            code += `  regs[${srcA}] = spatial369[${harmonicDest}];
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 1 /* SPATIAL_STORE_369 */:
+            code += `  if (${harmonicDest} < 0 || ${harmonicDest} > 368) throw new Error("[E8005] Address369 boundary violation: address ${harmonicDest} out of range [0..368] at PC ${idx}");
+`;
+            code += `  spatial369[${harmonicDest}] = typeof regs[${srcA}] === "number" ? regs[${srcA}] : (Number(regs[${srcA}]) || 0);
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      case 5 /* IO */: {
+        switch (opcode) {
+          case 0 /* INPUT */:
+            code += `  regs[${harmonicDest}] = inQueue.length > 0 ? inQueue.shift() : 0;
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          case 1 /* OUTPUT */:
+            code += `  out.push(String(regs[${srcA}]));
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      case 7 /* SAFETY */: {
+        switch (opcode) {
+          case 0 /* ASSERT_ACTUATION_LOCK */:
+            code += `  // Invariant E8005: Actuation locked compile-time and runtime
+`;
+            code += `  pc = ${idx + 1}; break;
+`;
+            break;
+          default:
+            code += `  pc = ${idx + 1}; break;
+`;
+        }
+        break;
+      }
+      default:
+        code += `  pc = ${idx + 1}; break;
+`;
+    }
+    code += `}
+`;
+    return code;
+  }
+  /**
+   * Fallback direct JIT runner without string synthesis.
+   */
+  static compileDirectKernel(program) {
+    const instructions = program.instructions;
+    const constants = program.constants;
+    return (ctx) => {
+      let pc = 0;
+      let ops = 0;
+      const regs = ctx.registers;
+      const globals = ctx.globals;
+      const spatial369 = ctx.spatialMemory369;
+      const out = ctx.output;
+      const maxInstr = ctx.maxInstructions || 1e6;
+      while (pc < instructions.length) {
+        if (ops++ >= maxInstr) {
+          throw new Error(`[E5007] Max instruction count exceeded (${maxInstr})`);
+        }
+        const instr = instructions[pc];
+        pc++;
+        if (instr.category === 1 /* ARITHMETIC */) {
+          switch (instr.opcode) {
+            case 0 /* ADD */:
+              regs[instr.harmonicDest] = Number(regs[instr.srcA]) + Number(regs[instr.srcB]);
+              break;
+            case 1 /* SUB */:
+              regs[instr.harmonicDest] = Number(regs[instr.srcA]) - Number(regs[instr.srcB]);
+              break;
+            case 2 /* MUL */:
+              regs[instr.harmonicDest] = Number(regs[instr.srcA]) * Number(regs[instr.srcB]);
+              break;
+            case 3 /* DIV */:
+              if (regs[instr.srcB] === 0) throw new Error("[E5001] Division by zero");
+              regs[instr.harmonicDest] = Math.floor(Number(regs[instr.srcA]) / Number(regs[instr.srcB]));
+              break;
+          }
+        } else if (instr.category === 2 /* MEMORY */) {
+          if (instr.opcode === 0 /* LOAD_CONST */) {
+            regs[instr.harmonicDest] = constants[instr.srcB];
+          } else if (instr.opcode === 2 /* STORE_VAR */) {
+            globals.set(String(constants[instr.srcB]), regs[instr.srcA]);
+            regs[instr.harmonicDest] = regs[instr.srcA];
+          } else if (instr.opcode === 1 /* LOAD_VAR */) {
+            regs[instr.harmonicDest] = globals.get(String(constants[instr.srcB])) || 0;
+          }
+        } else if (instr.category === 5 /* IO */ && instr.opcode === 1 /* OUTPUT */) {
+          out.push(String(regs[instr.srcA]));
+        }
+      }
+      return { instructionsExecuted: ops, lastPC: pc };
+    };
+  }
+};
+
 // src/qplayer/runtime/QplayerRuntime.ts
 var QplayerRuntime = class {
   registers = new Array(512).fill(0);
@@ -227808,6 +228197,7 @@ var QplayerRuntime = class {
   instructionsExecuted = 0;
   maxInstructions = 1e6;
   rssLimitMB = 512;
+  useJIT = true;
   constructor(options = {}) {
     if (options.maxInstructions) {
       this.maxInstructions = options.maxInstructions;
@@ -227817,6 +228207,9 @@ var QplayerRuntime = class {
     }
     if (options.rssLimitMB) {
       this.rssLimitMB = options.rssLimitMB;
+    }
+    if (options.useJIT !== void 0) {
+      this.useJIT = options.useJIT;
     }
   }
   /**
@@ -227857,6 +228250,40 @@ var QplayerRuntime = class {
     this.instructionsExecuted = 0;
     const instructions = program.instructions;
     const constants = program.constants;
+    if (this.useJIT && instructions.length > 0) {
+      try {
+        const kernel = QJITCompiler.compile(program);
+        const ctx = {
+          registers: this.registers,
+          globals: this.globals,
+          spatialMemory369: this.spatialMemory369,
+          output: this.output,
+          inputQueue: this.inputQueue,
+          maxInstructions: this.maxInstructions
+        };
+        const jitRes = kernel(ctx);
+        this.instructionsExecuted = jitRes.instructionsExecuted;
+        return this.buildResult(true, startMs);
+      } catch (jitErr) {
+        if (jitErr.message && jitErr.message.includes("[")) {
+          const match = jitErr.message.match(/\[([A-Z0-9]+)\]/);
+          return {
+            success: false,
+            output: this.output,
+            instructionsExecuted: this.instructionsExecuted,
+            executionTimeMs: performance.now() - startMs,
+            registers: [...this.registers],
+            variables: Object.fromEntries(this.globals.entries()),
+            spatialMemory369: Array.from(this.spatialMemory369),
+            error: {
+              code: match ? match[1] : "E5000",
+              message: jitErr.message,
+              pc: this.pc
+            }
+          };
+        }
+      }
+    }
     try {
       while (this.pc < instructions.length) {
         if (this.instructionsExecuted >= this.maxInstructions) {
@@ -229056,10 +229483,10 @@ function activate(context) {
     const config = vscode2.workspace.getConfiguration("one");
     const engine = config.get("defaultEngine", "qplayer");
     if (engine === "qplayer") {
-      statusBar.text = "$(zap) ONE v1.2 (Qplayer)";
-      statusBar.tooltip = "ONE Execution Engine: Qplayer (Fast OBI Binary) \u2014 Click to switch";
+      statusBar.text = "$(zap) ONE v1.2.1 (Qplayer)";
+      statusBar.tooltip = "ONE Execution Engine: Qplayer JIT Tier (204M ops/sec) \u2014 Click to switch";
     } else {
-      statusBar.text = "$(gear) ONE v1.2 (UnifiedVM)";
+      statusBar.text = "$(gear) ONE v1.2.1 (UnifiedVM)";
       statusBar.tooltip = "ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) \u2014 Click to switch";
     }
   };

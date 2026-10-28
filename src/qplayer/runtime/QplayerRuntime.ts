@@ -17,11 +17,13 @@ import {
 } from '../spec/OBISpec';
 import { QBinaryDecoder } from '../binary/QBinaryDecoder';
 import { QBinaryValidator } from '../binary/QBinaryValidator';
+import { QJITCompiler, QJITExecutionContext } from '../jit/QJITCompiler';
 
 export interface QplayerOptions {
   maxInstructions?: number;
   mockInputs?: Array<number | string | boolean>;
   rssLimitMB?: number;
+  useJIT?: boolean;
 }
 
 export interface CallFrame {
@@ -57,6 +59,7 @@ export class QplayerRuntime {
   private instructionsExecuted: number = 0;
   private maxInstructions: number = 1_000_000;
   private rssLimitMB: number = 512;
+  private useJIT: boolean = true;
 
   constructor(options: QplayerOptions = {}) {
     if (options.maxInstructions) {
@@ -67,6 +70,9 @@ export class QplayerRuntime {
     }
     if (options.rssLimitMB) {
       this.rssLimitMB = options.rssLimitMB;
+    }
+    if (options.useJIT !== undefined) {
+      this.useJIT = options.useJIT;
     }
   }
 
@@ -112,6 +118,43 @@ export class QplayerRuntime {
 
     const instructions = program.instructions;
     const constants = program.constants;
+
+    // Fast-Path: High-Throughput JIT Tier Execution
+    if (this.useJIT && instructions.length > 0) {
+      try {
+        const kernel = QJITCompiler.compile(program);
+        const ctx: QJITExecutionContext = {
+          registers: this.registers,
+          globals: this.globals,
+          spatialMemory369: this.spatialMemory369,
+          output: this.output,
+          inputQueue: this.inputQueue,
+          maxInstructions: this.maxInstructions,
+        };
+        const jitRes = kernel(ctx);
+        this.instructionsExecuted = jitRes.instructionsExecuted;
+        return this.buildResult(true, startMs);
+      } catch (jitErr: any) {
+        if (jitErr.message && jitErr.message.includes('[')) {
+          const match = jitErr.message.match(/\[([A-Z0-9]+)\]/);
+          return {
+            success: false,
+            output: this.output,
+            instructionsExecuted: this.instructionsExecuted,
+            executionTimeMs: performance.now() - startMs,
+            registers: [...this.registers],
+            variables: Object.fromEntries(this.globals.entries()),
+            spatialMemory369: Array.from(this.spatialMemory369),
+            error: {
+              code: match ? match[1] : 'E5000',
+              message: jitErr.message,
+              pc: this.pc,
+            },
+          };
+        }
+        // Fallback to baseline interpreter loop on complex dynamic constructs
+      }
+    }
 
     try {
       while (this.pc < instructions.length) {

@@ -2,7 +2,7 @@
   "name": "one-language",
   "displayName": "ONE Language",
   "description": "Professional development experience for ONE Language (.one) — compiler diagnostics, autocomplete, hover docs, go-to-definition, document outline, formatting, and one-click execution.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",

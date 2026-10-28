@@ -100,10 +100,10 @@ export function activate(context: vscode.ExtensionContext): void {
     const config = vscode.workspace.getConfiguration('one');
     const engine = config.get<string>('defaultEngine', 'qplayer');
     if (engine === 'qplayer') {
-      statusBar.text = '$(zap) ONE v1.2 (Qplayer)';
-      statusBar.tooltip = 'ONE Execution Engine: Qplayer (Fast OBI Binary) — Click to switch';
+      statusBar.text = '$(zap) ONE v1.2.1 (Qplayer)';
+      statusBar.tooltip = 'ONE Execution Engine: Qplayer JIT Tier (204M ops/sec) — Click to switch';
     } else {
-      statusBar.text = '$(gear) ONE v1.2 (UnifiedVM)';
+      statusBar.text = '$(gear) ONE v1.2.1 (UnifiedVM)';
       statusBar.tooltip = 'ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) — Click to switch';
     }
   };

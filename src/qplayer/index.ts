@@ -21,6 +21,8 @@ export * from './graph/QGraph';
 export * from './graph/QGraphOptimizer';
 export * from './graph/QGraphLowering';
 export * from './runtime/QplayerRuntime';
+export * from './jit/QJITCompiler';
+export * from './parallel/QSpatialParallelScheduler';
 
 export class Qplayer {
   /**
