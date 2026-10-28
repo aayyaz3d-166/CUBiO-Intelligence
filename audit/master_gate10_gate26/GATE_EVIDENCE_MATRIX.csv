@@ -1,0 +1,42 @@
+# ONE LANGUAGE — GATE EVIDENCE MATRIX (GATES 10–26)
+
+**Gate ID:** `GATE-10-26-MASTER-EVIDENCE`  
+**Date:** 2026-10-11  
+**Repository:** `F:\ONE language`  
+**Mode:** END-TO-END AUDIT, EVIDENCE-BASED
+
+---
+
+| Gate ID | Report found | Source impl found | Tests found | Tests executed | Test outcome | Integrity evidence | Benchmark evidence | Known issues | Dependencies | Verdict | Next action |
+|---------|--------------|-------------------|-------------|----------------|--------------|--------------------|--------------------|--------------|--------------|---------|-------------|
+| GATE 10 | Yes (audit/gate10/GATE10_BASELINE_REPORT.md) | Yes (279-file manifest) | 4 phase suites (test_baseline_report.json, 178/178 pass) | NOT RUN (module-resolution error) | Blocked | 3 binary hashes MATCH; checkpoint MATCH | None | Test command not reproducible; module-resolution blocker | GATE 9 (baseline) | PASS WITH LIMITATIONS | Fix module-resolution; re-run |
+| GATE 11 | No | No evidence | None | Not run | Not run | None | None | Missing report | GATE 10 | NOT RUN | Create report |
+| GATE 12 | No | Yes (StateExplorer nextCandidate, GREEDY_BEST_FIRST not implemented) | None executed | Not run | Not run | None | None | Heuristic branch not applied | GATE 10 | NOT RUN | Apply heuristic with authorization |
+| GATE 13 | No | Yes (ReasoningTraceEvent generic; RULE_APPLIED events in evidence) | None executed | Not run | Not run | None | None | Not in gate report; no execution | GATE 12 | NOT RUN | Add trace tests |
+| GATE 14 | No | Yes (DialogueState contracts added; 7 test failures) | Suite G/H added | Not run | Not run | None | None | 7 failures unaddressed | GATE 13 | NOT RUN | Apply test corrections |
+| GATE 15 | No | Yes (ConceptGraph schema implemented; tests added) | Suite added | Not run | Not run | None | None | Exact counts pending | GATE 14 | NOT RUN | Run test suite |
+| GATE 16 | No | Yes (Native5MAdapter stub; isAvailable()=false) | None executed | Not run | Not run | None | None | No actual inference callable | GATE 15 | NOT RUN | Run integration tests |
+| GATE 17 | No | Yes (checkpoint hash MATCH read-only) | None executed | Not run | Not run | Checkpoint MATCH | None | No evaluation dataset | GATE 16 | NOT RUN | Run evaluation |
+| GATE 18 | No (artifacts in src/one_net/ui/) | Yes (server.ts, index.html, app.css, app.js) | tests/ui/explorer_ui.test.ts (blocked by spawn-path) | Not run | Blocked | None | None | E2E test references git-bash | GATE 19 | PARTIALLY COMPLETED / BLOCKED | Fix spawn-path; write E2E |
+| GATE 19 | No | Yes (server.ts API contract documented) | None executed | Not run | Not run | None | None | No E2E verification | GATE 18 | NOT RUN | Implement E2E tests |
+| GATE 20 | No (tests/gate20_benchmark.ts exists; compiles clean) | Yes (benchmark written) | Compiles clean; not executed | Not run | Not run | None | None | Not executed | GATE 11/12 | NOT RUN | Execute benchmark |
+| GATE 21 | No | Yes (profiling not captured) | None executed | Not run | Not run | None | None | Module-resolution blocker | GATE 20 | NOT RUN | Profile workloads |
+| GATE 22 | No | Yes (security inspection performed; no formal testing) | None executed | Not run | Not run | None | None | No penetration testing | GATE 20/21 | NOT RUN | Threat-model with tests |
+| GATE 23 | No | No (no SDK code) | None | Not run | Not run | None | None | Not started | GATE 18/19 | NOT RUN | Create SDK + contract tests |
+| GATE 24 | No (artifacts in docs/, release/, src/one_net/ui/) | Yes (release notes, package created) | Tests blocked by spawn-path | Not run | Blocked | None | None | Test harness spawn issue | GATE 18/19 | PARTIALLY COMPLETED / BLOCKED | Fix spawn-path; run tests |
+| GATE 25 | No (GATE25_RESEARCH_PROPOSAL.md draft) | Yes (proposal draft) | None executed | Not run | Not run | None | None | Profiling blocked by module-resolution | GATE 20 | NOT RUN | Fix module-resolution; finalize |
+| GATE 26 | Yes (audit/gate26/GATE26_RELEASE_QUALIFICATION_REPORT.md) | Yes (proposed scope V1_RELEASE_SCOPE.md) | Not reproducible (module-resolution) | Blocked | Blocked | See INTEGRITY_COMPARISON.json | None | Scope provisional; Gates 12–25 not run | GATE 10–25 | BLOCKED — APPROVAL OR EVIDENCE REQUIRED | Approve scope; fix tests; run Gates 12–25 |
+
+---
+
+## Status Definitions (applied consistently)
+
+- PASS: Required acceptance criteria supported by source and test evidence.
+- PASS WITH LIMITATIONS: Core criteria met, documented limitations remain.
+- FAIL: Actual evidence demonstrates a blocking failure.
+- NOT RUN: Required tests/execution not performed.
+- BLOCKED: Work cannot be verified because a prerequisite or environment is unavailable.
+- NOT IMPLEMENTED: Required functionality demonstrably absent.
+- NOT VERIFIED: Evidence insufficient to determine implementation or correctness.
+
+**Note:** `NOT RUN` and `PASS` are never used interchangeably. Gates 12–25 are `NOT RUN` (no evidence), not `PASS`.

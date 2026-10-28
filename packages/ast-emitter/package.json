@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/ast-emitter",
+  "version": "1.0.0",
+  "description": "Type-Checked Deterministic AST Generator & Compiler Pipeline",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
+}

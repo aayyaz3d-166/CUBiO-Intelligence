@@ -1,0 +1,32 @@
+# ONE Language Licensing
+
+ONE Language is dual-licensed under:
+
+- The **MIT License** (see [LICENSE-MIT](LICENSE-MIT)); and
+- The **Apache License, Version 2.0** (see [LICENSE-APACHE](LICENSE-APACHE)).
+
+You may, at your option, use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software under the terms of either license.
+
+## Copyright
+
+Copyright © 2026 Ayyaz3D
+
+## Scope of Software License
+
+This dual license covers the ONE Language software source code within this repository, including:
+- Core compiler, parser, AST emitter, type checker, and intermediate representation (IR) lowering;
+- Virtual Machine (UnifiedVM), native runtime, and standard library modules;
+- Developer CLI toolchain (`bin/one.cjs`, `OneDeveloperCLI.ts`) and build/packaging scripts;
+- VS Code editor extension and Language Server (LSP);
+- Core modular packages (`packages/*`);
+- Executable packer (`ExecutablePacker.ts`, `ExecutableLoader.ts`, `*.ox` artifact format);
+- Official test suites and documentation.
+
+## Excluded Assets
+
+This software license does NOT apply to:
+- External neural network weights, model parameters, and checkpoints (including `one_lm_best.cubiomodel`), which reside outside this repository;
+- Model training datasets, corpus data, and private benchmark inputs;
+- External repositories and data volumes (including `F:\3D memory studio\ONE language` and `E:\ONE_language_baseline`).
+
+For further details regarding redistribution, attribution, and contribution rules, refer to [NOTICE](NOTICE), [RESTRICTIONS.md](RESTRICTIONS.md), and [CONTRIBUTING.md](CONTRIBUTING.md).

@@ -1,0 +1,456 @@
+{
+  "timestamp": "2026-10-11T02:51:14.822Z",
+  "targetDirectory": "F:/ONE language/legacy_experiments",
+  "copiedUnique": [
+    {
+      "relSrc": "cortex_rtos\\include\\event_group.h",
+      "target": "cortex_rtos\\include\\event_group.h",
+      "hash": "5bfdee78e730ce7b75429b1d5a3faa69869cf5be38e08a40caa175089ccde7b3"
+    },
+    {
+      "relSrc": "cortex_rtos\\include\\mutex.h",
+      "target": "cortex_rtos\\include\\mutex.h",
+      "hash": "87b63061180f36e2c80fb78da47614e41b0b70d36fd6c5e1825e8e3d68ace191"
+    },
+    {
+      "relSrc": "cortex_rtos\\include\\semaphore.h",
+      "target": "cortex_rtos\\include\\semaphore.h",
+      "hash": "0fcfd33f65d766758234ab6ab2ae7f6bf4936403b5303c5afe0af25297b03c0f"
+    },
+    {
+      "relSrc": "cortex_rtos\\include\\task_notification.h",
+      "target": "cortex_rtos\\include\\task_notification.h",
+      "hash": "3119e4d125a5a9a57b9a1f489752ebede67711a37df247cd6261bf7b1d34aa2e"
+    },
+    {
+      "relSrc": "cortex_rtos\\src\\event_group.c",
+      "target": "cortex_rtos\\src\\event_group.c",
+      "hash": "fa4548870b941bc9d77f645320a8348b90c6f1b269661cd1d2a813261c101895"
+    },
+    {
+      "relSrc": "cortex_rtos\\src\\mutex.c",
+      "target": "cortex_rtos\\src\\mutex.c",
+      "hash": "26c6372ebb64c1fdd523f68abc90a708ae640124982e67bd33f72328fc495b04"
+    },
+    {
+      "relSrc": "cortex_rtos\\src\\semaphore.c",
+      "target": "cortex_rtos\\src\\semaphore.c",
+      "hash": "d7bd0d9929db4f12631c97ce6f59e6575e2a2a68ff8c009a39167ddfff61342b"
+    },
+    {
+      "relSrc": "cortex_rtos\\src\\task_notification.c",
+      "target": "cortex_rtos\\src\\task_notification.c",
+      "hash": "c537f493fc1475c2dd6c1ae0bb5cf510aafed9669b6f0d2aa2124c39e556ab70"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_event_group.py",
+      "target": "cortex_rtos\\tests\\test_event_group.py",
+      "hash": "830661100d46a67740c00f6e2ffd7b1f9fc1aa8f3772506e128a1c5563a766e3"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_mutex.py",
+      "target": "cortex_rtos\\tests\\test_mutex.py",
+      "hash": "0140697985dd0e5100f9b44da80d2cd948999c5ce61a008e7683fb762743290e"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_scheduler.c",
+      "target": "cortex_rtos\\tests\\test_scheduler.c",
+      "hash": "a058d841946603220b6ea7fceb6168d763420ac06e83d58530871542ad0d8555"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_scheduler.py",
+      "target": "cortex_rtos\\tests\\test_scheduler.py",
+      "hash": "5e86ba033d3ece4a0c04cc1549b22d8acf5433ae248c609a9423a9633757e375"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_semaphore.py",
+      "target": "cortex_rtos\\tests\\test_semaphore.py",
+      "hash": "ef24b273822066b192ce012a614808fc7d329f0202f4e02b74e9d9717a549e44"
+    },
+    {
+      "relSrc": "cortex_rtos\\tests\\test_task_notification.py",
+      "target": "cortex_rtos\\tests\\test_task_notification.py",
+      "hash": "430ca0d5e28ced855c1e2ea81abf7ffb9bab1c3bb4e842b7efb949a69cd7eda2"
+    },
+    {
+      "relSrc": "fix_nlparser.py",
+      "target": "fix_nlparser.py",
+      "hash": "346e9606946072aac68a77884456b2dcd99b9e3d20757e3bc092552443970816"
+    },
+    {
+      "relSrc": "fix_nlparser_final.py",
+      "target": "fix_nlparser_final.py",
+      "hash": "564cfe1ce9bd0d04c7559800801b905c7a7aad82a084647f8c9d84c92d892d8c"
+    },
+    {
+      "relSrc": "src\\core\\engine\\checkpoint.ts",
+      "target": "src\\core\\engine\\checkpoint.ts",
+      "hash": "4c9fb54ae8a077d0fd8fa9e677d21d0e282ed219847f03b8a7c4b5d792e9c983"
+    },
+    {
+      "relSrc": "src\\core\\engine\\concurrentFunnel.ts",
+      "target": "src\\core\\engine\\concurrentFunnel.ts",
+      "hash": "5fd41b3cf36f5d6e40229c3dd6b1240cb40a9af329d0b3ef9c48dfab1da3e487"
+    },
+    {
+      "relSrc": "src\\core\\engine\\lockFreeStructures.ts",
+      "target": "src\\core\\engine\\lockFreeStructures.ts",
+      "hash": "4320a196aa2782c31dc3faa22afa2d72064600098dd1d9bf96318b4b50ee9816"
+    },
+    {
+      "relSrc": "src\\core\\engine\\recoveryManager.ts",
+      "target": "src\\core\\engine\\recoveryManager.ts",
+      "hash": "0493a88e23edc74e667b049237500dee36481a89bbf774f2a17086bedf0c67ae"
+    },
+    {
+      "relSrc": "src\\core\\engine\\spatialHarmonicAligner.ts",
+      "target": "src\\core\\engine\\spatialHarmonicAligner.ts",
+      "hash": "89f111f2d3fea54a03883cae48aa42f109fd6d4fd62202f7743fcc64cba06e44"
+    },
+    {
+      "relSrc": "src\\core\\engine\\spatialMeshCluster.ts",
+      "target": "src\\core\\engine\\spatialMeshCluster.ts",
+      "hash": "673084f9c7fda0e3408319210a91c062269de06b3ce7ebcdb674d107c6be2cc0"
+    },
+    {
+      "relSrc": "src\\core\\engine\\wal.ts",
+      "target": "src\\core\\engine\\wal.ts",
+      "hash": "f58cd50036adc92a755625c127a4f48e90148c8f954da148a8d19222233f496f"
+    },
+    {
+      "relSrc": "src\\one\\concurrencyBridge.ts",
+      "target": "src\\one\\concurrencyBridge.ts",
+      "hash": "001ad5a2d55c5778c1a525d10ec88320b9218e9a4546d090a0f3610262e17c7c"
+    },
+    {
+      "relSrc": "src\\one\\nlCodeGenerator.ts",
+      "target": "src\\one\\nlCodeGenerator.ts",
+      "hash": "fa45e5658c998cd3f37bcda7f3a54545fb8073f4af28c2e9acc6790c593084f3"
+    },
+    {
+      "relSrc": "src\\one\\nlCompiler.ts",
+      "target": "src\\one\\nlCompiler.ts",
+      "hash": "c69f04fe3aa6e35b84bec58a5a087fd5ef149609dfb6e52d64c4522fcc1288c2"
+    },
+    {
+      "relSrc": "src\\one\\nlParser.ts",
+      "target": "src\\one\\nlParser.ts",
+      "hash": "c8c7b51294e1c0e7198fdd4201abc68da53e32a92b0dccc817e070f7bba4e689"
+    },
+    {
+      "relSrc": "src\\one\\oneBridge.ts",
+      "target": "src\\one\\oneBridge.ts",
+      "hash": "6d84b8f8bc10ab9c53b3fb15a5375e79dfcb300dd90435b5bbb5b14a1bd59d8a"
+    },
+    {
+      "relSrc": "src\\one\\oneBuild.ts",
+      "target": "src\\one\\oneBuild.ts",
+      "hash": "2a6df415b50e3475be90264a5d5a4028e70840fbb7710bfd2ec32b1b5f7dd890"
+    },
+    {
+      "relSrc": "src\\one\\oneIO.ts",
+      "target": "src\\one\\oneIO.ts",
+      "hash": "3043cb334f3c43fe0839ce6212167d8f24a75e2a3b2d2ed86770536140060193"
+    },
+    {
+      "relSrc": "src\\one\\oneLLMMock.ts",
+      "target": "src\\one\\oneLLMMock.ts",
+      "hash": "6df9ea6afb9abc99cbbeb9117e4a0338d080edb8b6bea5441b1538b0b5a05c64"
+    },
+    {
+      "relSrc": "src\\one\\oneREPL.ts",
+      "target": "src\\one\\oneREPL.ts",
+      "hash": "bfda2172ce7de22bc131f70a3f38580fcca1a2e3bee97a903df4b949755b6ec6"
+    },
+    {
+      "relSrc": "src\\one\\oneTest.ts",
+      "target": "src\\one\\oneTest.ts",
+      "hash": "fa5d695718fa987c156e5a812894d4f813170d7ab8e7e866d3e8a541e711260b"
+    },
+    {
+      "relSrc": "src\\one\\persistenceBridge.ts",
+      "target": "src\\one\\persistenceBridge.ts",
+      "hash": "02c5b5de6d73d3bab378082172e44fd067eb6cf8c1ef11492f6a2d040042f811"
+    },
+    {
+      "relSrc": "src\\one\\test_concurrency.ts",
+      "target": "src\\one\\test_concurrency.ts",
+      "hash": "3544e3bf67b9d2e96b1805ff65a9a376d5b59bb6368d25af5c2b16966bd33a14"
+    },
+    {
+      "relSrc": "src\\one\\test_nl2one.ts",
+      "target": "src\\one\\test_nl2one.ts",
+      "hash": "07bfb3271ef4b92a9d89ccdf0a49e596f82b2bfa6610e748e6ce27b7f3053c65"
+    },
+    {
+      "relSrc": "src\\one\\test_persistence.ts",
+      "target": "src\\one\\test_persistence.ts",
+      "hash": "396943d69e6547c66e44cd843b6ce9e0479db31ed012309ee913f873945eeabb"
+    },
+    {
+      "relSrc": "src\\one\\test_phase4_bridge.ts",
+      "target": "src\\one\\test_phase4_bridge.ts",
+      "hash": "1a8d3afaa6d788a3d178682a7872b66f79d7a95ec9293ae4e578300d5d6afbea"
+    },
+    {
+      "relSrc": "src\\one\\test_spatial_mesh.ts",
+      "target": "src\\one\\test_spatial_mesh.ts",
+      "hash": "1d06670cdeab0f8ac732588b96cc0948854c8c4d575a241574b19a6202527e51"
+    }
+  ],
+  "copiedConflicts": [
+    {
+      "relSrc": "package-lock.json",
+      "target": "conflicts\\package-lock.json",
+      "hash": "169ef4cddef2318bb2a3dc8f3815b0d34d1d4483b04bfb27f9f8c127a2bfd0ee"
+    },
+    {
+      "relSrc": "package.json",
+      "target": "conflicts\\package.json",
+      "hash": "abc002d034b9486311c22d9ca239180722cd46a39506d185e287010b21e9a208"
+    },
+    {
+      "relSrc": "src\\cli\\oneCLI.ts",
+      "target": "conflicts\\src\\cli\\oneCLI.ts",
+      "hash": "fd4a298a435b9197be56722ec69ad7dea316825ea2fc650239bfd40b74bdc0a9"
+    },
+    {
+      "relSrc": "src\\cli\\spatialVisualizer.ts",
+      "target": "conflicts\\src\\cli\\spatialVisualizer.ts",
+      "hash": "e40e0c81d642da12f0a1aece4165355b1332570d4956e1ba60d748b7d3b90ec8"
+    },
+    {
+      "relSrc": "src\\cli\\test_phase6_cli.ts",
+      "target": "conflicts\\src\\cli\\test_phase6_cli.ts",
+      "hash": "da18abb2a684abc0eb681eb3ef1734ccd634ebc1f1f08036cdb06df336731f8c"
+    },
+    {
+      "relSrc": "src\\core\\benchmarks\\benchmarkCertification.ts",
+      "target": "conflicts\\src\\core\\benchmarks\\benchmarkCertification.ts",
+      "hash": "329777cd8f9f6283ecf31e77f91656dde3045c792e0f0df96c8d2d0afac5f7f3"
+    },
+    {
+      "relSrc": "src\\core\\checkpoint\\checkpointManager.ts",
+      "target": "conflicts\\src\\core\\checkpoint\\checkpointManager.ts",
+      "hash": "e6d414f3b2081b5371baff59c8aa9c94833a665570248c59f067d6e290903204"
+    },
+    {
+      "relSrc": "src\\core\\checkpoint\\snapshotEngine.ts",
+      "target": "conflicts\\src\\core\\checkpoint\\snapshotEngine.ts",
+      "hash": "bf3674e20d3c4dde1c3e26075619dd5a70ea722c90c69eb2645b0e3823a2b19d"
+    },
+    {
+      "relSrc": "src\\core\\checkpoint\\wal.ts",
+      "target": "conflicts\\src\\core\\checkpoint\\wal.ts",
+      "hash": "abaf2bff466d93b13e81a372f12fe646f1cd8870c3a90f8fd1c521004721ef0e"
+    },
+    {
+      "relSrc": "src\\core\\engine\\cubioVM.ts",
+      "target": "conflicts\\src\\core\\engine\\cubioVM.ts",
+      "hash": "4bd876527c654e866129d8b3af181617970ddbbb4163a36c6ebfee55c0f33f8e"
+    },
+    {
+      "relSrc": "src\\core\\engine\\spatialHarmonic369.ts",
+      "target": "conflicts\\src\\core\\engine\\spatialHarmonic369.ts",
+      "hash": "aa13aa345c84014e06a23bbe6e6a480f09110b02ec4101e30168501f422964de"
+    },
+    {
+      "relSrc": "src\\core\\engine\\threadPool.ts",
+      "target": "conflicts\\src\\core\\engine\\threadPool.ts",
+      "hash": "c7a6970de1f6ae5af13c7410e6be11cab213bf70d1ce07dc10f74686723e2d24"
+    },
+    {
+      "relSrc": "src\\core\\inference\\productionInference.ts",
+      "target": "conflicts\\src\\core\\inference\\productionInference.ts",
+      "hash": "2979d320fe3f033d1098d73619b5b3dad57bf6ba926b9823766f0f2f1e9915cb"
+    },
+    {
+      "relSrc": "src\\core\\memory\\rssGuard.ts",
+      "target": "conflicts\\src\\core\\memory\\rssGuard.ts",
+      "hash": "c289bdf3a67e9f32c455393d42fdfe793c33599904bc77049381bba1bb07b09d"
+    },
+    {
+      "relSrc": "src\\core\\release\\masterCertification.ts",
+      "target": "conflicts\\src\\core\\release\\masterCertification.ts",
+      "hash": "e739c07a29620573b6dc37e449c18a206473558ee367a4b87dbfe9ed53d2e352"
+    },
+    {
+      "relSrc": "src\\core\\release\\provenanceMerkle.ts",
+      "target": "conflicts\\src\\core\\release\\provenanceMerkle.ts",
+      "hash": "445849a36b981841649fcde73d80f3bbb78768e6ef3a4bdced8173ecb57834e1"
+    },
+    {
+      "relSrc": "src\\core\\stream\\spatialFunnelEngine.ts",
+      "target": "conflicts\\src\\core\\stream\\spatialFunnelEngine.ts",
+      "hash": "f270f1a100d307369932a8ea21a2d8f8e793ba90ccc0340a08bd594f957a5086"
+    },
+    {
+      "relSrc": "src\\core\\stream\\spatialRingBuffer.ts",
+      "target": "conflicts\\src\\core\\stream\\spatialRingBuffer.ts",
+      "hash": "b4977094f798e2b4dd4f95b6c9f255542c85053c70b8b1c06f1ef70855938ea5"
+    },
+    {
+      "relSrc": "src\\core\\test_phase2_execution.ts",
+      "target": "conflicts\\src\\core\\test_phase2_execution.ts",
+      "hash": "3a6ed07437507b62324a07e01038c63ef3ade08cafd32fa673090383c298cc65"
+    },
+    {
+      "relSrc": "src\\core\\test_phase4_checkpointing.ts",
+      "target": "conflicts\\src\\core\\test_phase4_checkpointing.ts",
+      "hash": "c4b913d35e247fc87dde4414029e6dd9299b627b413fdde06e30fd485fa9fd31"
+    },
+    {
+      "relSrc": "src\\core\\training\\datasetIngestion.ts",
+      "target": "conflicts\\src\\core\\training\\datasetIngestion.ts",
+      "hash": "da9ab19cc19beb9240fdf31f1ffebd12be183ead54a53d4434400de8eab94883"
+    },
+    {
+      "relSrc": "src\\core\\training\\faultTolerantWAL.ts",
+      "target": "conflicts\\src\\core\\training\\faultTolerantWAL.ts",
+      "hash": "6da4e0a536a1763afbe93839448eb3e60bd2c5231a1aa863b2e451e72f7ee6bb"
+    },
+    {
+      "relSrc": "src\\core\\training\\harmonicAlignment.ts",
+      "target": "conflicts\\src\\core\\training\\harmonicAlignment.ts",
+      "hash": "e012a97f027426093e2fe457af41014781ca9859f1ff69c13eca30b2160ba287"
+    },
+    {
+      "relSrc": "src\\core\\training\\pretrainingScheduler.ts",
+      "target": "conflicts\\src\\core\\training\\pretrainingScheduler.ts",
+      "hash": "b2d6ca36df749cb54b5425d0cf463ec01537e0527dcd9af88b06ef4989bea3f0"
+    },
+    {
+      "relSrc": "src\\core\\training\\test_step63_64.ts",
+      "target": "conflicts\\src\\core\\training\\test_step63_64.ts",
+      "hash": "fd18f29d4f338bf603730f795cc705a2faf51aeb4b6fbbd769f673ecf4e8eebf"
+    },
+    {
+      "relSrc": "src\\core\\training\\test_step65_66.ts",
+      "target": "conflicts\\src\\core\\training\\test_step65_66.ts",
+      "hash": "f886304b8a71d01ffe082abad87c6838c2d302b2b55718bdc6b69c55c603dc58"
+    },
+    {
+      "relSrc": "src\\core\\training\\test_step67_68.ts",
+      "target": "conflicts\\src\\core\\training\\test_step67_68.ts",
+      "hash": "eb08a60f9dacf60f3dd2d82cf7d0b0a91c9178563922bdf66bb274dac39a471f"
+    },
+    {
+      "relSrc": "src\\mesh\\euclideanRouter.ts",
+      "target": "conflicts\\src\\mesh\\euclideanRouter.ts",
+      "hash": "b6bb28f8ee17a8deed37e650b10f7fa10a739f406fec24abeab29b9937f49d00"
+    },
+    {
+      "relSrc": "src\\mesh\\nodeRegistry.ts",
+      "target": "conflicts\\src\\mesh\\nodeRegistry.ts",
+      "hash": "86bbdb4813f99cf4208fa30b2675fb080f59589c320afc78298fe5c5cf73c114"
+    },
+    {
+      "relSrc": "src\\mesh\\spatialMeshCluster.ts",
+      "target": "conflicts\\src\\mesh\\spatialMeshCluster.ts",
+      "hash": "afd8e69a2b68deb6f1fe5cfeb788017cad2bdbbc382868e9b19a358877fcda9a"
+    },
+    {
+      "relSrc": "src\\mesh\\test_phase5_mesh.ts",
+      "target": "conflicts\\src\\mesh\\test_phase5_mesh.ts",
+      "hash": "0d30585f73c63ae16a2b9f4f6c4a98d99c8f53fe08bce480475dfe42f359ca69"
+    },
+    {
+      "relSrc": "src\\one\\oneCompiler.ts",
+      "target": "conflicts\\src\\one\\oneCompiler.ts",
+      "hash": "d5b3cd8c946185a9cdfbd82864d08f0821e0113bc76640717db9189de9c64f2d"
+    },
+    {
+      "relSrc": "src\\one\\oneLexer.ts",
+      "target": "conflicts\\src\\one\\oneLexer.ts",
+      "hash": "d83847d896b3d5a8de7c13924d4778312a79f52f25f114c8ab82fd97a6fe23dd"
+    },
+    {
+      "relSrc": "src\\one\\oneParser.ts",
+      "target": "conflicts\\src\\one\\oneParser.ts",
+      "hash": "e8ec85152e3106a18e25dd554e14222b5754b67f1c987a92668538fef9af9c3c"
+    },
+    {
+      "relSrc": "src\\one\\test_one_language.ts",
+      "target": "conflicts\\src\\one\\test_one_language.ts",
+      "hash": "a6e7f9666a276b7173771c1e928ee097f412ee749225b8724ca9caf60c563999"
+    },
+    {
+      "relSrc": "src\\test_master_release.ts",
+      "target": "conflicts\\src\\test_master_release.ts",
+      "hash": "fc0eed4bddab36b26b84bdc481f47d8a1f4096ba0dfe8101ce0ea0775926aba0"
+    },
+    {
+      "relSrc": "src\\test_phase3_streaming.ts",
+      "target": "conflicts\\src\\test_phase3_streaming.ts",
+      "hash": "8d833794739e1be3be99f52943e8a1301eff3a039d1a925f54c5102ad7d46383"
+    },
+    {
+      "relSrc": "tsconfig.json",
+      "target": "conflicts\\tsconfig.json",
+      "hash": "0cd5854117615c97940b2554be82d4d3b48f7ccfc6284e45cb03e06c54f541c8"
+    }
+  ],
+  "skippedRegen": [
+    "cortex_rtos\\tests\\__pycache__\\test_event_group.cpython-314.pyc",
+    "cortex_rtos\\tests\\__pycache__\\test_task_notification.cpython-314.pyc",
+    "dist\\cli\\oneCLI.js",
+    "dist\\cli\\spatialVisualizer.js",
+    "dist\\cli\\test_phase6_cli.js",
+    "dist\\core\\benchmarks\\benchmarkCertification.js",
+    "dist\\core\\checkpoint\\checkpointManager.js",
+    "dist\\core\\checkpoint\\snapshotEngine.js",
+    "dist\\core\\checkpoint\\wal.js",
+    "dist\\core\\engine\\checkpoint.js",
+    "dist\\core\\engine\\concurrentFunnel.js",
+    "dist\\core\\engine\\cubioVM.js",
+    "dist\\core\\engine\\lockFreeStructures.js",
+    "dist\\core\\engine\\recoveryManager.js",
+    "dist\\core\\engine\\spatialHarmonic369.js",
+    "dist\\core\\engine\\spatialHarmonicAligner.js",
+    "dist\\core\\engine\\spatialMeshCluster.js",
+    "dist\\core\\engine\\threadPool.js",
+    "dist\\core\\engine\\wal.js",
+    "dist\\core\\inference\\productionInference.js",
+    "dist\\core\\memory\\rssGuard.js",
+    "dist\\core\\release\\masterCertification.js",
+    "dist\\core\\release\\provenanceMerkle.js",
+    "dist\\core\\stream\\spatialFunnelEngine.js",
+    "dist\\core\\stream\\spatialRingBuffer.js",
+    "dist\\core\\test_phase2_execution.js",
+    "dist\\core\\test_phase4_checkpointing.js",
+    "dist\\core\\training\\datasetIngestion.js",
+    "dist\\core\\training\\faultTolerantWAL.js",
+    "dist\\core\\training\\harmonicAlignment.js",
+    "dist\\core\\training\\pretrainingScheduler.js",
+    "dist\\core\\training\\test_step63_64.js",
+    "dist\\core\\training\\test_step65_66.js",
+    "dist\\core\\training\\test_step67_68.js",
+    "dist\\mesh\\euclideanRouter.js",
+    "dist\\mesh\\nodeRegistry.js",
+    "dist\\mesh\\spatialMeshCluster.js",
+    "dist\\mesh\\test_phase5_mesh.js",
+    "dist\\one\\concurrencyBridge.js",
+    "dist\\one\\nlCodeGenerator.js",
+    "dist\\one\\nlCompiler.js",
+    "dist\\one\\nlParser.js",
+    "dist\\one\\oneBridge.js",
+    "dist\\one\\oneBuild.js",
+    "dist\\one\\oneCompiler.js",
+    "dist\\one\\oneIO.js",
+    "dist\\one\\oneLexer.js",
+    "dist\\one\\oneLLMMock.js",
+    "dist\\one\\oneParser.js",
+    "dist\\one\\oneREPL.js",
+    "dist\\one\\oneTest.js",
+    "dist\\one\\persistenceBridge.js",
+    "dist\\one\\test_concurrency.js",
+    "dist\\one\\test_nl2one.js",
+    "dist\\one\\test_one_language.js",
+    "dist\\one\\test_persistence.js",
+    "dist\\one\\test_phase4_bridge.js",
+    "dist\\one\\test_spatial_mesh.js",
+    "dist\\test_master_release.js",
+    "dist\\test_phase3_streaming.js",
+    "tsconfig.tsbuildinfo"
+  ]
+}

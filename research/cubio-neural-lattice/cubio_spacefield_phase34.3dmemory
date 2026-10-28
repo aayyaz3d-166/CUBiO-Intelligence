@@ -1,0 +1,47 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v34_SPACEFIELD_COUPLER",
+  "gate": "CNL-P34-001",
+  "version": "34.1.0-one-spacefield",
+  "spacefield_coupling_status": "SYNCHRONIZED",
+  "pqc_master_seal": "0xPQC_369_8ad13f5054cafe1b017bc8e193cdfce2_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 101.8,
+  "baseline_potential_volts": 100,
+  "ambient_potential_volts": 99.988601,
+  "left_charge_gradient": 100.002011,
+  "right_charge_gradient": 99.975191,
+  "field_asymmetry_ratio": 0.0002682,
+  "quantum_phase_coherence": 0.9998,
+  "polarization_vector": {
+    "Ex": 0.896,
+    "Ey": 0.737,
+    "Ez": 0.717,
+    "phase_angle_rad": 0.742,
+    "polarity_sign": 1
+  },
+  "state_checksum": "0xFIELD_07CDC548",
+  "field_resonance_audit": {
+    "is_resonant": true,
+    "phase_discrepancy_rad": 0,
+    "coherence_match": 0.9998,
+    "resonance_confidence": 1
+  },
+  "csi_total_score": 99.625,
+  "csi_grade": "S+",
+  "csi_fail_safe_triggered": false,
+  "pillar_evolutionary_fitness": 98.5,
+  "pillar_homeostatic_health": 100,
+  "pillar_uup_truth": 100,
+  "pillar_pqc_security": 100,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3,
+    6,
+    9
+  ],
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725906000000
+}

@@ -1,0 +1,68 @@
+{
+  "name": "one-binary-reasoning",
+  "version": "1.0.0",
+  "description": "ONE Binary 0/1 Reasoning Intelligence — Deterministic 3/6/9-Bit Binary Language and Bounded 0/1 Symbolic Reasoning Engine",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aayyaz3d-166/ONE-Binary-Reasoning-Intelligence.git"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./binary": {
+      "types": "./dist/binary/index.d.ts",
+      "import": "./dist/binary/index.js"
+    },
+    "./reasoning": {
+      "types": "./dist/reasoning/index.d.ts",
+      "import": "./dist/reasoning/index.js"
+    },
+    "./integration": {
+      "types": "./dist/integration/index.d.ts",
+      "import": "./dist/integration/index.js"
+    },
+    "./shared": {
+      "types": "./dist/shared/index.d.ts",
+      "import": "./dist/shared/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "docs",
+    "assets",
+    "README.md",
+    "LICENSE",
+    "LICENSE-MIT",
+    "LICENSE-APACHE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/test_runner.cjs",
+    "test:binary": "node scripts/test_runner.cjs tests/binary/binary_language.test.ts",
+    "test:reasoning": "node scripts/test_runner.cjs tests/reasoning/reasoning_engine.test.ts",
+    "test:integration": "node scripts/test_runner.cjs tests/integration/bridge_e2e.test.ts",
+    "test:benchmark": "node scripts/test_runner.cjs tests/reasoning/reasoning_benchmark.ts"
+  },
+  "keywords": [
+    "binary-protocol",
+    "reasoning-engine",
+    "symbolic-ai",
+    "discrete-logic",
+    "deterministic",
+    "address369",
+    "one-language"
+  ],
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  }
+}

@@ -1,0 +1,34 @@
+ONE Language
+Copyright © 2026 Ayyaz3D
+
+This product is dual-licensed under:
+- The MIT License (LICENSE-MIT)
+- The Apache License, Version 2.0 (LICENSE-APACHE)
+
+You may choose to use this software under the terms of either license.
+
+==============================================================================
+Third-Party Software and Dependencies
+==============================================================================
+
+This project utilizes or builds upon third-party open-source libraries:
+- TypeScript (Apache-2.0) - Copyright (c) Microsoft Corporation
+- esbuild (MIT) - Copyright (c) 2020 Evan Wallace
+- postject (MIT) - Copyright (c) 2022 Postman, Inc
+- ts-node (MIT) - Copyright (c) 2014 Blake Embrey
+- Node.js runtime and headers (MIT) - Copyright Node.js contributors
+
+==============================================================================
+Excluded Assets & Model Checkpoints
+==============================================================================
+
+This software license covers only the software source code in this repository.
+It strictly excludes and does not grant rights to:
+1. Pre-trained neural network weights, biases, and serialized checkpoints
+   (including but not limited to one_lm_best.cubiomodel).
+2. Training datasets, raw corpus files, and benchmark evaluations.
+3. External model volumes and repositories (including external paths at
+   F:\3D memory studio\ONE language and E:\ONE_language_baseline).
+
+Rights to excluded model assets remain subject to separate ownership and
+redistribution clearance reviews.

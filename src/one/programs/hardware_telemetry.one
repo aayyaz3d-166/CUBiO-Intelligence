@@ -1,0 +1,133 @@
+// ONE Language Native Source: Physical Current Measurement Module
+// Gate CNL-P26.6: Zero-Hallucination Hardware Telemetry Bridge
+//
+// STRICT ENFORCEMENT RULES (IMMUTABLE):
+//   1. No simulated current values — if hardware absent: PHYSICAL_MEASUREMENT_UNAVAILABLE
+//   2. is_actuation_blocked = true ALWAYS — telemetry is READ-ONLY, never writes to hardware
+//   3. UUP = 1.0 — zero-state maintained when hardware is offline (no crash, no fabrication)
+//   4. σ² = 0.0 — same hardware state → same deterministic response, zero drift
+//   5. PQC seal on every valid measurement — tamper-proof timestamped readings
+
+module One.Engine.HardwareTelemetry {
+
+    // Supported physical hardware interface types
+    const ADC_CURRENT_METER_01: String = "ADC_CURRENT_METER_01";   // USB/UART ADC meter
+    const ADC_CURRENT_METER_02: String = "ADC_CURRENT_METER_02";   // SPI/I2C ADC
+    const WIFI_TELEMETRY_BRIDGE: String = "CUBIO_WIFI_BRIDGE_8369"; // Port 8369 WiFi bridge
+
+    // Status codes — NEVER fabricate an "OK" response without real hardware
+    const STATUS_OK: String = "OK";
+    const STATUS_UNAVAILABLE: String = "PHYSICAL_MEASUREMENT_UNAVAILABLE";
+    const STATUS_TIMEOUT: String = "HARDWARE_READ_TIMEOUT";
+    const STATUS_RANGE_ERROR: String = "MEASUREMENT_OUT_OF_SAFE_RANGE";
+
+    // Safety thresholds
+    const MAX_SAFE_AMPS: Float32 = 50.0f;   // Hard ceiling — above = RANGE_ERROR
+    const MIN_VALID_AMPS: Float32 = 0.0f;   // No negative current in measurement mode
+
+    struct CurrentMeasurementResponse {
+        is_valid: Bool;           // false if hardware absent or read failed
+        measured_amps: Float32;   // ALWAYS 0.0f when is_valid = false
+        status_code: String;      // "OK" | "PHYSICAL_MEASUREMENT_UNAVAILABLE" | ...
+        timestamp: Int64;         // System epoch milliseconds (0 when unavailable)
+        device_id: String;        // Which physical device produced this reading
+        pqc_seal: String;         // PQC cryptographic seal of reading (empty if invalid)
+        is_actuation_blocked: Bool; // ALWAYS true — telemetry is read-only
+    }
+
+    native class CurrentSensorBus {
+        private is_physical_device_active: Bool;
+        private active_device_id: String;
+        private read_count: Int32;
+
+        constructor() {
+            // Probe hardware — must succeed BEFORE any measurement is allowed
+            this.active_device_id = "";
+            this.read_count = 0;
+            this.is_physical_device_active = this.probe_hardware_interface();
+        }
+
+        // Check physical bus for real ADC/USB current hardware
+        private method probe_hardware_interface(): Bool {
+            // Priority order: WiFi bridge first, then USB ADC, then SPI ADC
+            if (NativeSystem.CheckDevicePresence(WIFI_TELEMETRY_BRIDGE)) {
+                this.active_device_id = WIFI_TELEMETRY_BRIDGE;
+                return true;
+            }
+            if (NativeSystem.CheckDevicePresence(ADC_CURRENT_METER_01)) {
+                this.active_device_id = ADC_CURRENT_METER_01;
+                return true;
+            }
+            if (NativeSystem.CheckDevicePresence(ADC_CURRENT_METER_02)) {
+                this.active_device_id = ADC_CURRENT_METER_02;
+                return true;
+            }
+            // NO hardware found — zero-state, UUP maintained, no fabrication
+            this.active_device_id = "";
+            return false;
+        }
+
+        // STRICT: No measurement without confirmed physical hardware presence
+        public method measure(): CurrentMeasurementResponse {
+            // Hardware absence → immediate fail-closed with zero fabrication
+            if (!this.is_physical_device_active) {
+                return CurrentMeasurementResponse(
+                    false,                          // is_valid = false
+                    0.0f,                           // NEVER fabricate current
+                    STATUS_UNAVAILABLE,             // Honest status
+                    0,                              // No timestamp when unavailable
+                    "",                             // No device ID
+                    "",                             // No PQC seal on invalid data
+                    true                            // is_actuation_blocked = ALWAYS
+                );
+            }
+
+            // Read actual physical current from hardware register
+            let raw_value: Float32 = NativeSystem.ReadHardwareRegister("REG_ADC_CURRENT");
+            let current_time: Int64 = NativeSystem.GetSystemTimestamp();
+
+            // Range validation — out-of-range is an error, not a measurement
+            if (raw_value < MIN_VALID_AMPS || raw_value > MAX_SAFE_AMPS) {
+                return CurrentMeasurementResponse(
+                    false,
+                    0.0f,
+                    STATUS_RANGE_ERROR,
+                    current_time,
+                    this.active_device_id,
+                    "",
+                    true
+                );
+            }
+
+            // Generate cryptographic seal on valid reading
+            let seal_input: String = raw_value.ToString() + "@" + current_time.ToString();
+            let pqc_seal: String = NativeCrypto.PQCLatticeSeal(seal_input);
+
+            this.read_count = this.read_count + 1;
+
+            return CurrentMeasurementResponse(
+                true,
+                raw_value,
+                STATUS_OK,
+                current_time,
+                this.active_device_id,
+                pqc_seal,
+                true                            // is_actuation_blocked = ALWAYS
+            );
+        }
+
+        // Probe hardware status without triggering a measurement
+        public method probe(): Bool {
+            this.is_physical_device_active = this.probe_hardware_interface();
+            return this.is_physical_device_active;
+        }
+
+        public method get_read_count(): Int32 {
+            return this.read_count;
+        }
+
+        public method get_active_device(): String {
+            return this.active_device_id;
+        }
+    }
+}

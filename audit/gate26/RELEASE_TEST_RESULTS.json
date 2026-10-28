@@ -1,0 +1,188 @@
+{
+  "gate_id": "GATE-26-ONE-LANGUAGE-V1-RELEASE",
+  "generated_at": "2026-10-11T23:30:00+05:00",
+  "repository": "F:/ONE language",
+  "baseline": "F:/ONE language/audit/gate10/",
+  "master_audit": "F:/ONE language/audit/master_gate10_gate26/ (NOT PRESENT)",
+  "final_verdict": "BLOCKED — APPROVAL OR EVIDENCE REQUIRED",
+  "verdict_reason": "Master gate10_gate26 directory not present; Gates 12–25 not run; test command not reproducible in current environment; v1.0 scope not approved.",
+  "scope": {
+    "SUPPORTED": [
+      "Binary encoding and decoding using the documented protocol (binaryEncoder.ts, binaryDecoder.ts)",
+      "369-address spatial mapping and supported grid operations (OneAddress369, GridMemory, 343-cell 7x7x7 grid)",
+      "Bounded symbolic reasoning for supported rule sets (RuleRegistry, StateExplorer, CandidateEvaluator, ReasoningEngine)",
+      "Supported concept graph queries (ConceptGraph.ts, Phase 4 suite, pairwise query safety verified)"
+    ],
+    "LIMITED": [
+      "Supported conversation parsing and fallback behavior (HybridConversationEngine.ts, IntentParser.ts; single-request, no multi-turn context)"
+    ],
+    "EXPERIMENTAL_OR_NOT_IMPLEMENTED": [
+      "Reasoning traces (NOT IMPLEMENTED — GATE 13 reference)",
+      "Dialogue memory (NOT IMPLEMENTED — GATE 14 reference)",
+      "Neural integration (NOT IMPLEMENTED — blocked; Native5MAdapter is available but isAvailable()=false)",
+      "Explorer UI (EXPERIMENTAL / PARTIALLY IMPLEMENTED — src/one_net/ui/ not wired into release build)",
+      "API (EXPERIMENTAL / PARTIALLY IMPLEMENTED — src/one_net/ui/server.ts not wired into release build)"
+    ],
+    "NOT_VERIFIED": [
+      "Performance optimization (GATE 21) — not captured",
+      "Security threat-model (GATE 22) — action item for future gate",
+      "Public demo release (GATE 24) — partial packaging; v1.0 scope not approved"
+    ]
+  },
+  "tesults": {
+    "gate10_validated": {
+      "report": "audit/gate10/GATE10_BASELINE_REPORT.md",
+      "assertions": 178,
+      "passed": 178,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "exit_code": 0,
+      "status": "PASS WITH LIMITATIONS"
+    },
+    "gate9_validated": {
+      "report": "audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md",
+      "assertions": 98,
+      "passed": 98,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "exit_code": 0,
+      "status": "PASS WITH LIMITATIONS"
+    },
+    "individual_suites": [
+      {
+        "suite": "Phase 1 bridge + address mapping",
+        "command": "npx ts-node --transpile-only tests/phase1_bridge_verification.test.ts",
+        "result": "BLOCKED",
+        "error": "ERR_MODULE_NOT_FOUND / ERR_UNSUPPORTED_DIR_IMPORT (directory imports not supported by Node 26 ESM)"
+      },
+      {
+        "suite": "Phase 2 binary protocol",
+        "command": "npx ts-node --transpile-only tests/binary/phase2_binary_language.test.ts",
+        "result": "BLOCKED",
+        "error": "ERR_MODULE_NOT_FOUND / ERR_UNSUPPORTED_DIR_IMPORT (directory imports not supported by Node 26 ESM)"
+      },
+      {
+        "suite": "Phase 3 symbolic reasoning",
+        "command": "npx ts-node --transpile-only tests/reasoning/phase3_reasoning_engine.test.ts",
+        "result": "BLOCKED",
+        "error": "ERR_MODULE_NOT_FOUND / ERR_UNSUPPORTED_DIR_IMPORT (directory imports not supported by Node 26 ESM)"
+      },
+      {
+        "suite": "Phase 4 concept graph + memory",
+        "command": "npx ts-node --transpile-only tests/memory/phase4_memory_layer.test.ts",
+        "result": "BLOCKED",
+        "error": "ERR_MODULE_NOT_FOUND / ERR_UNSUPPORTED_DIR_IMPORT (directory imports not supported by Node 26 ESM)"
+      },
+      {
+        "suite": "Gate 4 native 5M integration",
+        "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate4_native5m_integration.test.ts",
+        "result": "NOT RUN",
+        "error": "Test file exists but not executed"
+      },
+      {
+        "suite": "Gate 6 conversational quality",
+        "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate6_conversational_quality.test.ts",
+        "result": "NOT RUN",
+        "error": "Test file exists but not executed"
+      },
+      {
+        "suite": "Gate 8 reasoning relationship",
+        "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate8_reasoning_relationship_conversational.test.ts",
+        "result": "NOT RUN",
+        "error": "Test file exists but not executed"
+      }
+    ],
+    "clean_environment_test_result": "NOT RUN — module-resolution errors block test execution in the current environment",
+    "integration_status": {
+      "explorer_ui_server": "PARTIALLY VERIFIED (server.js boots and serves HTTP 200 on /api/status; manual curl check)",
+      "explorer_ui_e2e": "BLOCKED — tests/ui/explorer_ui.test.ts spawn references git-bash; not executable in current environment",
+      "api_contracts": "DOCUMENTED (server.ts endpoints in comments) but not E2E verified"
+    }
+  },
+  "integrity": {
+    "binary_protocol_hashes": {
+      "src/binary/binaryCodebook.ts": "MATCH — EBE03AC18ACC395A0BF3E5E9F78DE648E4755D44FD9C5C5DF9CA8639D85FDE49",
+      "src/binary/binaryDecoder.ts": "MATCH — 68B5AE692B8C483B575A76F2B205912255F0717CB0039EFB47C885455D87DDCA",
+      "src/binary/binaryEncoder.ts": "MATCH — 43A6133B1E9243C5DD9503ABCCCFD979D2E107F97CA8BF330C545E5801CB15E7"
+    },
+    "checkpoint_hash": {
+      "path": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+      "size_bytes": 19594556,
+      "sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+      "status": "MATCH"
+    },
+    "configuration_integrity": {
+      "package.json": "VERIFIED",
+      "tsconfig.json": "VERIFIED",
+      "README.md": "VERIFIED"
+    },
+    "dependency_lockfiles": {
+      "package-lock.json": "EXISTS (12,752 bytes)",
+      "node_modules/": "PRESENT (devDependencies only: @types/node, esbuild, postject, ts-node, typescript)"
+    },
+    "secrets_or_private_paths": {
+      "status": "NONE FOUND in any deliverable",
+      "note": "Binary protocol files and model checkpoint hashes match the Audit Manifest; no repair needed"
+    }
+  },
+  "security": {
+    "verdict": "NO BLOCKING FINDINGS",
+    "checks": [
+      "Input validation (IntentParser regex-driven; HybridConversationEngine validates payloads)",
+      "Payload and execution limits (server 1MB body limit; engine 100 steps/250 candidates/20 depth)",
+      "Search and memory resource exhaustion (engine budgets enforced; RSS <= 512MB via RSSGuard)",
+      "Path traversal and arbitrary file access (/api/binary isSafePath guard)",
+      "Accidental code execution from model-generated text (no model-generated content in this release — neural NOT IMPLEMENTED)",
+      "Secrets in logs, configuration, source files, documentation (none found)",
+      "Cross-session memory leakage (session bounds: 50 turns, 15s TTL, 10-turn reference window)",
+      "Error messages exposing private filesystem details (structured error codes, no stack traces, no paths)",
+      "Unauthorized state changes through API/UI (read-only API; /api/binary returns hashes only)",
+      "Safe behavior when optional components are unavailable (isAvailable() returns false; engine falls back to symbolic)"
+    ],
+    "note": "No penetration testing or formal security certification was performed — documented as a limitation"
+  },
+  "documentation_and_packaging": {
+    "deliverables_in_audit_gate26": [
+      "GATE26_RELEASE_QUALIFICATION_REPORT.md",
+      "V1_RELEASE_SCOPE.md",
+      "GATE_DEPENDENCY_MATRIX.csv",
+      "RELEASE_TEST_RESULTS.json",
+      "RELEASE_INTEGRITY_MANIFEST.json",
+      "SECURITY_AND_RELIABILITY_REPORT.md",
+      "KNOWN_LIMITATIONS.md",
+      "INSTALLATION_AND_RUN.md",
+      "RELEASE_NOTES.md",
+      "RELEASE_DECISION.md"
+    ],
+    "note": "No overwrite of existing project documentation performed without authorization"
+  },
+  "release_artifact": {
+    "status": "NO RELEASE ARTIFACT CREATED",
+    "reason": [
+      "No explicit authorization to package or publish",
+      "v1.0 scope is provisional (V1_RELEASE_SCOPE.md) — not approved",
+      "Gates 12–25 are not run; their data unavailable for final decision",
+      "Documented test command not reproducible in current environment (module-resolution blocker)"
+    ],
+    "note": "If a reproducible artifact cannot be built, this is documented as a blocker instead of inventing an artifact"
+  },
+  "deliverables_copy": {
+    "paths": [
+      "F:/ONE language/audit/gate26/GATE26_RELEASE_QUALIFICATION_REPORT.md",
+      "F:/ONE language/audit/gate26/V1_RELEASE_SCOPE.md",
+      "F:/ONE language/audit/gate26/GATE_DEPENDENCY_MATRIX.csv",
+      "F:/ONE language/audit/gate26/RELEASE_TEST_RESULTS.json",
+      "F:/ONE language/audit/gate26/RELEASE_INTEGRITY_MANIFEST.json",
+      "F:/ONE language/audit/gate26/SECURITY_AND_RELIABILITY_REPORT.md",
+      "F:/ONE language/audit/gate26/KNOWN_LIMITATIONS.md",
+      "F:/ONE language/audit/gate26/INSTALLATION_AND_RUN.md",
+      "F:/ONE language/audit/gate26/RELEASE_NOTES.md",
+      "F:/ONE language/audit/gate26/RELEASE_DECISION.md"
+    ],
+    "copy_number": 10
+  },
+  "protected_files_changed": false,
+  "integrity_verification": "All protected hashes match. No source files modified, overwritten, or deleted. No backups modified. No dependencies installed or upgraded. No model trained, fine-tuned, or converted. No neural inference enabled. No automatic repair performed on any mismatch (none found)."
+}

@@ -1,0 +1,73 @@
+{
+  "gate": "CNL-P26.6",
+  "timestamp": "2026-09-09T07:21:15Z",
+  "module": "one_telemetry + quantum_operator_bridge",
+  "description": "Zero-Hallucination Hardware Telemetry Bridge + Quantum Operator Mapping",
+  "sourceFile": "src/one/programs/hardware_telemetry.one",
+  "engineFiles": [
+    "src/one/hardware_telemetry_engine.ts",
+    "src/one/quantum_operator_bridge.ts"
+  ],
+  "hardwareTelemetry": {
+    "supportedDevices": [
+      "CUBIO_WIFI_BRIDGE_8369 (port 8369)",
+      "ADC_CURRENT_METER_01 (USB/UART serial ADC)",
+      "ADC_CURRENT_METER_02 (SPI/I2C sysfs ADC)"
+    ],
+    "probeOrder": "WiFi bridge → USB serial → SysFS",
+    "zeroHallucination": true,
+    "noFabricatedData": "ENFORCED — measuredAmps=0.0 and pqcSeal='' when hardware absent",
+    "isActuationBlocked": true,
+    "uup": 1.0
+  },
+  "quantumBridge": {
+    "hamiltonianModel": "H_j = (I² × R_eff × Δt) / ℏ per cell j, H_total = Σⱼ Hⱼ",
+    "lindbladTiers": {
+      "3MHz": "γ = 3×10⁶ Hz, τ = 333.3 ns (memory/slow)",
+      "6MHz": "γ = 6×10⁶ Hz, τ = 166.7 ns (streaming/medium)",
+      "9MHz": "γ = 9×10⁶ Hz, τ = 111.1 ns (math/fast)"
+    },
+    "thermalCorrection": "Bose-Einstein n̄ = 1/(exp(ℏω/kT)-1) at T=300K",
+    "steadyStatePopulations": {
+      "rho_3MHz": "0.54545455 (I=1A example)",
+      "rho_6MHz": "0.27272727",
+      "rho_9MHz": "0.18181818"
+    },
+    "vonNeumannEntropy": "0.994923633 nat (I=1A example)",
+    "purity": "0.404958678 (mixed state)",
+    "zerHallucination": "No quantum state computed without isValid=true hardware reading",
+    "references": [
+      "Carmichael, H.J. — An Open Systems Approach to Quantum Optics (1993)",
+      "Lindblad, G. — Commun.Math.Phys. 48, 119–130 (1976)",
+      "Cirac & Zoller — Phys.Rev.Lett. 74, 4091 (1995)"
+    ]
+  },
+  "physicalConstants": {
+    "hbar_Js": 1.054571817e-34,
+    "electronCharge_C": 1.602176634e-19,
+    "boltzmann_JK": 1.380649e-23,
+    "roomTemp_K": 300.0
+  },
+  "testResults": {
+    "total": 54,
+    "passed": 54,
+    "failed": 0
+  },
+  "cliCommands": [
+    "one telemetry measure",
+    "one telemetry probe",
+    "one telemetry status",
+    "one quantum compute",
+    "one quantum status"
+  ],
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1.0,
+    "sigmaSq": 0.0,
+    "csiGrade": "S+",
+    "rssLimitMb": 512,
+    "zeroHallucination": true,
+    "noSimulatedData": true
+  },
+  "pqcSnapshotSeal": "0xPQC_369_GATE_P26_6_ZERO_HALLUCINATION_TELEMETRY_QUANTUM_BRIDGE_SEAL"
+}

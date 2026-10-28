@@ -1,0 +1,28 @@
+{
+  "name": "one-language-core",
+  "version": "1.0.0",
+  "description": "ONE Language Core Compiler Backend (Lexer, Parser, Compiler/Validator)",
+  "main": "dist/one/test_one_language.js",
+  "scripts": {
+    "build": "tsc --incremental --noEmit",
+    "build:prod": "tsc --incremental --noEmit && echo 'Production build ready'",
+    "build:clean": "rimraf dist && tsc",
+    "build:watch": "tsc --watch",
+    "build:repl": "ts-node --transpile-only src/one/oneREPL.ts",
+    "test": "ts-node --transpile-only src/test_master_release.ts",
+    "test:parallel": "ts-node --transpile-only --max-old-space-size=4096 src/test_master_release.ts",
+    "test:watch": "ts-node --transpile-only src/test_master_release.ts --watch",
+    "start": "ts-node --transpile-only src/test_master_release.ts",
+    "optimize": "ts-node --transpile-only src/one/oneBuild.ts",
+    "optimize:clean": "ts-node --transpile-only src/one/oneBuild.ts --clean",
+    "optimize:watch": "ts-node --transpile-only src/one/oneBuild.ts --watch",
+    "optimize:perf": "ts-node --transpile-only src/one/oneBuild.ts --perf"
+  },
+  "devDependencies": {
+    "chokidar": "^3.5.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "@types/node": "^20.12.7"
+  }
+}

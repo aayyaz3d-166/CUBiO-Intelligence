@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/nlp-parser",
+  "version": "1.0.0",
+  "description": "Standalone Bilingual (Roman Urdu + English) Spatial Natural Language Parser",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
+}

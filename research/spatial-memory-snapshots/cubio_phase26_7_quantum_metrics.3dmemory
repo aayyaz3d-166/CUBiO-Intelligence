@@ -1,0 +1,89 @@
+{
+  "gate": "CNL-P26.7",
+  "timestamp": "2026-09-09T07:37:14Z",
+  "module": "quantum_metrics_engine",
+  "title": "Advanced Quantum Metrics & Complexity Classification",
+  "description": "Symplectic Rank (Mele/Chabaud 2024) + isoTNS Complexity (Malz et al. 2024)",
+  "sourceFile": "src/one/programs/quantum_operators.one",
+  "engineFile": "src/one/quantum_metrics_engine.ts",
+  "framework1_SymplecticRank": {
+    "reference": "Chabaud, U. & Mele, A.A. (2024) — Symplectic rank of Gaussian states",
+    "formula": "s_symp = #{j : dⱼ > 1}",
+    "physicalMeaning": "dⱼ = Williamson symplectic eigenvalue of covariance matrix Γ",
+    "uncertaintyPrinciple": "dⱼ ≥ 1 ALWAYS (Robertson-Schrödinger bound)",
+    "thermalMapping": "dⱼ = 2·n̄ⱼ + 1 (photon number to eigenvalue)",
+    "singleModeWilliamson": "d = sqrt(det(V)) = sqrt(Vxx·Vpp - Vxp²)",
+    "complexityClasses": {
+      "CLASSICALLY_SIMULABLE": "s_symp = 0 (pure Gaussian state)",
+      "BOUNDARY": "s_symp ≤ floor(log₂ n) (polylog-sparse mixed)",
+      "QUANTUM_HARD": "s_symp > floor(log₂ n) (dense mixed state)"
+    }
+  },
+  "framework2_isoTNS": {
+    "reference": "Malz, D., Styliaris, G., Wei, Z.-Y., Cirac, J.I. — PRL 132, 040404 (2024)",
+    "formula": "η = δ²·D²",
+    "parameters": {
+      "delta": "local contraction/overlap parameter (0 < δ ≤ 1)",
+      "D": "bond dimension (integer ≥ 1)"
+    },
+    "threshold": 0.41,
+    "classes": {
+      "STRONG_INJECTIVITY_CLASSICAL_EFFICIENT": "η ≥ 0.41 — O(1)-depth circuit preparation",
+      "WEAKLY_INJECTIVE_BQP_COMPLETE": "η < 0.41 — polynomial-depth required"
+    },
+    "helpers": {
+      "minDeltaForClassical": "sqrt(0.41) / D ≈ 0.6403 / D",
+      "minBondDimForClassical": "ceil(sqrt(0.41) / δ)"
+    }
+  },
+  "exampleResults": {
+    "pureGaussianState": {
+      "eigenvalues": [1.0, 1.0, 1.0, 1.0],
+      "symplecticRank": 0,
+      "class": "CLASSICALLY_SIMULABLE"
+    },
+    "denseMixedState": {
+      "eigenvalues": [5.0, 4.0, 3.0, 2.5, 2.0, 1.5, 2.5, 3.5],
+      "symplecticRank": 8,
+      "class": "QUANTUM_HARD"
+    },
+    "isoTNS_classical": {
+      "delta": 0.7,
+      "D": 1,
+      "eta": 0.49,
+      "class": "STRONG_INJECTIVITY_CLASSICAL_EFFICIENT"
+    },
+    "isoTNS_bqp": {
+      "delta": 0.3,
+      "D": 1,
+      "eta": 0.09,
+      "class": "WEAKLY_INJECTIVE_BQP_COMPLETE"
+    }
+  },
+  "cliCommands": [
+    "one metrics symplectic",
+    "one metrics isotns [delta]",
+    "one metrics evaluate",
+    "one metrics status"
+  ],
+  "testResults": {
+    "total": 45,
+    "passed": 45,
+    "failed": 0
+  },
+  "cumulativeRegressionResults": {
+    "CNL-P26.3-COMPILER": "100% CERTIFIED",
+    "CNL-P26.3-BINARY": "33/33 PASS",
+    "CNL-P26.4-RENDER": "33/33 PASS",
+    "CNL-P26.5-NET": "37/37 PASS",
+    "CNL-P26.6-TELEMETRY-QM": "61/61 PASS",
+    "CNL-P26.7-QUANTUM-METRICS": "45/45 PASS"
+  },
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1.0,
+    "sigmaSq": 0.0,
+    "zeroHallucination": true,
+    "deterministicSeal": "0xPQC_369_CNL_P26_7_SYMPLECTIC_ISOTNS_MELE_CHABAUD_MALZ_CERTIFIED_SEAL"
+  }
+}

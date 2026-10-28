@@ -1,0 +1,109 @@
+// ONE Language Native Source: Native Spatial Mesh Transport Protocol
+// Gate CNL-P26.5: Zero-Copy P2P Binary Packet Serialization & Routing
+
+module One.Net.SpatialMesh {
+
+    const PROTOCOL_VERSION: Int32 = 1;
+    const MAGIC_HEADER: Int32 = 0x3690_C5A1;      // Gate CNL-P26.5 magic
+    const MAX_PAYLOAD_BYTES: Int32 = 9604;         // Exactly 343 × 28 bytes
+    const PACKET_HEADER_BYTES: Int32 = 96;         // Fixed packet header
+    const PQC_SEAL_BYTES: Int32 = 64;              // PQC seal field (ASCII hex)
+    const ADDRESS_BYTES: Int32 = 12;               // 369-address: node_id(4)+x(2)+y(2)+z(2)+tier(2)
+    const MAX_PACKET_BYTES: Int32 = PACKET_HEADER_BYTES + MAX_PAYLOAD_BYTES + PQC_SEAL_BYTES; // 9,764 bytes
+
+    // Harmonic routing tiers (maps to 3-6-9 frequency bands)
+    const TIER_MEMORY: UInt8 = 0x03;     // 3MHz — memory/storage routing
+    const TIER_STREAMING: UInt8 = 0x06;  // 6MHz — streaming/relay routing
+    const TIER_MATH: UInt8 = 0x09;       // 9MHz — math/compute routing
+
+    struct SpatialMeshAddress {
+        node_id: Int32;        // 32-bit sovereign node identifier
+        x: Int16;              // Canonical spatial X [0..6]
+        y: Int16;              // Canonical spatial Y [0..6]
+        z: Int16;              // Canonical spatial Z [0..6]
+        harmonic_tier: UInt8;  // 0x03 | 0x06 | 0x09
+        reserved: UInt8;       // 0x00 padding
+    }
+
+    struct SpatialMeshPacketHeader {
+        magic: Int32;           // 0x3690C5A1
+        version: UInt8;         // 0x01
+        packet_type: UInt8;     // 0x01=DATA, 0x02=ACK, 0x03=PROBE, 0x04=RELAY
+        harmonic_tier: UInt8;   // Routing tier: 0x03 | 0x06 | 0x09
+        is_actuation_blocked: UInt8; // 0x01 = ALWAYS
+        src_address: SpatialMeshAddress;
+        dst_address: SpatialMeshAddress;
+        payload_bytes: Int32;   // 0 .. 9604
+        sequence_id: Int32;     // Monotonic packet counter
+        pqc_seal: UInt8[64];    // ASCII hex PQC root seal
+    }
+
+    native class SpatialMeshNode {
+        private node_address: SpatialMeshAddress;
+        private packet_counter: Int32;
+        private is_active: Bool;
+
+        constructor(node_id: Int32, x: Int16, y: Int16, z: Int16, tier: UInt8) {
+            this.node_address = SpatialMeshAddress(node_id, x, y, z, tier, 0);
+            this.packet_counter = 0;
+            this.is_active = true;
+        }
+
+        // Serialize compiled spatial binary + PQC seal → raw packet buffer
+        public method serialize_data_packet(
+            payload_ptr: UInt8[9604],
+            pqc_seal_str: UInt8[64],
+            dst: SpatialMeshAddress
+        ): UInt8[9764] {
+            let packet: UInt8[9764];
+            // Write header fields
+            this.write_header(packet, dst, pqc_seal_str, 9604);
+            // Zero-copy payload blit
+            this.blit_payload(packet, payload_ptr, PACKET_HEADER_BYTES, 9604);
+            this.packet_counter = this.packet_counter + 1;
+            return packet;
+        }
+
+        // Route packet via harmonic tier (3MHz=memory, 6MHz=stream, 9MHz=math)
+        public method route_by_harmonic(packet_tier: UInt8): UInt8 {
+            if (packet_tier == TIER_MATH) {
+                return 0x09; // Direct P2P math node route
+            }
+            if (packet_tier == TIER_STREAMING) {
+                return 0x06; // Relay hop streaming route
+            }
+            return 0x03; // Persistent memory route
+        }
+
+        private method write_header(
+            buf: UInt8[9764],
+            dst: SpatialMeshAddress,
+            seal: UInt8[64],
+            payload_len: Int32
+        ): Void {
+            // Magic: 4 bytes
+            buf[0] = Cast(MAGIC_HEADER >> 24, UInt8);
+            buf[1] = Cast((MAGIC_HEADER >> 16) & 0xFF, UInt8);
+            buf[2] = Cast((MAGIC_HEADER >> 8) & 0xFF, UInt8);
+            buf[3] = Cast(MAGIC_HEADER & 0xFF, UInt8);
+            // Version, type, tier, safety lock
+            buf[4] = Cast(PROTOCOL_VERSION, UInt8);
+            buf[5] = 0x01; // DATA packet
+            buf[6] = this.node_address.harmonic_tier;
+            buf[7] = 0x01; // is_actuation_blocked = ALWAYS TRUE
+        }
+
+        private method blit_payload(
+            dst_buf: UInt8[9764],
+            src_buf: UInt8[9604],
+            offset: Int32,
+            len: Int32
+        ): Void {
+            let i: Int32 = 0;
+            while (i < len) {
+                dst_buf[offset + i] = src_buf[i];
+                i = i + 1;
+            }
+        }
+    }
+}

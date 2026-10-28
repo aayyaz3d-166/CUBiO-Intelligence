@@ -1,0 +1,204 @@
+{
+  "Function Declaration": {
+    "prefix": "fn",
+    "body": [
+      "function ${1:name}(${2:params}): ${3:void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Declare a standard ONE Language function"
+  },
+  "Async Function Declaration": {
+    "prefix": "fn-async",
+    "body": [
+      "async function ${1:name}(${2:params}): ${3:void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Declare an asynchronous ONE Language function"
+  },
+  "Variable Declaration": {
+    "prefix": "let",
+    "body": [
+      "let ${1:variable} = ${2:value};"
+    ],
+    "description": "Declare a mutable block-scoped variable"
+  },
+  "Constant Declaration": {
+    "prefix": "const",
+    "body": [
+      "const ${1:constant} = ${2:value};"
+    ],
+    "description": "Declare an immutable block-scoped constant"
+  },
+  "Struct Declaration": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} {",
+      "\t${2:field}: ${3:number};",
+      "}"
+    ],
+    "description": "Declare a typed data struct"
+  },
+  "Enum Declaration": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "\t${2:VariantA} = 0,",
+      "\t${3:VariantB} = 1,",
+      "}"
+    ],
+    "description": "Declare a numeric or symbolic enum"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Conditional if branching statement"
+  },
+  "If-Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$2",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Conditional if-else branching statement"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "While loop iteration"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for (let ${1:i} = 0; ${1:i} < ${2:count}; ${1:i} = ${1:i} + 1) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Standard indexed for loop"
+  },
+  "Print Statement": {
+    "prefix": "print",
+    "body": [
+      "print ${1:expression};"
+    ],
+    "description": "Print expression to standard output"
+  },
+  "Spatial Node": {
+    "prefix": "node",
+    "body": [
+      "node ${1:NodeAlpha} {",
+      "\t@Space(343)",
+      "\t$0",
+      "}"
+    ],
+    "description": "Declare a 343-voxel spatial computing node"
+  },
+  "Spatial Channel": {
+    "prefix": "channel",
+    "body": [
+      "channel ${1:sender} -> ${2:receiver};"
+    ],
+    "description": "Establish a peer gossip channel between spatial nodes"
+  },
+  "Spatial Seal": {
+    "prefix": "seal",
+    "body": [
+      "checkpoint \"${1:checkpoint_id}\";",
+      "seal;"
+    ],
+    "description": "Snapshot Merkle state checkpoint and cryptographic seal"
+  },
+  "Module Import": {
+    "prefix": "import",
+    "body": [
+      "import { ${1:symbol} } from \"${2:./module}\";"
+    ],
+    "description": "Import declarations from another ONE source module"
+  },
+  "Module Export": {
+    "prefix": "export",
+    "body": [
+      "export { ${1:symbol} };"
+    ],
+    "description": "Export declarations from current ONE module"
+  },
+  "One's Variable Declaration": {
+    "prefix": "ones",
+    "body": [
+      "one's ${1:variable} = ${2:value};"
+    ],
+    "description": "Declare a variable using ONE Language v1.0.1 command syntax"
+  },
+  "One Set Mutation": {
+    "prefix": "one-set",
+    "body": [
+      "one set ${1:variable} = ${2:value};"
+    ],
+    "description": "Mutate a variable using ONE Language v1.0.1 command syntax"
+  },
+  "One Out Print": {
+    "prefix": "one-out",
+    "body": [
+      "one out ${1:expression};"
+    ],
+    "description": "Print expression using ONE Language v1.0.1 command syntax"
+  },
+  "One In Input": {
+    "prefix": "one-in",
+    "body": [
+      "one in ${1:variable};"
+    ],
+    "description": "Read input into variable using ONE Language v1.0.1 command syntax"
+  },
+  "One If Conditional": {
+    "prefix": "one-if",
+    "body": [
+      "one if ${1:condition} {",
+      "\t$0",
+      "} one else {",
+      "\t",
+      "}"
+    ],
+    "description": "Conditional branching using ONE Language v1.0.1 command syntax"
+  },
+  "One Repeat Loop": {
+    "prefix": "one-repeat",
+    "body": [
+      "one repeat ${1:count} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Bounded repeat loop using ONE Language v1.0.1 command syntax"
+  },
+  "One Repeat While Loop": {
+    "prefix": "one-while",
+    "body": [
+      "one repeat while ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Conditional while loop using ONE Language v1.0.1 command syntax"
+  },
+  "One Make Function": {
+    "prefix": "one-make",
+    "body": [
+      "one make ${1:name}(${2:params}): ${3:void} {",
+      "\t$0",
+      "\tone done;",
+      "}"
+    ],
+    "description": "Function definition using ONE Language v1.0.1 command syntax"
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ONE Language Explorer — GATE 18</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<!-- ── Top bar ── -->
+<header class="topbar">
+  <h1>ONE Language Explorer</h1>
+  <div class="topbar-meta">
+    <span id="status-badge" class="badge">loading</span>
+    <span id="node-version">node v26.7.0</span>
+    <span id="backend-label">ONE Language</span>
+  </div>
+</header>
+
+<!-- ── Main layout ── -->
+<main class="layout">
+  <!-- Query console ── -->
+  <section class="panel" id="console-panel">
+    <h2>Query Console</h2>
+    <form id="query-form" autocomplete="off">
+      <input id="query-input" type="text" placeholder="Enter a prompt (e.g. &quot;What properties does concept_car have?&quot;)..." maxlength="500">
+      <button type="submit" id="query-btn">Run</button>
+    </form>
+    <div id="query-status" class="status">Idle</div>
+  </section>
+
+  <!-- Result panel ── -->
+  <section class="panel" id="result-panel">
+    <h2>Result</h2>
+    <pre id="result-output" class="result" aria-live="polite">Type a query and press Run.</pre>
+  </section>
+
+  <!-- Left column: reasoning trace + concept graph ── -->
+  <div class="column">
+    <section class="panel" id="trace-panel">
+      <h2>Reasoning Trace</h2>
+      <pre id="trace-output" class="result" aria-live="polite">Loading trace…</pre>
+      <button id="trace-clear" class="btn-small">Clear</button>
+    </section>
+
+    <section class="panel" id="concept-graph-panel">
+      <h2>Concept Graph</h2>
+      <canvas id="graph-canvas" width="560" height="360" class="graph-canvas"></canvas>
+      <p class="muted">Topology: vehicle → car → engine/wheels (deterministic subgraph from Phase 4 tests)</p>
+    </section>
+  </div>
+
+  <!-- Right column: binary inspector + benchmark/status ── -->
+  <div class="column">
+    <section class="panel" id="binary-panel">
+      <h2>Binary Inspector</h2>
+      <div id="binary-output" class="result">Select files and click Inspect.</div>
+      <div class="checkbox-row">
+        <label><input type="checkbox" id="bin-encoder" checked> binaryEncoder.ts</label>
+        <label><input type="checkbox" id="bin-decoder" checked> binaryDecoder.ts</label>
+        <label><input type="checkbox" id="bin-codebook" checked> binaryCodebook.ts</label>
+      </div>
+      <button id="bin-inspect-btn" class="btn-small">Inspect</button>
+    </section>
+
+    <section class="panel" id="benchmark-panel">
+      <h2>Benchmark / Status</h2>
+      <div id="benchmark-output" class="result">Click Run Benchmark.</div>
+      <button id="bench-btn" class="btn-small">Run Benchmark</button>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <span id="footer-time"></span>
+  <span class="muted">GATE 18 Explorer UI — mock-only areas labelled: concept-graph topology (deterministic subgraph), binary file list (read-only). All other values come from the real engine via <code>/api/*</code>.</span>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

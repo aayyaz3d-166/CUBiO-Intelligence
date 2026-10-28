@@ -1,0 +1,61 @@
+// ONE Language Native Source: Spatial Material Interference & Permittivity Mapping
+// Gate CNL-P26.11: Solid Interference & Wave Velocity Slowdown Modeling
+
+module One.Engine.MaterialGrid {
+
+    enum MaterialType {
+        AIR,
+        CONCRETE,
+        METAL,
+        HUMAN_MASS
+    }
+
+    struct CellProperties {
+        material: MaterialType;
+        permittivity_epsilon_r: Float32;
+        density_kg_m3: Float32;
+        is_obstacle: Bool;
+    }
+
+    struct WaveInteractionResult {
+        cell_id: Int32;
+        propagation_velocity_factor: Float32;
+        energy_density_pressure: Float32;
+        status: String;
+    }
+
+    native class CUBiOMaterialLayer {
+        // Maps material properties to specific cells in the 343 lattice
+        public method assign_material(cell_id: Int32, mat: MaterialType): CellProperties {
+            if (cell_id < 0 || cell_id >= 343) {
+                return CellProperties(MaterialType.AIR, 1.0f, 1.204f, false);
+            }
+
+            if (mat == MaterialType.CONCRETE) {
+                return CellProperties(mat, 6.5f, 2300.0f, true);
+            } else if (mat == MaterialType.METAL) {
+                return CellProperties(mat, 1.0f, 7850.0f, true); // High reflection / conductive barrier
+            } else if (mat == MaterialType.HUMAN_MASS) {
+                return CellProperties(mat, 50.0f, 985.0f, true); // High dielectric absorption due to water content
+            } else {
+                return CellProperties(MaterialType.AIR, 1.0f, 1.204f, false);
+            }
+        }
+
+        // Calculate solid interference, wave velocity slowdown, and localized pressure
+        public method evaluate_wave_interference(cell_id: Int32, cell: CellProperties, incoming_signal_power: Float32): WaveInteractionResult {
+            // Wave velocity reduction factor inside dielectric: v_factor = 1 / sqrt(epsilon_r)
+            let velocity_factor: Float32 = 1.0f / Sqrt(cell.permittivity_epsilon_r);
+            
+            // Energy density accumulation / pressure increase due to material resistance
+            let local_pressure: Float32 = incoming_signal_power * cell.density_kg_m3 * cell.permittivity_epsilon_r * 0.001f;
+
+            return WaveInteractionResult(
+                cell_id, // Target cell in the 343 grid (e.g. 171 = center (3,3,3))
+                velocity_factor,
+                local_pressure,
+                cell.is_obstacle ? "SOLID_INTERFERENCE_DETECTED" : "UNOBSTRUCTED_FREE_SPACE"
+            );
+        }
+    }
+}

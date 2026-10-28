@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/time-travel",
+  "version": "1.0.0",
+  "description": "Bit-Exact Deterministic State Snapshotting & Cryptographic Rewind Engine",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
+}

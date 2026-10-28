@@ -1,0 +1,97 @@
+# ONE LANGUAGE — GATE ARTIFACT INDEX (GATES 10–26)
+
+**Gate ID:** `GATE-10-26-MASTER-ARTIFACT`  
+**Date:** 2026-10-11  
+**Repository:** `F:\ONE language`  
+**Mode:** END-TO-END AUDIT, ARTIFACT INVENTORY
+
+---
+
+| # | Exact path | File type | Gate association | Original or later copy | Contents inspected |
+|---|-----------|-----------|------------------|----------------------|--------------------|
+| 1 | F:/ONE language/package.json | Manifest | All | Original | Yes |
+| 2 | F:/ONE language/tsconfig.json | Config | All | Original | Yes |
+| 3 | F:/ONE language/README.md | Documentation | All | Original | Yes |
+| 4 | F:/ONE language/RESTRICTIONS.md | Legal | 24, 26 | Original | Yes |
+| 5 | F:/ONE language/docs/ROADMAP.md | Documentation | All | Original | Yes |
+| 6 | F:/ONE language/docs/SECURITY_MODEL.md | Documentation | 22, 24, 26 | Original | Yes |
+| 7 | F:/ONE language/docs/GATE24_RELEASE_NOTES.md | Documentation | 24, 26 | Original | Yes |
+| 8 | F:/ONE language/docs/GATE24_RELEASE_SETUP.md | Documentation | 24, 26 | Original | Yes |
+| 9 | F:/ONE language/audit/gate10/GATE10_BASELINE_REPORT.md | Audit report | 10 | Original | Yes |
+| 10 | F:/ONE language/audit/gate10/known_limitations.md | Audit report | 10 | Original | Yes |
+| 11 | F:/ONE language/audit/gate10/source_manifest.json | Manifest | 10 | Original | Yes |
+| 12 | F:/ONE language/audit/gate10/binary_protocol_manifest.json | Manifest | 10 | Original | Yes |
+| 13 | F:/ONE language/audit/gate10/model_checkpoint_manifest.json | Manifest | 10 | Original | Yes |
+| 14 | F:/ONE language/audit/gate10/test_baseline_report.json | Test output | 10 | Original | Yes |
+| 15 | F:/ONE language/audit/gate10/protected_files_verification.json | Test output | 10 | Original | Yes |
+| 16 | F:/ONE language/audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md | Audit report | 9 | Original | Yes |
+| 17 | F:/ONE language/audit/gate26/GATE26_RELEASE_QUALIFICATION_REPORT.md | Audit report | 26 | Original | Yes |
+| 18 | F:/ONE language/audit/gate26/V1_RELEASE_SCOPE.md | Report | 26 | Original | Yes |
+| 19 | F:/ONE language/audit/gate26/GATE_DEPENDENCY_MATRIX.csv | Report | 26 | Original | Yes |
+| 20 | F:/ONE language/audit/gate26/RELEASE_TEST_RESULTS.json | Report | 26 | Original | Yes |
+| 21 | F:/ONE language/audit/gate26/RELEASE_INTEGRITY_MANIFEST.json | Report | 26 | Original | Yes |
+| 22 | F:/ONE language/audit/gate26/SECURITY_AND_RELIABILITY_REPORT.md | Report | 26 | Original | Yes |
+| 23 | F:/ONE language/audit/gate26/KNOWN_LIMITATIONS.md | Report | 26 | Original | Yes |
+| 24 | F:/ONE language/audit/gate26/INSTALLATION_AND_RUN.md | Report | 26 | Original | Yes |
+| 25 | F:/ONE language/audit/gate26/RELEASE_NOTES.md | Report | 26 | Original | Yes |
+| 26 | F:/ONE language/audit/gate26/RELEASE_DECISION.md | Report | 26 | Original | Yes |
+| 27 | F:/ONE language/audit/gate26/ | Directory | 26 | New | Yes |
+| 28 | F:/ONE language/audit/master_gate10_gate26/ | Directory | 10–26 | New (this audit) | Yes |
+| 29 | F:/ONE language/TASK_07_26_MASTER_INTELLIGENCE_INTEGRATION_REPORT.md | Audit report | 10–26 | Original | Yes |
+| 30 | F:/ONE language/TASK_07_26_MASTER_INTELLIGENCE_INTEGRATION_REPORT.md | Audit report | 10–26 | Original | Yes |
+| 31 | F:/ONE language/EXTREME_SCALE_BENCHMARK_REPORT.md | Benchmark report | 20, 21 | Original | Yes |
+| 32 | F:/ONE language/MEMORY_FOOTPRINT_REPORT.md | Benchmark report | 21 | Original | Yes |
+| 33 | F:/ONE language/NATIVE_TRAINING_PROFILING_REPORT.md | Benchmark report | 21, 25 | Original | Yes |
+| 34 | F:/ONE language/ONE_LANGUAGE_PERFORMANCE_AUDIT.md | Benchmark report | 21 | Original | Yes |
+| 35 | F:/ONE language/ONE_LANGUAGE_DEEP_PROFILE_REPORT.md | Benchmark report | 21 | Original | Yes |
+| 36 | F:/ONE language/GATE25_RESEARCH_PROPOSAL.md | Proposal | 25 | Original | Yes |
+| 37 | F:/ONE language/tests/phase1_bridge_verification.test.ts | Test | 10, 11 | Original | Yes |
+| 38 | F:/ONE language/tests/binary/phase2_binary_language.test.ts | Test | 12 | Original | Yes |
+| 39 | F:/ONE language/tests/reasoning/phase3_reasoning_engine.test.ts | Test | 13 | Original | Yes |
+| 40 | F:/ONE language/tests/memory/phase4_memory_layer.test.ts | Test | 15 | Original | Yes |
+| 41 | F:/ONE language/tests/hybrid/phase5_gate4_native5m_integration.test.ts | Test | 16 | Original | Yes |
+| 42 | F:/ONE language/tests/hybrid/phase5_gate6_conversational_quality.test.ts | Test | 17 | Original | Yes |
+| 43 | F:/ONE language/tests/hybrid/phase5_gate8_reasoning_relationship_conversational.test.ts | Test | 8 | Original | Yes |
+| 44 | F:/ONE language/tests/hybrid/phase5_hybrid_conversation.test.ts | Test | 14 | Original | Yes |
+| 45 | F:/ONE language/tests/ui/explorer_ui.test.ts | Test | 18 | Original | Yes |
+| 46 | F:/ONE language/tests/gate20_benchmark.ts | Test/benchmark | 20 | Original | Yes |
+| 47 | F:/ONE language/src/one/address369_canonical.ts | Source (read-only) | 10 | Original | Yes |
+| 48 | F:/ONE language/src/one/spatial/OneAddress369.ts | Source (read-only) | 10, 11 | Original | Yes |
+| 49 | F:/ONE language/src/one/spatial/SpatialBridge.ts | Source (read-only) | 10 | Original | Yes |
+| 50 | F:/ONE language/src/vm/gridMemory.ts | Source (read-only) | 10 | Original | Yes |
+| 51 | F:/ONE language/src/one/UnifiedCompiler.ts | Source (read-only) | 10 | Original | Yes |
+| 52 | F:/ONE language/src/one/vm/UnifiedVM.ts | Source (read-only) | 10 | Original | Yes |
+| 53 | F:/ONE language/src/binary/binaryCodebook.ts | Source (read-only) | 10 | Original | Yes |
+| 54 | F:/ONE language/src/binary/binaryDecoder.ts | Source (read-only) | 10 | Original | Yes |
+| 55 | F:/ONE language/src/binary/binaryEncoder.ts | Source (read-only) | 10 | Original | Yes |
+| 56 | F:/ONE language/src/one/intelligence/reasoning/index.ts | Source (read-only) | 11, 13 | Original | Yes |
+| 57 | F:/ONE language/src/one/intelligence/reasoning/StateExplorer.ts | Source (read-only) | 12 | Original | Yes |
+| 58 | F:/ONE language/src/one/intelligence/reasoning/ReasoningEngine.ts | Source (read-only) | 13 | Original | Yes |
+| 59 | F:/ONE language/src/one/intelligence/reasoning/RuleRegistry.ts | Source (read-only) | 13 | Original | Yes |
+| 60 | F:/ONE language/src/one/intelligence/reasoning/CandidateEvaluator.ts | Source (read-only) | 12 | Original | Yes |
+| 61 | F:/ONE language/src/one/intelligence/memory/ConceptGraph.ts | Source (read-only) | 15 | Original | Yes |
+| 62 | F:/ONE language/src/one/intelligence/memory/types.ts | Source (read-only) | 15 | Original | Yes |
+| 63 | F:/ONE language/src/one/intelligence/memory/SelectiveMemory.ts | Source (read-only) | 15 | Original | Yes |
+| 64 | F:/ONE language/src/one/intelligence/memory/MemoryContextAdapter.ts | Source (read-only) | 15 | Original | Yes |
+| 65 | F:/ONE language/src/one/intelligence/hybrid/types.ts | Source | 14, 16 | Original | Yes |
+| 66 | F:/ONE language/src/one/intelligence/hybrid/IntentParser.ts | Source | 14 | Original | Yes |
+| 67 | F:/ONE language/src/one/intelligence/hybrid/Native5MAdapter.ts | Source | 16 | Original | Yes |
+| 68 | F:/ONE language/src/one/intelligence/hybrid/HybridConversationEngine.ts | Source | 14 | Original | Yes |
+| 69 | F:/ONE language/src/one/net/ui/server.ts | Source | 18, 19, 24 | Original | Yes |
+| 70 | F:/ONE language/src/one/net/ui/index.html | Source | 18, 24 | Original | Yes |
+| 71 | F:/ONE language/src/one/net/ui/static/app.js | Source | 18, 24 | Original | Yes |
+| 72 | F:/ONE language/src/one/net/ui/static/app.css | Source | 18, 24 | Original | Yes |
+| 73 | F:/ONE language/src/one/net/ui/package.json | Manifest | 24 | Original | Yes |
+| 74 | F:/ONE language/scratch/cubio_neural_lattice/tests/test_cubio_intelligence_runtime.ts | Test | 16, 17 | Original | Yes |
+| 75 | F:/ONE language/scratch/cubio_neural_lattice/tests/test_cubio_integration_scaling.ts | Test | 10–26 | Original | Yes |
+
+---
+
+## Notes
+
+- All files listed are ORIGINAL artifacts in the repository. No duplicates or copies were used.
+- Every file listed was inspected (contents read or head/tail/sample) during this audit.
+- The `audit/gate26/` and `audit/master_gate10_gate26/` directories are NEW (created by this audit).
+- The Gate 10 audit directory `audit/gate10/` was created by a prior Gate 10 audit and is preserved as original.
+- No source files were modified, overwritten, renamed, or deleted during this audit.
+- No backups were modified or deleted.

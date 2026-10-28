@@ -1,0 +1,14 @@
+# ==============================================================================
+# ONE LANGUAGE — Git Archive Export Attributes
+# ==============================================================================
+# Exclude internal forensic audits, reports, scratch sandboxes, and legacy clones
+# from clean public source distribution tarballs (git archive).
+
+/audit/ export-ignore
+/reports/ export-ignore
+/scratch/ export-ignore
+/legacy_experiments/ export-ignore
+/.backup_gate_* export-ignore
+/.backup_phase_* export-ignore
+/PHASE_0_TO_PHASE_3_END_TO_END_FORENSIC_REPORT.md export-ignore
+"/ONE language/" export-ignore

@@ -1,0 +1,248 @@
+// ONE Language Native Source: Sovereign Power Grid Physics Module
+// Gate CNL-P26.9: Zero-Hallucination Power Electronics & Grid Stability
+//
+// ════════════════════════════════════════════════════════════════════════════
+// MATHEMATICAL FRAMEWORKS:
+//
+// 1. SWING EQUATION (Hantao Cui, 2023 — IEEE Trans. Power Syst.)
+//    2H_eq · dω/dt = P_m - P_e - D·Δω
+//    Zero-hallucination: P_m, P_e from physical sensor or fail-closed.
+//
+// 2. INCREMENTAL-CONDUCTANCE MPPT (Sangeetha Manickam, 2022 — IEEE TPEL)
+//    dI/dV = -I/V  at Maximum Power Point
+//    Condition determines voltage sweep direction without guessing.
+//
+// 3. DAB POWER FORMULA (Dongsheng Yu, 2021 — IEEE JESTPE)
+//    P_DAB = (n·V1·V2)/(ω·L) · φ·(1 - |φ|/π)
+//    Bidirectional power flow via phase-shift φ ∈ (-π/2, π/2).
+//
+// 4. RIPPLE MINIMIZATION (Guidong Zhang, 2022 — IEEE TPEL)
+//    min_{φ₁,...,φN} |ΔVo| = optimal interleaving ΔVo_single / N
+//    Phase-shift: φ_k = 2π(k-1)/N  for N interleaved modules
+// ════════════════════════════════════════════════════════════════════════════
+
+module One.Engine.PowerGrid {
+
+    // ── Struct Definitions ────────────────────────────────────────────────────
+
+    struct SwingEquationResult {
+        d_omega_dt: Float64;          // dω/dt = (Pm - Pe - D·Δω) / (2·Heq)
+        omega_next: Float64;          // ω[k+1] = ω[k] + dω/dt · Δt
+        delta_next: Float64;          // δ[k+1] = δ[k] + ω[k] · Δt (rotor angle)
+        frequency_hz: Float64;        // f = ω/(2π)
+        is_stable: Bool;             // |Δω| < stability threshold
+        is_valid: Bool;
+    }
+
+    struct MPPTConditionResult {
+        mppt_error: Float64;          // dI/dV + I/V  (= 0 at MPP)
+        direction: String;            // "INCREASE_V" | "DECREASE_V" | "AT_MPP"
+        power_w: Float64;            // P = V·I (real measurement)
+        dP_dV: Float64;             // dP/dV = I + V·(dI/dV)
+        is_at_mpp: Bool;
+        is_valid: Bool;
+    }
+
+    struct DABPowerResult {
+        P_dab_w: Float64;            // P_DAB = (n·V1·V2)/(ω·L) · φ·(1 - |φ|/π)
+        P_max_w: Float64;            // P_max = n·V1·V2 / (2·ω·L)
+        phi_normalized: Float64;     // φ/π ∈ [-1, 1]
+        efficiency_ratio: Float64;   // P_DAB / P_max
+        direction: String;           // "FORWARD" | "REVERSE" | "ZERO"
+        is_valid: Bool;
+    }
+
+    struct RippleOptimizationResult {
+        delta_vo_single: Float64;    // Ripple of single module (reference)
+        delta_vo_optimal: Float64;   // Ripple with optimal N-phase interleaving
+        ripple_reduction_factor: Float64; // = 1/N
+        optimal_phase_shifts_rad: Float64[]; // φ_k = 2π(k-1)/N
+        num_modules: Int32;
+        is_valid: Bool;
+    }
+
+    // ── Power Grid Physics Engine ──────────────────────────────────────────────
+
+    native class PowerGridPhysics {
+
+        // ── 1. SWING EQUATION (Hantao Cui) ─────────────────────────────────────
+        //
+        // 2·H_eq · dω/dt = P_m - P_e - D·Δω
+        //
+        // dω/dt = (P_m - P_e - D·Δω) / (2·H_eq)
+        //
+        // Euler integration step:
+        //   ω[k+1] = ω[k] + dω/dt · Δt
+        //   δ[k+1] = δ[k] + ω[k] · Δt
+        //
+        // Where:
+        //   H_eq  = equivalent inertia constant (s)
+        //   P_m   = mechanical power (pu) — from physical sensor
+        //   P_e   = electrical power (pu) — from physical sensor
+        //   D     = damping coefficient (pu)
+        //   Δω    = ω - ω₀ (deviation from nominal)
+        //   ω₀   = 2π·f₀ (nominal angular frequency, f₀=50/60 Hz)
+
+        public method compute_swing_equation(
+            H_eq: Float64,       // inertia constant [s]
+            P_m: Float64,        // mechanical power [pu]
+            P_e: Float64,        // electrical power [pu]
+            D: Float64,          // damping coefficient [pu]
+            omega: Float64,      // current angular frequency [rad/s]
+            delta: Float64,      // current rotor angle [rad]
+            omega_0: Float64,    // nominal frequency [rad/s] (2π·50 or 2π·60)
+            dt: Float64          // time step [s]
+        ): SwingEquationResult {
+            if (H_eq <= 0.0) {
+                return SwingEquationResult(0.0, omega, delta, omega/(2.0*PI), false, false);
+            }
+
+            let delta_omega: Float64 = omega - omega_0;
+            let d_omega_dt: Float64 = (P_m - P_e - D * delta_omega) / (2.0 * H_eq);
+            let omega_next: Float64 = omega + d_omega_dt * dt;
+            let delta_next: Float64 = delta + omega * dt;
+            let frequency_hz: Float64 = omega_next / (2.0 * PI);
+            let is_stable: Bool = Math.Abs(omega_next - omega_0) < (0.5 * 2.0 * PI);
+
+            return SwingEquationResult(
+                d_omega_dt, omega_next, delta_next,
+                frequency_hz, is_stable, true
+            );
+        }
+
+        // ── 2. INCREMENTAL-CONDUCTANCE MPPT (Sangeetha Manickam) ───────────────
+        //
+        // At MPP: dI/dV = -I/V  →  dI/dV + I/V = 0
+        //
+        // MPPT error ε = dI/dV + I/V:
+        //   ε > 0 → left of MPP  → increase V
+        //   ε < 0 → right of MPP → decrease V
+        //   ε ≈ 0 → at MPP       → hold V
+        //
+        // dP/dV = d(V·I)/dV = I + V·(dI/dV)
+        //       = I + V·(-I/V) = 0  at MPP  ✓
+
+        public method compute_mppt_condition(
+            V: Float64,     // current voltage [V]
+            I: Float64,     // current current [A]
+            dV: Float64,    // voltage differential [V]
+            dI: Float64     // current differential [A]
+        ): MPPTConditionResult {
+            if (V <= 0.0 || Math.Abs(dV) < 1e-12) {
+                return MPPTConditionResult(0.0, "INVALID_MEASUREMENT", V*I, 0.0, false, false);
+            }
+
+            let dI_dV: Float64 = dI / dV;
+            let I_over_V: Float64 = I / V;
+            let mppt_error: Float64 = dI_dV + I_over_V;   // = 0 at MPP
+            let dP_dV: Float64 = I + V * dI_dV;           // dP/dV check
+
+            let direction: String;
+            let is_at_mpp: Bool;
+
+            if (Math.Abs(mppt_error) < 1e-6) {
+                direction = "AT_MPP";
+                is_at_mpp = true;
+            } else if (mppt_error > 0.0) {
+                direction = "INCREASE_V";   // left of MPP
+                is_at_mpp = false;
+            } else {
+                direction = "DECREASE_V";   // right of MPP
+                is_at_mpp = false;
+            }
+
+            return MPPTConditionResult(
+                mppt_error, direction, V * I, dP_dV, is_at_mpp, true
+            );
+        }
+
+        // ── 3. DAB POWER FORMULA (Dongsheng Yu) ────────────────────────────────
+        //
+        // P_DAB = (n·V1·V2)/(ω·L) · φ·(1 - |φ|/π)
+        //
+        // Where:
+        //   n  = transformer turns ratio (V2/V1 at unity)
+        //   V1 = primary voltage [V]
+        //   V2 = secondary voltage [V]
+        //   ω  = switching angular frequency = 2π·fs [rad/s]
+        //   L  = series inductance [H]
+        //   φ  = phase shift angle [rad], φ ∈ (-π/2, π/2)
+        //
+        // Maximum at |φ| = π/2:
+        //   P_max = n·V1·V2 / (2·ω·L)
+        //
+        // Direction: φ > 0 → forward, φ < 0 → reverse, φ = 0 → zero
+
+        public method compute_dab_power(
+            n: Float64,     // turns ratio
+            V1: Float64,    // primary voltage [V]
+            V2: Float64,    // secondary voltage [V]
+            omega: Float64, // switching angular frequency [rad/s]
+            L: Float64,     // inductance [H]
+            phi: Float64    // phase shift [rad]
+        ): DABPowerResult {
+            if (omega <= 0.0 || L <= 0.0 || V1 <= 0.0 || V2 <= 0.0 || n <= 0.0) {
+                return DABPowerResult(0.0, 0.0, 0.0, 0.0, "INVALID_PARAMETERS", false);
+            }
+
+            let K: Float64 = (n * V1 * V2) / (omega * L);
+            let phi_abs: Float64 = Math.Abs(phi);
+            let P_dab: Float64 = K * phi * (1.0 - phi_abs / PI);
+            let P_max: Float64 = K * PI / 4.0;   // at φ = π/2: φ·(1-|φ|/π) = π/2·(1/2) = π/4
+
+            let direction: String;
+            if (phi > 1e-10) {
+                direction = "FORWARD";
+            } else if (phi < -1e-10) {
+                direction = "REVERSE";
+            } else {
+                direction = "ZERO";
+            }
+
+            return DABPowerResult(
+                P_dab, P_max, phi / PI,
+                P_dab / P_max, direction, true
+            );
+        }
+
+        // ── 4. RIPPLE MINIMIZATION (Guidong Zhang) ──────────────────────────────
+        //
+        // For N interleaved modules, optimal phase shifts:
+        //   φ_k = 2π(k-1)/N  for k = 1, ..., N
+        //
+        // This minimizes output voltage ripple:
+        //   ΔVo_optimal = ΔVo_single / N
+        //
+        // Single-module ripple (reference, buck converter):
+        //   ΔVo_single = (V_in - V_out)·D / (f_s·L·N)  [simplified]
+        //   or provided from real sensor measurement
+        //
+        // Zero-hallucination: ΔVo_single MUST come from real measurement
+        // or rigorous circuit simulation — never fabricated.
+
+        public method compute_ripple_optimization(
+            delta_vo_single: Float64,  // measured single-module ripple [V]
+            num_modules: Int32,        // N (number of interleaved modules)
+            f_switching: Float64       // switching frequency [Hz]
+        ): RippleOptimizationResult {
+            if (num_modules <= 0 || delta_vo_single < 0.0 || f_switching <= 0.0) {
+                return RippleOptimizationResult(0.0, 0.0, 0.0, [], 0, false);
+            }
+
+            let ripple_reduction: Float64 = 1.0 / Cast<Float64>(num_modules);
+            let delta_vo_optimal: Float64 = delta_vo_single * ripple_reduction;
+
+            // Optimal phase shifts: φ_k = 2π(k-1)/N
+            let phase_shifts: Float64[] = [];
+            for (let k: Int32 = 0; k < num_modules; k = k + 1) {
+                let phi_k: Float64 = (2.0 * PI * Cast<Float64>(k)) / Cast<Float64>(num_modules);
+                phase_shifts.Append(phi_k);
+            }
+
+            return RippleOptimizationResult(
+                delta_vo_single, delta_vo_optimal,
+                ripple_reduction, phase_shifts, num_modules, true
+            );
+        }
+    }
+}

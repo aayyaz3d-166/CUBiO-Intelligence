@@ -1,0 +1,12 @@
+{
+  "name": "@one-lang/sovereign-cli",
+  "version": "1.0.0",
+  "description": "Interactive Sovereign Pipeline CLI Engine & Demo",
+  "main": "index.ts",
+  "types": "index.ts",
+  "bin": {
+    "sovereign-cli": "./demo.ts"
+  },
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
+}

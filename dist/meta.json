@@ -1,0 +1,1659 @@
+{
+  "inputs": {
+    "src/one/oneLexer.ts": {
+      "bytes": 13026,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/oneParser.ts": {
+      "bytes": 14587,
+      "imports": [
+        {
+          "path": "src/one/oneLexer.ts",
+          "kind": "import-statement",
+          "original": "./oneLexer"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/ast/SourceLocation.ts": {
+      "bytes": 391,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/computational/ComputationalParser.ts": {
+      "bytes": 38237,
+      "imports": [
+        {
+          "path": "src/one/oneLexer.ts",
+          "kind": "import-statement",
+          "original": "../oneLexer"
+        },
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/ast/SourceLocation.ts",
+          "kind": "import-statement",
+          "original": "../ast/SourceLocation"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/ast/DeclarativeASTAdapter.ts": {
+      "bytes": 2629,
+      "imports": [
+        {
+          "path": "../oneParser",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/router/GrammarRouter.ts": {
+      "bytes": 4023,
+      "imports": [
+        {
+          "path": "src/one/oneLexer.ts",
+          "kind": "import-statement",
+          "original": "../oneLexer"
+        },
+        {
+          "path": "src/one/oneParser.ts",
+          "kind": "import-statement",
+          "original": "../oneParser"
+        },
+        {
+          "path": "src/one/computational/ComputationalParser.ts",
+          "kind": "import-statement",
+          "original": "../computational/ComputationalParser"
+        },
+        {
+          "path": "src/one/ast/DeclarativeASTAdapter.ts",
+          "kind": "import-statement",
+          "original": "../ast/DeclarativeASTAdapter"
+        },
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/semantics/SymbolTable.ts": {
+      "bytes": 1701,
+      "imports": [
+        {
+          "path": "../ast/SourceLocation",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/autograd/AutogradTape.ts": {
+      "bytes": 6447,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./TapeEntry",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/MatmulKernel.ts": {
+      "bytes": 5528,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/AddKernel.ts": {
+      "bytes": 4107,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/MulKernel.ts": {
+      "bytes": 2443,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/TransposeKernel.ts": {
+      "bytes": 2368,
+      "imports": [
+        {
+          "path": "../Tensor",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/SoftmaxKernel.ts": {
+      "bytes": 4202,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/LayerNormKernel.ts": {
+      "bytes": 6196,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/ReluKernel.ts": {
+      "bytes": 1886,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/ReduceKernel.ts": {
+      "bytes": 4804,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/CrossEntropyKernel.ts": {
+      "bytes": 5142,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/kernels/index.ts": {
+      "bytes": 645,
+      "imports": [
+        {
+          "path": "src/one/tensor/kernels/MatmulKernel.ts",
+          "kind": "import-statement",
+          "original": "./MatmulKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/AddKernel.ts",
+          "kind": "import-statement",
+          "original": "./AddKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/MulKernel.ts",
+          "kind": "import-statement",
+          "original": "./MulKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/TransposeKernel.ts",
+          "kind": "import-statement",
+          "original": "./TransposeKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/SoftmaxKernel.ts",
+          "kind": "import-statement",
+          "original": "./SoftmaxKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/LayerNormKernel.ts",
+          "kind": "import-statement",
+          "original": "./LayerNormKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/ReluKernel.ts",
+          "kind": "import-statement",
+          "original": "./ReluKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/ReduceKernel.ts",
+          "kind": "import-statement",
+          "original": "./ReduceKernel"
+        },
+        {
+          "path": "src/one/tensor/kernels/CrossEntropyKernel.ts",
+          "kind": "import-statement",
+          "original": "./CrossEntropyKernel"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/autograd/AutogradOps.ts": {
+      "bytes": 13926,
+      "imports": [
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../Tensor"
+        },
+        {
+          "path": "../TensorArena",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/tensor/autograd/AutogradTape.ts",
+          "kind": "import-statement",
+          "original": "./AutogradTape"
+        },
+        {
+          "path": "src/one/tensor/kernels/index.ts",
+          "kind": "import-statement",
+          "original": "../kernels"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/AutogradBridge.ts": {
+      "bytes": 3245,
+      "imports": [
+        {
+          "path": "src/one/tensor/autograd/AutogradTape.ts",
+          "kind": "import-statement",
+          "original": "./autograd/AutogradTape"
+        },
+        {
+          "path": "src/one/tensor/autograd/AutogradOps.ts",
+          "kind": "import-statement",
+          "original": "./autograd/AutogradOps"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/tensor/Tensor.ts": {
+      "bytes": 27548,
+      "imports": [
+        {
+          "path": "./TensorArena",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/tensor/AutogradBridge.ts",
+          "kind": "import-statement",
+          "original": "./AutogradBridge"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/stdlib/OneStdLib.ts": {
+      "bytes": 12131,
+      "imports": [
+        {
+          "path": "fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../tensor/Tensor"
+        },
+        {
+          "path": "src/one/tensor/autograd/AutogradOps.ts",
+          "kind": "import-statement",
+          "original": "../tensor/autograd/AutogradOps"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/semantics/SemanticAnalyzer.ts": {
+      "bytes": 24479,
+      "imports": [
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/semantics/SymbolTable.ts",
+          "kind": "import-statement",
+          "original": "./SymbolTable"
+        },
+        {
+          "path": "src/one/stdlib/OneStdLib.ts",
+          "kind": "import-statement",
+          "original": "../stdlib/OneStdLib"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/types/TypeSystem.ts": {
+      "bytes": 7396,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/types/TypeChecker.ts": {
+      "bytes": 24055,
+      "imports": [
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/types/TypeSystem.ts",
+          "kind": "import-statement",
+          "original": "./TypeSystem"
+        },
+        {
+          "path": "src/one/stdlib/OneStdLib.ts",
+          "kind": "import-statement",
+          "original": "../stdlib/OneStdLib"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/ir/UnifiedIR.ts": {
+      "bytes": 1641,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/ir/IRLowering.ts": {
+      "bytes": 16561,
+      "imports": [
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/ir/UnifiedIR.ts",
+          "kind": "import-statement",
+          "original": "./UnifiedIR"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/ir/IRPrinter.ts": {
+      "bytes": 1856,
+      "imports": [
+        {
+          "path": "./UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/types/TypedNumeric.ts": {
+      "bytes": 13141,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/jit/JITRuntimeContext.ts": {
+      "bytes": 4007,
+      "imports": [
+        {
+          "path": "src/one/vm/UnifiedVM.ts",
+          "kind": "import-statement",
+          "original": "../vm/UnifiedVM"
+        },
+        {
+          "path": "src/one/types/TypedNumeric.ts",
+          "kind": "import-statement",
+          "original": "../types/TypedNumeric"
+        },
+        {
+          "path": "src/one/stdlib/OneStdLib.ts",
+          "kind": "import-statement",
+          "original": "../stdlib/OneStdLib"
+        },
+        {
+          "path": "src/one/tensor/Tensor.ts",
+          "kind": "import-statement",
+          "original": "../tensor/Tensor"
+        },
+        {
+          "path": "src/one/tensor/autograd/AutogradOps.ts",
+          "kind": "import-statement",
+          "original": "../tensor/autograd/AutogradOps"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/address369_canonical.ts": {
+      "bytes": 4356,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/spatial/SpatialBridge.ts": {
+      "bytes": 11510,
+      "imports": [
+        {
+          "path": "src/one/address369_canonical.ts",
+          "kind": "import-statement",
+          "original": "../address369_canonical"
+        },
+        {
+          "path": "../../vm/gridMemory",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/vm/UnifiedVM.ts": {
+      "bytes": 60418,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/stdlib/OneStdLib.ts",
+          "kind": "import-statement",
+          "original": "../stdlib/OneStdLib"
+        },
+        {
+          "path": "src/one/types/TypedNumeric.ts",
+          "kind": "import-statement",
+          "original": "../types/TypedNumeric"
+        },
+        {
+          "path": "src/one/jit/JITRuntimeContext.ts",
+          "kind": "import-statement",
+          "original": "../jit/JITRuntimeContext"
+        },
+        {
+          "path": "src/one/spatial/SpatialBridge.ts",
+          "kind": "import-statement",
+          "original": "../spatial/SpatialBridge"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/vig/types.ts": {
+      "bytes": 21581,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/vig/VIGCanonicalizer.ts": {
+      "bytes": 8358,
+      "imports": [
+        {
+          "path": "node:crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node:fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node:path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/types.ts",
+          "kind": "import-statement",
+          "original": "./types"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/vig/VIGSecurityGuard.ts": {
+      "bytes": 12583,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/types.ts",
+          "kind": "import-statement",
+          "original": "./types"
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "./VIGCanonicalizer"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/modules/ModuleResolver.ts": {
+      "bytes": 4287,
+      "imports": [
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/VIGSecurityGuard.ts",
+          "kind": "import-statement",
+          "original": "../vig/VIGSecurityGuard"
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "../vig/VIGCanonicalizer"
+        }
+      ],
+      "format": "esm"
+    },
+    "node_modules/typescript/lib/typescript.js": {
+      "bytes": 9112572,
+      "imports": [
+        {
+          "path": "perf_hooks",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "os",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "source-map-support",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "inspector",
+          "kind": "require-call",
+          "external": true
+        }
+      ],
+      "format": "cjs"
+    },
+    "src/one/vig/VIGModel.ts": {
+      "bytes": 6505,
+      "imports": [
+        {
+          "path": "src/one/vig/types.ts",
+          "kind": "import-statement",
+          "original": "./types"
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "./VIGCanonicalizer"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/vig/VIGASTExtractor.ts": {
+      "bytes": 53559,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "node_modules/typescript/lib/typescript.js",
+          "kind": "import-statement",
+          "original": "typescript"
+        },
+        {
+          "path": "./types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "./VIGCanonicalizer"
+        },
+        {
+          "path": "src/one/vig/VIGModel.ts",
+          "kind": "import-statement",
+          "original": "./VIGModel"
+        },
+        {
+          "path": "./VIGGraphStore",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/modules/ModuleGraph.ts": {
+      "bytes": 11040,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/oneLexer.ts",
+          "kind": "import-statement",
+          "original": "../oneLexer"
+        },
+        {
+          "path": "src/one/router/GrammarRouter.ts",
+          "kind": "import-statement",
+          "original": "../router/GrammarRouter"
+        },
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/VIGASTExtractor.ts",
+          "kind": "import-statement",
+          "original": "../vig/VIGASTExtractor"
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "../vig/VIGCanonicalizer"
+        },
+        {
+          "path": "./ModuleResolver",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/modules/MultiFileLinker.ts": {
+      "bytes": 5336,
+      "imports": [
+        {
+          "path": "src/one/ir/UnifiedIR.ts",
+          "kind": "import-statement",
+          "original": "../ir/UnifiedIR"
+        },
+        {
+          "path": "./ModuleGraph",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/vig/VIGCompilationCache.ts": {
+      "bytes": 6683,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "./types",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vig/VIGCanonicalizer.ts",
+          "kind": "import-statement",
+          "original": "./VIGCanonicalizer"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/jit/JITSlotAllocator.ts": {
+      "bytes": 4224,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/jit/JITBytecodeEmitter.ts": {
+      "bytes": 30790,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/jit/JITSlotAllocator.ts",
+          "kind": "import-statement",
+          "original": "./JITSlotAllocator"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/jit/JITCompiler.ts": {
+      "bytes": 4731,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vm/UnifiedVM.ts",
+          "kind": "import-statement",
+          "original": "../vm/UnifiedVM"
+        },
+        {
+          "path": "src/one/jit/JITSlotAllocator.ts",
+          "kind": "import-statement",
+          "original": "./JITSlotAllocator"
+        },
+        {
+          "path": "src/one/jit/JITBytecodeEmitter.ts",
+          "kind": "import-statement",
+          "original": "./JITBytecodeEmitter"
+        },
+        {
+          "path": "src/one/jit/JITRuntimeContext.ts",
+          "kind": "import-statement",
+          "original": "./JITRuntimeContext"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/jit/UnifiedExecutionEngine.ts": {
+      "bytes": 4096,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vm/UnifiedVM.ts",
+          "kind": "import-statement",
+          "original": "../vm/UnifiedVM"
+        },
+        {
+          "path": "src/one/jit/JITCompiler.ts",
+          "kind": "import-statement",
+          "original": "./JITCompiler"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/UnifiedCompiler.ts": {
+      "bytes": 10546,
+      "imports": [
+        {
+          "path": "src/one/oneLexer.ts",
+          "kind": "import-statement",
+          "original": "./oneLexer"
+        },
+        {
+          "path": "src/one/router/GrammarRouter.ts",
+          "kind": "import-statement",
+          "original": "./router/GrammarRouter"
+        },
+        {
+          "path": "./ast/UnifiedAST",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/semantics/SemanticAnalyzer.ts",
+          "kind": "import-statement",
+          "original": "./semantics/SemanticAnalyzer"
+        },
+        {
+          "path": "src/one/types/TypeChecker.ts",
+          "kind": "import-statement",
+          "original": "./types/TypeChecker"
+        },
+        {
+          "path": "src/one/ir/IRLowering.ts",
+          "kind": "import-statement",
+          "original": "./ir/IRLowering"
+        },
+        {
+          "path": "src/one/ir/IRPrinter.ts",
+          "kind": "import-statement",
+          "original": "./ir/IRPrinter"
+        },
+        {
+          "path": "./ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/vm/UnifiedVM.ts",
+          "kind": "import-statement",
+          "original": "./vm/UnifiedVM"
+        },
+        {
+          "path": "src/one/modules/ModuleResolver.ts",
+          "kind": "import-statement",
+          "original": "./modules/ModuleResolver"
+        },
+        {
+          "path": "src/one/modules/ModuleGraph.ts",
+          "kind": "import-statement",
+          "original": "./modules/ModuleGraph"
+        },
+        {
+          "path": "src/one/modules/MultiFileLinker.ts",
+          "kind": "import-statement",
+          "original": "./modules/MultiFileLinker"
+        },
+        {
+          "path": "src/one/vig/VIGCompilationCache.ts",
+          "kind": "import-statement",
+          "original": "./vig/VIGCompilationCache"
+        },
+        {
+          "path": "src/one/jit/UnifiedExecutionEngine.ts",
+          "kind": "require-call",
+          "original": "./jit/UnifiedExecutionEngine"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/formatter/OneFormatter.ts": {
+      "bytes": 6482,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/diagnostics/DiagnosticFormatter.ts": {
+      "bytes": 5892,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/packer/ExecutableArtifact.ts": {
+      "bytes": 1932,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/packer/ExecutableValidator.ts": {
+      "bytes": 5200,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/address369_canonical.ts",
+          "kind": "import-statement",
+          "original": "../address369_canonical"
+        },
+        {
+          "path": "src/one/vig/VIGSecurityGuard.ts",
+          "kind": "import-statement",
+          "original": "../vig/VIGSecurityGuard"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/packer/ExecutablePacker.ts": {
+      "bytes": 9377,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/packer/ExecutableArtifact.ts",
+          "kind": "import-statement",
+          "original": "./ExecutableArtifact"
+        },
+        {
+          "path": "src/one/packer/ExecutableValidator.ts",
+          "kind": "import-statement",
+          "original": "./ExecutableValidator"
+        },
+        {
+          "path": "../vig/VIGCanonicalizer",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeExecutionModel.ts": {
+      "bytes": 4893,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeValues.ts": {
+      "bytes": 12306,
+      "imports": [
+        {
+          "path": "src/one/address369_canonical.ts",
+          "kind": "import-statement",
+          "original": "../address369_canonical"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeErrors.ts": {
+      "bytes": 4458,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/core/memory/rssGuard.ts": {
+      "bytes": 1099,
+      "imports": [],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeRuntimeState.ts": {
+      "bytes": 9319,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/runtime/NativeValues.ts",
+          "kind": "import-statement",
+          "original": "./NativeValues"
+        },
+        {
+          "path": "src/one/runtime/NativeErrors.ts",
+          "kind": "import-statement",
+          "original": "./NativeErrors"
+        },
+        {
+          "path": "src/core/memory/rssGuard.ts",
+          "kind": "import-statement",
+          "original": "../../core/memory/rssGuard"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/core/crypto/pqc_lattice_seal.ts": {
+      "bytes": 777,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeModules.ts": {
+      "bytes": 15984,
+      "imports": [
+        {
+          "path": "crypto",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/runtime/NativeValues.ts",
+          "kind": "import-statement",
+          "original": "./NativeValues"
+        },
+        {
+          "path": "src/one/runtime/NativeErrors.ts",
+          "kind": "import-statement",
+          "original": "./NativeErrors"
+        },
+        {
+          "path": "src/one/address369_canonical.ts",
+          "kind": "import-statement",
+          "original": "../address369_canonical"
+        },
+        {
+          "path": "src/one/spatial/SpatialBridge.ts",
+          "kind": "import-statement",
+          "original": "../spatial/SpatialBridge"
+        },
+        {
+          "path": "src/core/crypto/pqc_lattice_seal.ts",
+          "kind": "import-statement",
+          "original": "../../core/crypto/pqc_lattice_seal"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/runtime/NativeRuntime.ts": {
+      "bytes": 33060,
+      "imports": [
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/UnifiedCompiler.ts",
+          "kind": "import-statement",
+          "original": "../UnifiedCompiler"
+        },
+        {
+          "path": "src/one/runtime/NativeExecutionModel.ts",
+          "kind": "import-statement",
+          "original": "./NativeExecutionModel"
+        },
+        {
+          "path": "src/one/runtime/NativeRuntimeState.ts",
+          "kind": "import-statement",
+          "original": "./NativeRuntimeState"
+        },
+        {
+          "path": "src/one/runtime/NativeValues.ts",
+          "kind": "import-statement",
+          "original": "./NativeValues"
+        },
+        {
+          "path": "src/one/runtime/NativeErrors.ts",
+          "kind": "import-statement",
+          "original": "./NativeErrors"
+        },
+        {
+          "path": "src/one/runtime/NativeModules.ts",
+          "kind": "import-statement",
+          "original": "./NativeModules"
+        },
+        {
+          "path": "../spatial/SpatialBridge",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/types/TypedNumeric.ts",
+          "kind": "import-statement",
+          "original": "../types/TypedNumeric"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/packer/ExecutableLinker.ts": {
+      "bytes": 5159,
+      "imports": [
+        {
+          "path": "fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/UnifiedCompiler.ts",
+          "kind": "import-statement",
+          "original": "../UnifiedCompiler"
+        },
+        {
+          "path": "../ir/UnifiedIR",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/packer/ExecutablePacker.ts",
+          "kind": "import-statement",
+          "original": "./ExecutablePacker"
+        },
+        {
+          "path": "src/one/packer/ExecutableArtifact.ts",
+          "kind": "import-statement",
+          "original": "./ExecutableArtifact"
+        },
+        {
+          "path": "src/one/vm/UnifiedVM.ts",
+          "kind": "import-statement",
+          "original": "../vm/UnifiedVM"
+        },
+        {
+          "path": "src/one/runtime/NativeRuntime.ts",
+          "kind": "import-statement",
+          "original": "../runtime/NativeRuntime"
+        }
+      ],
+      "format": "esm"
+    },
+    "src/one/cli/OneDeveloperCLI.ts": {
+      "bytes": 18227,
+      "imports": [
+        {
+          "path": "fs",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "src/one/UnifiedCompiler.ts",
+          "kind": "import-statement",
+          "original": "../UnifiedCompiler"
+        },
+        {
+          "path": "src/one/formatter/OneFormatter.ts",
+          "kind": "import-statement",
+          "original": "../formatter/OneFormatter"
+        },
+        {
+          "path": "src/one/diagnostics/DiagnosticFormatter.ts",
+          "kind": "import-statement",
+          "original": "../diagnostics/DiagnosticFormatter"
+        },
+        {
+          "path": "src/one/packer/ExecutablePacker.ts",
+          "kind": "import-statement",
+          "original": "../packer/ExecutablePacker"
+        },
+        {
+          "path": "src/one/packer/ExecutableLinker.ts",
+          "kind": "import-statement",
+          "original": "../packer/ExecutableLinker"
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "dist/test-bundle.js": {
+      "imports": [
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "perf_hooks",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "os",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "source-map-support",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "inspector",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "node:crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "node:fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "node:path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "fs",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "path",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        },
+        {
+          "path": "crypto",
+          "kind": "require-call",
+          "external": true
+        }
+      ],
+      "exports": [],
+      "entryPoint": "src/one/cli/OneDeveloperCLI.ts",
+      "inputs": {
+        "src/one/tensor/autograd/AutogradTape.ts": {
+          "bytesInOutput": 5744
+        },
+        "src/one/tensor/kernels/MatmulKernel.ts": {
+          "bytesInOutput": 5137
+        },
+        "src/one/tensor/kernels/AddKernel.ts": {
+          "bytesInOutput": 3611
+        },
+        "src/one/tensor/kernels/MulKernel.ts": {
+          "bytesInOutput": 2096
+        },
+        "src/one/tensor/kernels/TransposeKernel.ts": {
+          "bytesInOutput": 1868
+        },
+        "src/one/tensor/kernels/SoftmaxKernel.ts": {
+          "bytesInOutput": 3801
+        },
+        "src/one/tensor/kernels/LayerNormKernel.ts": {
+          "bytesInOutput": 5628
+        },
+        "src/one/tensor/kernels/ReluKernel.ts": {
+          "bytesInOutput": 1531
+        },
+        "src/one/tensor/kernels/ReduceKernel.ts": {
+          "bytesInOutput": 4262
+        },
+        "src/one/tensor/kernels/CrossEntropyKernel.ts": {
+          "bytesInOutput": 4599
+        },
+        "src/one/tensor/kernels/index.ts": {
+          "bytesInOutput": 323
+        },
+        "src/one/tensor/autograd/AutogradOps.ts": {
+          "bytesInOutput": 13052
+        },
+        "src/one/tensor/AutogradBridge.ts": {
+          "bytesInOutput": 1609
+        },
+        "src/one/tensor/Tensor.ts": {
+          "bytesInOutput": 27507
+        },
+        "src/one/stdlib/OneStdLib.ts": {
+          "bytesInOutput": 10624
+        },
+        "src/one/types/TypedNumeric.ts": {
+          "bytesInOutput": 4117
+        },
+        "src/one/jit/JITRuntimeContext.ts": {
+          "bytesInOutput": 2610
+        },
+        "src/one/address369_canonical.ts": {
+          "bytesInOutput": 3717
+        },
+        "src/one/spatial/SpatialBridge.ts": {
+          "bytesInOutput": 8438
+        },
+        "src/one/vm/UnifiedVM.ts": {
+          "bytesInOutput": 55488
+        },
+        "node_modules/typescript/lib/typescript.js": {
+          "bytesInOutput": 9938482
+        },
+        "src/one/jit/JITSlotAllocator.ts": {
+          "bytesInOutput": 3692
+        },
+        "src/one/jit/JITBytecodeEmitter.ts": {
+          "bytesInOutput": 31361
+        },
+        "src/one/jit/JITCompiler.ts": {
+          "bytesInOutput": 3716
+        },
+        "src/one/jit/UnifiedExecutionEngine.ts": {
+          "bytesInOutput": 3536
+        },
+        "src/one/cli/OneDeveloperCLI.ts": {
+          "bytesInOutput": 16721
+        },
+        "src/one/oneLexer.ts": {
+          "bytesInOutput": 10121
+        },
+        "src/one/oneParser.ts": {
+          "bytesInOutput": 12901
+        },
+        "src/one/ast/SourceLocation.ts": {
+          "bytesInOutput": 177
+        },
+        "src/one/computational/ComputationalParser.ts": {
+          "bytesInOutput": 35615
+        },
+        "src/one/ast/DeclarativeASTAdapter.ts": {
+          "bytesInOutput": 2288
+        },
+        "src/one/router/GrammarRouter.ts": {
+          "bytesInOutput": 3580
+        },
+        "src/one/semantics/SymbolTable.ts": {
+          "bytesInOutput": 887
+        },
+        "src/one/semantics/SemanticAnalyzer.ts": {
+          "bytesInOutput": 21111
+        },
+        "src/one/types/TypeSystem.ts": {
+          "bytesInOutput": 5746
+        },
+        "src/one/types/TypeChecker.ts": {
+          "bytesInOutput": 20975
+        },
+        "src/one/ir/UnifiedIR.ts": {
+          "bytesInOutput": 436
+        },
+        "src/one/ir/IRLowering.ts": {
+          "bytesInOutput": 14145
+        },
+        "src/one/ir/IRPrinter.ts": {
+          "bytesInOutput": 1579
+        },
+        "src/one/UnifiedCompiler.ts": {
+          "bytesInOutput": 7393
+        },
+        "src/one/modules/ModuleResolver.ts": {
+          "bytesInOutput": 3515
+        },
+        "src/one/vig/VIGSecurityGuard.ts": {
+          "bytesInOutput": 10767
+        },
+        "src/one/vig/types.ts": {
+          "bytesInOutput": 622
+        },
+        "src/one/vig/VIGCanonicalizer.ts": {
+          "bytesInOutput": 6603
+        },
+        "src/one/modules/ModuleGraph.ts": {
+          "bytesInOutput": 8498
+        },
+        "src/one/vig/VIGASTExtractor.ts": {
+          "bytesInOutput": 47883
+        },
+        "src/one/vig/VIGModel.ts": {
+          "bytesInOutput": 4919
+        },
+        "src/one/modules/MultiFileLinker.ts": {
+          "bytesInOutput": 4305
+        },
+        "src/one/vig/VIGCompilationCache.ts": {
+          "bytesInOutput": 4574
+        },
+        "src/one/formatter/OneFormatter.ts": {
+          "bytesInOutput": 4204
+        },
+        "src/one/diagnostics/DiagnosticFormatter.ts": {
+          "bytesInOutput": 5212
+        },
+        "src/one/packer/ExecutablePacker.ts": {
+          "bytesInOutput": 7541
+        },
+        "src/one/packer/ExecutableArtifact.ts": {
+          "bytesInOutput": 246
+        },
+        "src/one/packer/ExecutableValidator.ts": {
+          "bytesInOutput": 4431
+        },
+        "src/one/packer/ExecutableLinker.ts": {
+          "bytesInOutput": 3870
+        },
+        "src/one/runtime/NativeExecutionModel.ts": {
+          "bytesInOutput": 3249
+        },
+        "src/one/runtime/NativeRuntimeState.ts": {
+          "bytesInOutput": 7228
+        },
+        "src/one/runtime/NativeValues.ts": {
+          "bytesInOutput": 6396
+        },
+        "src/one/runtime/NativeErrors.ts": {
+          "bytesInOutput": 2700
+        },
+        "src/core/memory/rssGuard.ts": {
+          "bytesInOutput": 949
+        },
+        "src/one/runtime/NativeModules.ts": {
+          "bytesInOutput": 13884
+        },
+        "src/core/crypto/pqc_lattice_seal.ts": {
+          "bytesInOutput": 652
+        },
+        "src/one/runtime/NativeRuntime.ts": {
+          "bytesInOutput": 28574
+        }
+      },
+      "bytes": 10486580
+    }
+  }
+}

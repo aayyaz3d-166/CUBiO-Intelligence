@@ -1,0 +1,22 @@
+{
+  "extension": "one-language.one-language",
+  "version": "1.0.1",
+  "artifact": "one-language-1.0.0.vsix",
+  "sizeBytes": 2058250,
+  "sha256": "6970f56d167b66748d3664813093b8b70404cd8e25b52b9992a7292e80206d61",
+  "builtAt": "2026-10-28T03:09:00.560Z",
+  "supportedEngines": "^1.80.0",
+  "languages": [
+    "one"
+  ],
+  "features": [
+    "TextMate Syntax Highlighting (source.one)",
+    "Language Configuration (comments, brackets, auto-closing)",
+    "Code Snippets (16 constructs)",
+    "In-Process Diagnostics (OneLanguageServer)",
+    "Autocomplete / Completions",
+    "Hover Signatures & Docstrings",
+    "Go-to-Definition",
+    "Run & Check Editor Commands"
+  ]
+}

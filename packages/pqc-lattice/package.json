@@ -1,0 +1,9 @@
+{
+  "name": "@one-lang/pqc-lattice",
+  "version": "1.0.0",
+  "description": "Post-Quantum Cryptography (Module-LWE) Variable Sandbox & Mesh Guard",
+  "main": "index.ts",
+  "types": "index.ts",
+  "author": "Ayyaz3D",
+  "license": "MIT OR Apache-2.0"
+}

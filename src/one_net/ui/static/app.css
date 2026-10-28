@@ -1,0 +1,213 @@
+/**
+ * ONE Language — GATE 18: Explorer UI
+ * Module: Frontend Stylesheet
+ *
+ * Dependency-free CSS (no framework).  Dark theme matching the terminal
+ * rendering aesthetic of the ONE Language backend.
+ */
+:root {
+  --bg: #0b0d12;
+  --surface: #11141c;
+  --surface2: #181e2a;
+  --border: #2a3340;
+  --foreground: #e6edf3;
+  --muted-foreground: #8a94a5;
+  --accent: #5b8cff;
+  --accent-hover: #7aa3ff;
+  --success: #4ade80;
+  --warning: #facc15;
+  --error: #f87171;
+  --panel-radius: 10px;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Cascadia Mono', 'Consolas', monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* ── Top bar ── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar h1 {
+  font-size: 16px;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+.topbar-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.badge {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--surface2);
+  color: var(--muted-foreground);
+}
+.badge.ok { color: var(--success); }
+.badge.err { color: var(--error); }
+
+/* ── Layout ── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  height: calc(100% - 58px);
+  max-height: calc(100vh - 58px);
+}
+.column {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ── Panels ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--panel-radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+.panel h2 {
+  font-size: 13px;
+  margin: 0 0 8px;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.panel > h2:first-child { margin-top: 0; }
+
+/* ── Query console ── */
+#console-panel { grid-column: 1 / -1; }
+#query-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+#query-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface2);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  min-width: 0;
+}
+#query-input:focus { outline: none; border-color: var(--accent); }
+#query-btn {
+  padding: 8px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+#query-btn:hover { background: var(--accent-hover); }
+#query-status {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  min-height: 18px;
+}
+#query-status.ok { color: var(--success); }
+#query-status.err { color: var(--error); }
+
+/* ── Result / trace output ── */
+.result {
+  flex: 1;
+  min-height: 0;
+  padding: 8px;
+  margin: 0;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.panel .result { margin-top: 0; }
+
+/* ── Buttons ── */
+.btn-small {
+  padding: 4px 8px;
+  background: var(--surface2);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.btn-small:hover { background: var(--border); }
+
+/* ── Graph canvas ── */
+.graph-canvas {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface2);
+}
+.muted { font-size: 11px; color: var(--muted-foreground); }
+
+/* ── Checkbox row ── */
+.checkbox-row {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 6px;
+}
+.checkbox-row label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
+
+/* ── Footer ── */
+.footer {
+  padding: 8px 16px;
+  font-size: 11px;
+  color: var(--muted-foreground);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.footer code {
+  background: var(--surface2);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+  }
+  .column { grid-template-rows: auto auto; }
+}

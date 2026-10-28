@@ -1,0 +1,47 @@
+# Generated Build Outputs
+dist/
+*.tsbuildinfo
+coverage/
+.nyc_output/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment Variables & Local Config
+.env
+.env.*
+*.env
+!.env.example
+
+# Secrets & Credentials
+*.pem
+*.key
+*.cert
+*.pfx
+id_rsa*
+credentials.json
+token.json
+*.secret
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS Files & Temporary Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.swp
+*~
+
+# IDE & Editor Configurations
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json

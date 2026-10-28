@@ -1,0 +1,99 @@
+{
+  "audit_run": "master_gate10_gate26_run2",
+  "generated_at": "2026-10-11T19:16:00+05:00",
+  "environment": {
+    "os": "Windows 11",
+    "node": "v24.14.1",
+    "shell": "powershell / cmd",
+    "module_format": "ESM (package.json type: module)"
+  },
+  "summary": {
+    "total_suites_evaluated": 8,
+    "suites_passed": 0,
+    "suites_failed": 0,
+    "suites_blocked_at_resolution": 8,
+    "historical_passed_assertions": 178
+  },
+  "suite_executions": [
+    {
+      "suite_id": "phase1_bridge",
+      "file": "tests/phase1_bridge_verification.test.ts",
+      "command": "npx ts-node --transpile-only tests/phase1_bridge_verification.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\address369_canonical' imported from F:\\ONE language\\tests\\phase1_bridge_verification.test.ts",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase2_binary",
+      "file": "tests/binary/phase2_binary_language.test.ts",
+      "command": "npx ts-node --transpile-only tests/binary/phase2_binary_language.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_UNSUPPORTED_DIR_IMPORT: Directory import 'F:\\ONE language\\src\\binary' is not supported resolving ES modules",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase3_reasoning",
+      "file": "tests/reasoning/phase3_reasoning_engine.test.ts",
+      "command": "npx ts-node --transpile-only tests/reasoning/phase3_reasoning_engine.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\reasoning\\types'",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase4_memory",
+      "file": "tests/memory/phase4_memory_layer.test.ts",
+      "command": "npx ts-node --transpile-only tests/memory/phase4_memory_layer.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\memory\\index'",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase5_gate4",
+      "file": "tests/hybrid/phase5_gate4_native5m_integration.test.ts",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate4_native5m_integration.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\hybrid\\Native5MAdapter'",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase5_gate6",
+      "file": "tests/hybrid/phase5_gate6_conversational_quality.test.ts",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate6_conversational_quality.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\hybrid\\IntentParser'",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase5_gate8",
+      "file": "tests/hybrid/phase5_gate8_reasoning_relationship_conversational.test.ts",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_gate8_reasoning_relationship_conversational.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\hybrid\\HybridConversationEngine'",
+      "modifies_state": false
+    },
+    {
+      "suite_id": "phase5_hybrid",
+      "file": "tests/hybrid/phase5_hybrid_conversation.test.ts",
+      "command": "npx ts-node --transpile-only tests/hybrid/phase5_hybrid_conversation.test.ts",
+      "working_dir": "F:/ONE language",
+      "exit_code": 1,
+      "status": "BLOCKED_MODULE_RESOLUTION",
+      "error_message": "ERR_MODULE_NOT_FOUND: Cannot find module 'F:\\ONE language\\src\\one\\intelligence\\hybrid\\IntentParser'",
+      "modifies_state": false
+    }
+  ]
+}

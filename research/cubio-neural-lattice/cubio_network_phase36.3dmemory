@@ -1,0 +1,54 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v36_SOVEREIGN_NETWORK",
+  "gate": "CNL-P36-001",
+  "version": "36.0.0-one-net",
+  "network_status": "SYNCHRONIZED_ONLINE",
+  "pqc_master_seal": "0xPQC_369_7c49bdcf4e6320d17a32f50700812731_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 94.6,
+  "registered_domains_count": 3,
+  "registered_domains": [
+    {
+      "domain": "portal.one",
+      "canonical_address": 26,
+      "display_index": 27,
+      "content_root_hash": "portal.one:root"
+    },
+    {
+      "domain": "studio.cubio",
+      "canonical_address": 197,
+      "display_index": 198,
+      "content_root_hash": "studio.cubio:root"
+    },
+    {
+      "domain": "docs.sovereign",
+      "canonical_address": 368,
+      "display_index": 369,
+      "content_root_hash": "docs.sovereign:root"
+    }
+  ],
+  "total_stored_bytes": 1174,
+  "asset_count": 3,
+  "gateway_port": 3690,
+  "sample_resolution": {
+    "domain": "portal.one",
+    "canonical_address": 26,
+    "display_index": 27,
+    "latency_ms": 0.0013
+  },
+  "sample_gateway_response": {
+    "status_code": 200,
+    "content_type": "text/html; charset=utf-8",
+    "latency_ms": 0.0163
+  },
+  "csi_total_score": 99.625,
+  "csi_grade": "S+",
+  "spatial_cells_count": 343,
+  "symbolic_cells_count": 26,
+  "total_address369_count": 369,
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725910000000
+}

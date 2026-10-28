@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Local Scratch Sandbox (Junctions to research/)
+scratch/
+
+# Intermediate Build Blobs & Duplicate Distributions
+dist/v1.0.1-rc/
+dist/temp-icon-test/
+dist/sea-prep.blob
+dist/cli-bundle.js
+dist/test-bundle.js
+dist/test-small.js
+dist/*.exe
+dist-clean/
+
+# Compilers & Runtime Caches
+*.tsbuildinfo
+__pycache__/
+*/__pycache__/
+*.pyc
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Transient Test Files
+temp_*.3dmemory

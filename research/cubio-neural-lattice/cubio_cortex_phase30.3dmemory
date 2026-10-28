@@ -1,0 +1,33 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v30_SOVEREIGN_CORTEX",
+  "gate": "CNL-P30-001",
+  "version": "30.0.0-one-cortex",
+  "pqc_master_seal": "0xPQC_369_f5f57bba321935f1bc39f87b3ab465a8_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 92.8,
+  "working_memory_capacity": 7,
+  "active_working_memory_chunks": 7,
+  "millers_law_enforced": true,
+  "total_evicted_chunks": 2,
+  "total_signals_processed": 4,
+  "noise_suppression_rate_pct": 75,
+  "csi_total_score": 99.625,
+  "csi_grade": "S+",
+  "csi_fail_safe_triggered": false,
+  "pillar_evolutionary_fitness": 98.5,
+  "pillar_homeostatic_health": 100,
+  "pillar_uup_truth": 100,
+  "pillar_pqc_security": 100,
+  "total_action_potentials": 3,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3,
+    6,
+    9
+  ],
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725905000000
+}

@@ -1,0 +1,107 @@
+{
+  "gate_id": "GATE-26-ONE-LANGUAGE-V1-RELEASE",
+  "generated_at": "2026-10-11T23:31:00+05:00",
+  "repository": "F:/ONE language",
+  "mode": "RELEASE QUALIFICATION — EVIDENCE-DRIVEN",
+  "verdict": "BLOCKED — APPROVAL OR EVIDENCE REQUIRED",
+  "verdict_summary": {
+    "reason_1": "Master gate10_gate26 directory not present — no master audit baseline provided.",
+    "reason_2": "Gates 12–25 have no reports — no evidence exists to confirm or refute required gate criteria.",
+    "reason_3": "Test command not reproducible in current environment — all npx ts-node --transpile-only test commands fail with ERR_MODULE_NOT_FOUND (directory imports not supported by Node 26 ESM).",
+    "reason_4": "v1.0 scope is provisional — proposed scope in V1_RELEASE_SCOPE.md requires explicit approval.",
+    "reason_5": "No release artifact created — no one.exe packaging, no tarball, no public release. No authorization to package was given."
+  },
+  "scope": {
+    "SUPPORTED": [
+      "Binary encoding and decoding using the documented protocol",
+      "369-address spatial mapping and supported grid operations",
+      "Bounded symbolic reasoning for supported rule sets",
+      "Supported concept graph queries"
+    ],
+    "LIMITED": [
+      "Supported conversation parsing and fallback behavior (single-request, no multi-turn context)"
+    ],
+    "EXPERIMENTAL_OR_NOT_IMPLEMENTED": [
+      "Reasoning traces (NOT IMPLEMENTED)",
+      "Dialogue memory (NOT IMPLEMENTED)",
+      "Neural integration (NOT IMPLEMENTED — blocked)",
+      "Explorer UI (EXPERIMENTAL / PARTIALLY IMPLEMENTED)",
+      "API (EXPERIMENTAL / PARTIALLY IMPLEMENTED)"
+    ],
+    "NOT_VERIFIED": [
+      "Performance optimization (GATE 21)",
+      "Security threat-model (GATE 22)",
+      "Public demo release (GATE 24)"
+    ]
+  },
+  "gates_status": {
+    "GATE 10": "PASS WITH LIMITATIONS — audit/gate10/GATE10_BASELINE_REPORT.md, 178/178 assertions pass, hashes match",
+    "GATE 9": "PASS WITH LIMITATIONS — audit/gate9/GATE9_INDEPENDENT_VERIFICATION.md, 98/98 assertions pass",
+    "GATES 12–25": "NOT STARTED / NOT RUN — no reports exist",
+    "GATE 18": "PARTIALLY COMPLETED / BLOCKED — Explorer UI created, E2E tests blocked",
+    "GATE 24": "PARTIALLY COMPLETED / BLOCKED — release notes created, packaging partial"
+  },
+  "actual_test_counts": {
+    "gate10_baseline": {
+      "assertions": 178,
+      "passed": 178,
+      "failed": 0,
+      "skipped": 0,
+      "not_run": 0,
+      "report_path": "audit/gate10/test_baseline_report.json"
+    },
+    "individual_suites_current_environment": [
+      "Phase 1: BLOCKED — ERR_MODULE_NOT_FOUND (directory import)",
+      "Phase 2: BLOCKED — ERR_MODULE_NOT_FOUND (directory import)",
+      "Phase 3: BLOCKED — ERR_MODULE_NOT_FOUND (directory import)",
+      "Phase 4: BLOCKED — ERR_MODULE_NOT_FOUND (directory import)",
+      "Gate 4: NOT RUN — test file not executed",
+      "Gate 6: NOT RUN — test file not executed",
+      "Gate 8: NOT RUN — test file not executed"
+    ],
+    "clean_environment_test_result": "NOT RUN — module-resolution errors block test execution"
+  },
+  "integration_status": {
+    "explorer_ui_server": "PARTIALLY VERIFIED — server.js boots and serves HTTP 200 on /api/status (manual curl)",
+    "explorer_ui_e2e": "BLOCKED — tests/ui/explorer_ui.test.ts spawn references git-bash; not executable in current environment",
+    "api_contracts": "DOCUMENTED (server.ts endpoints) but not E2E verified",
+    "ui_trace_matches_engine_trace": "NOT VERIFIED — cannot run E2E tests"
+  },
+  "hash_and_provenance_results": {
+    "binary_protocol_hashes": "3/3 MATCH",
+    "checkpoint_hash": "MATCH (19,594,556 bytes, sha256 2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948)",
+    "configuration_integrity": "package.json, tsconfig.json, README.md VERIFIED",
+    "dependency_lockfiles": "package-lock.json EXISTS; node_modules/ PRESENT (devDependencies only)",
+    "secrets_or_private_paths_in_deliverables": "NONE FOUND"
+  },
+  "security_blockers": "NONE",
+  "release_artifact_path": "NONE — no release candidate was packaged",
+  "deliverables": [
+    "F:/ONE language/audit/gate26/GATE26_RELEASE_QUALIFICATION_REPORT.md",
+    "F:/ONE language/audit/gate26/V1_RELEASE_SCOPE.md",
+    "F:/ONE language/audit/gate26/GATE_DEPENDENCY_MATRIX.csv",
+    "F:/ONE language/audit/gate26/RELEASE_TEST_RESULTS.json",
+    "F:/ONE language/audit/gate26/RELEASE_INTEGRITY_MANIFEST.json",
+    "F:/ONE language/audit/gate26/SECURITY_AND_RELIABILITY_REPORT.md",
+    "F:/ONE language/audit/gate26/KNOWN_LIMITATIONS.md",
+    "F:/ONE language/audit/gate26/INSTALLATION_AND_RUN.md",
+    "F:/ONE language/audit/gate26/RELEASE_NOTES.md",
+    "F:/ONE language/audit/gate26/RELEASE_DECISION.md"
+  ],
+  "protected_files": {
+    "source_files_changed": false,
+    "binary_protocol_files_changed": false,
+    "model_weights_changed": false,
+    "note": "Hash verification confirms all protected files match. No repair needed."
+  },
+  "remaining_actions_before_publication": [
+    "Provide or create the audit/master_gate10_gate26/ master audit directory.",
+    "Approve the v1.0 scope (V1_RELEASE_SCOPE.md, Section 5).",
+    "Fix the module-resolution blocker (directory imports → explicit .ts extensions) and re-run the test suite to obtain real test counts.",
+    "Run Gates 12–25 or provide their data.",
+    "Authorize packaging (if desired) — the release candidate is not yet a v1.0 artifact."
+  ],
+  "generated_by": "GATE 26 RELEASE QUALIFICATION — EVIDENCE-DRIVEN",
+  "generated_at": "2026-10-11T23:32:00+05:00",
+  "mode": "RELEASE QUALIFICATION — NO PUBLICATION PERFORMED"
+}

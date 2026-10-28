@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-10-11T04:45:17.015955+00:00",
+  "file_path": "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel",
+  "file_size_bytes": 19594556,
+  "sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+  "availability": "available",
+  "protected": true,
+  "reference_sha256": "2D35BB53A226FD369C3B282C1EA6A0D039F66A3557D31A77EAC72ED8C9DBF948",
+  "hash_match": true
+}
