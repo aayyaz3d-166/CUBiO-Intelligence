@@ -26,7 +26,8 @@
     "intelligence"
   ],
   "activationEvents": [
-    "onLanguage:one"
+    "onLanguage:one",
+    "onView:one.views.environments"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -112,6 +113,26 @@
         "command": "one.showMenu",
         "title": "ONE: Quick Action Menu",
         "icon": "$(zap)"
+      },
+      {
+        "command": "one.selectEngine",
+        "title": "ONE: Switch Execution Engine (Qplayer / UnifiedVM)",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "one.refreshEnvironments",
+        "title": "ONE: Refresh Environments",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "one.refreshPackages",
+        "title": "ONE: Refresh Packages",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "one.refreshSpatial",
+        "title": "ONE: Refresh Spatial Memory View",
+        "icon": "$(refresh)"
       }
     ],
     "menus": {
@@ -174,6 +195,56 @@
           "command": "one.runObiFile",
           "when": "resourceExtname == .obi",
           "group": "1_one@4"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "one.selectEngine",
+          "when": "view == one.views.environments",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.refreshEnvironments",
+          "when": "view == one.views.environments",
+          "group": "navigation@2"
+        },
+        {
+          "command": "one.refreshPackages",
+          "when": "view == one.views.packages",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.refreshSpatial",
+          "when": "view == one.views.spatial",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "one-language",
+          "title": "ONE Language Studio",
+          "icon": "assets/one-activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "one-language": [
+        {
+          "id": "one.views.environments",
+          "name": "Environments & Runtimes",
+          "contextualTitle": "ONE Environments"
+        },
+        {
+          "id": "one.views.packages",
+          "name": "Packages & Substrates",
+          "contextualTitle": "ONE Packages"
+        },
+        {
+          "id": "one.views.spatial",
+          "name": "Spatial Memory & Safety",
+          "contextualTitle": "ONE Spatial Memory"
         }
       ]
     },

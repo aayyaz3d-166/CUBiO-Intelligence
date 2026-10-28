@@ -4,6 +4,7 @@ import * as path from 'path';
 import { OneLanguageServer, LSPCompletionItem, LSPDocumentSymbol, LSPSymbolKind } from '../../../src/one/lsp/OneLanguageServer';
 import { OneDeveloperCLI } from '../../../src/one/cli/OneDeveloperCLI';
 import { OneFormatter } from '../../../src/one/formatter/OneFormatter';
+import { OneEnvironmentsProvider, OnePackagesProvider, OneSpatialProvider } from './OneTreeProviders';
 
 function mapCompletionKind(kind: LSPCompletionItem['kind']): vscode.CompletionItemKind {
   switch (kind) {
@@ -82,11 +83,32 @@ export function activate(context: vscode.ExtensionContext): void {
   const diagnosticCollection = vscode.languages.createDiagnosticCollection('one');
   context.subscriptions.push(diagnosticCollection);
 
-  // Status Bar Indicator
+  // 0. Register Activity Bar Tree Data Providers (ONE Language Studio)
+  const envProvider = new OneEnvironmentsProvider(context);
+  const pkgProvider = new OnePackagesProvider();
+  const spatialProvider = new OneSpatialProvider();
+
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider('one.views.environments', envProvider),
+    vscode.window.registerTreeDataProvider('one.views.packages', pkgProvider),
+    vscode.window.registerTreeDataProvider('one.views.spatial', spatialProvider)
+  );
+
+  // Status Bar Indicator with Interactive Engine Switcher
   const statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-  statusBar.text = '$(zap) ONE v1.2.0';
-  statusBar.tooltip = 'ONE Language Platform (Click for Commands)';
-  statusBar.command = 'one.showMenu';
+  const updateStatusBar = () => {
+    const config = vscode.workspace.getConfiguration('one');
+    const engine = config.get<string>('defaultEngine', 'qplayer');
+    if (engine === 'qplayer') {
+      statusBar.text = '$(zap) ONE v1.2 (Qplayer)';
+      statusBar.tooltip = 'ONE Execution Engine: Qplayer (Fast OBI Binary) — Click to switch';
+    } else {
+      statusBar.text = '$(gear) ONE v1.2 (UnifiedVM)';
+      statusBar.tooltip = 'ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) — Click to switch';
+    }
+  };
+  updateStatusBar();
+  statusBar.command = 'one.selectEngine';
   statusBar.show();
   context.subscriptions.push(statusBar);
 
@@ -301,7 +323,7 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
-  // 9. Command: Run Current File
+  // 9. Command: Run Current File (Adaptive Engine)
   context.subscriptions.push(
     vscode.commands.registerCommand('one.runFile', () => {
       const editor = vscode.window.activeTextEditor;
@@ -310,11 +332,16 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
       }
 
+      const config = vscode.workspace.getConfiguration('one');
+      const defaultEngine = config.get<string>('defaultEngine', 'qplayer');
+      const engineFlag = defaultEngine === 'qplayer' ? ['--engine=qplayer'] : [];
+      const engineName = defaultEngine === 'qplayer' ? 'Qplayer Engine' : 'UnifiedVM';
+
       outputChannel.show(true);
       outputChannel.appendLine(`\n------------------------------------------------------------`);
-      outputChannel.appendLine(`[ONE Run]: Executing ${editor.document.fileName}...`);
+      outputChannel.appendLine(`[ONE Run (${engineName})]: Executing ${editor.document.fileName}...`);
       const startTime = Date.now();
-      const res = OneDeveloperCLI.run(['run', editor.document.fileName]);
+      const res = OneDeveloperCLI.run(['run', editor.document.fileName, ...engineFlag]);
       const durationMs = Date.now() - startTime;
 
       if (res.stdout) {
@@ -325,9 +352,9 @@ export function activate(context: vscode.ExtensionContext): void {
       }
       outputChannel.appendLine(`[Process finished with exit code ${res.exitCode} in ${durationMs}ms]`);
       if (res.exitCode === 0) {
-        vscode.window.showInformationMessage(`✔ ONE: Executed successfully (${durationMs}ms)`);
+        vscode.window.showInformationMessage(`✔ ONE (${engineName}): Executed successfully (${durationMs}ms)`);
       } else {
-        vscode.window.showErrorMessage(`✖ ONE: Execution failed with exit code ${res.exitCode}`);
+        vscode.window.showErrorMessage(`✖ ONE (${engineName}): Execution failed with exit code ${res.exitCode}`);
       }
     })
   );
@@ -567,6 +594,47 @@ export function activate(context: vscode.ExtensionContext): void {
           break;
       }
     })
+  );
+  // 15. Command: Switch Execution Engine (Qplayer / UnifiedVM)
+  context.subscriptions.push(
+    vscode.commands.registerCommand('one.selectEngine', async (targetEngine?: string) => {
+      const config = vscode.workspace.getConfiguration('one');
+      let chosen = targetEngine;
+      if (!chosen) {
+        const current = config.get<string>('defaultEngine', 'qplayer');
+        const items: vscode.QuickPickItem[] = [
+          {
+            label: '$(zap) Qplayer Runtime (OBI Engine)',
+            description: 'High-throughput register VM (7.7M ops/sec, 94.9% bytecode reduction)',
+            detail: current === 'qplayer' ? '● Currently Active' : 'Available',
+          },
+          {
+            label: '$(shield) UnifiedVM (Spatial 369 VM)',
+            description: 'Standard zero-variance spatial virtual machine (sigma^2 = 0.0)',
+            detail: current === 'unifiedvm' ? '● Currently Active' : 'Available',
+          },
+        ];
+        const selected = await vscode.window.showQuickPick(items, {
+          placeHolder: 'Select active ONE execution engine (like selecting Python interpreter)',
+        });
+        if (!selected) return;
+        chosen = selected.label.includes('Qplayer') ? 'qplayer' : 'unifiedvm';
+      }
+
+      await config.update('defaultEngine', chosen, true);
+      updateStatusBar();
+      envProvider.refresh();
+      const friendlyName = chosen === 'qplayer' ? 'Qplayer Runtime (OBI Fast Engine)' : 'UnifiedVM (Spatial 369 VM)';
+      outputChannel.appendLine(`[Environment]: Active execution engine switched to: ${friendlyName}`);
+      vscode.window.showInformationMessage(`✔ Active ONE Engine: ${friendlyName}`);
+    })
+  );
+
+  // 16. Refresh Commands for Tree Views
+  context.subscriptions.push(
+    vscode.commands.registerCommand('one.refreshEnvironments', () => envProvider.refresh()),
+    vscode.commands.registerCommand('one.refreshPackages', () => pkgProvider.refresh()),
+    vscode.commands.registerCommand('one.refreshSpatial', () => spatialProvider.refresh())
   );
 }
 

@@ -2,9 +2,9 @@
   "extension": "one-language.one-language",
   "version": "1.2.0",
   "artifact": "one-language-1.2.0.vsix",
-  "sizeBytes": 2069466,
-  "sha256": "3b0d5a82c2386372d52ce92a60e2bce8d674e7ae5bb5a28efb527b6c46c45e29",
-  "builtAt": "2026-10-28T11:38:18.710Z",
+  "sizeBytes": 2072856,
+  "sha256": "2e1fd28d19a3aeddc99878d6ad6f1806f8a41a3325db9824fa0682926baf36be",
+  "builtAt": "2026-10-28T13:09:28.957Z",
   "supportedEngines": "^1.80.0",
   "languages": [
     "one"

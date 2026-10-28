@@ -261,13 +261,88 @@ declare module 'vscode' {
     export function getConfiguration(section?: string, scope?: Uri | null): WorkspaceConfiguration;
   }
 
+  export enum TreeItemCollapsibleState {
+    None = 0,
+    Collapsed = 1,
+    Expanded = 2,
+  }
+
+  export class ThemeIcon {
+    static readonly File: ThemeIcon;
+    static readonly Folder: ThemeIcon;
+    constructor(id: string, color?: ThemeColor);
+    readonly id: string;
+  }
+
+  export class ThemeColor {
+    constructor(id: string);
+    readonly id: string;
+  }
+
+  export class TreeItem {
+    constructor(label: string, collapsibleState?: TreeItemCollapsibleState);
+    constructor(resourceUri: Uri, collapsibleState?: TreeItemCollapsibleState);
+    label?: string;
+    id?: string;
+    iconPath?: string | Uri | { light: string | Uri; dark: string | Uri } | ThemeIcon;
+    description?: string | boolean;
+    tooltip?: string | MarkdownString;
+    command?: Command;
+    collapsibleState?: TreeItemCollapsibleState;
+    contextValue?: string;
+  }
+
+  export interface Command {
+    title: string;
+    command: string;
+    tooltip?: string;
+    arguments?: any[];
+  }
+
+  export interface Event<T> {
+    (listener: (e: T) => any, thisArgs?: any, disposables?: Disposable[]): Disposable;
+  }
+
+  export class EventEmitter<T> {
+    constructor();
+    readonly event: Event<T>;
+    fire(data?: T): void;
+    dispose(): void;
+  }
+
+  export interface TreeDataProvider<T> {
+    onDidChangeTreeData?: Event<T | undefined | null | void>;
+    getTreeItem(element: T): TreeItem | Thenable<TreeItem>;
+    getChildren(element?: T): ProviderResult<T[]>;
+    getParent?(element: T): ProviderResult<T>;
+    resolveTreeItem?(item: TreeItem, element: T, token: CancellationToken): ProviderResult<TreeItem>;
+  }
+
+  export type ProviderResult<T> = T | undefined | null | Thenable<T | undefined | null>;
+
+  export interface QuickPickItem {
+    label: string;
+    description?: string;
+    detail?: string;
+    picked?: boolean;
+    alwaysShow?: boolean;
+  }
+
+  export enum ConfigurationTarget {
+    Global = 1,
+    Workspace = 2,
+    WorkspaceFolder = 3,
+  }
+
   export namespace window {
     export let activeTextEditor: TextEditor | undefined;
     export function showInformationMessage(message: string, ...items: string[]): Thenable<string | undefined>;
     export function showWarningMessage(message: string, ...items: string[]): Thenable<string | undefined>;
     export function showErrorMessage(message: string, ...items: string[]): Thenable<string | undefined>;
+    export function showQuickPick<T extends QuickPickItem>(items: T[] | Thenable<T[]>, options?: any): Thenable<T | undefined>;
     export function showQuickPick(items: string[] | Thenable<string[]>, options?: any): Thenable<string | undefined>;
     export function showInputBox(options?: any): Thenable<string | undefined>;
+    export function registerTreeDataProvider<T>(viewId: string, treeDataProvider: TreeDataProvider<T>): Disposable;
     export function createOutputChannel(name: string): {
       append(value: string): void;
       appendLine(value: string): void;
