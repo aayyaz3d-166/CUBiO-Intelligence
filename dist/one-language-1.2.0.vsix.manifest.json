@@ -1,10 +1,10 @@
 {
-  "extension": "one-language.one-language",
+  "extension": "ayyaz3d.one-language",
   "version": "1.2.0",
   "artifact": "one-language-1.2.0.vsix",
-  "sizeBytes": 2072856,
-  "sha256": "2e1fd28d19a3aeddc99878d6ad6f1806f8a41a3325db9824fa0682926baf36be",
-  "builtAt": "2026-10-28T13:09:28.957Z",
+  "sizeBytes": 2073033,
+  "sha256": "b710884cbd6b44ffd3b2dbc0b948e46cbeb63af9e94549430796780ae693b18f",
+  "builtAt": "2026-10-28T13:19:25.476Z",
   "supportedEngines": "^1.80.0",
   "languages": [
     "one"

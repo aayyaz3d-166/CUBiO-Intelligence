@@ -3,10 +3,18 @@
   "displayName": "ONE Language",
   "description": "Professional development experience for ONE Language (.one) — compiler diagnostics, autocomplete, hover docs, go-to-definition, document outline, formatting, and one-click execution.",
   "version": "1.2.0",
-  "publisher": "one-language",
+  "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
   "icon": "assets/ONE-Language-Logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aayyaz3d-166/CUBiO-Intelligence.git"
+  },
+  "homepage": "https://github.com/aayyaz3d-166/CUBiO-Intelligence",
+  "bugs": {
+    "url": "https://github.com/aayyaz3d-166/CUBiO-Intelligence/issues"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
