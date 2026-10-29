@@ -2,7 +2,7 @@
   "name": "one-language",
   "displayName": "ONE Language",
   "description": "Professional development experience for ONE Language (.one) — compiler diagnostics, autocomplete, hover docs, go-to-definition, document outline, formatting, and one-click execution.",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
@@ -71,6 +71,11 @@
         "command": "one.runFile",
         "title": "ONE: Run Current File",
         "icon": "$(play)"
+      },
+      {
+        "command": "one.askCopilot",
+        "title": "ONE: Ask ECHO-1 (Offline AI Copilot)",
+        "icon": "$(sparkle)"
       },
       {
         "command": "one.checkFile",
@@ -159,6 +164,11 @@
           "command": "one.buildFile",
           "when": "editorLangId == one",
           "group": "navigation@3"
+        },
+        {
+          "command": "one.askCopilot",
+          "when": "editorLangId == one",
+          "group": "navigation@4"
         }
       ],
       "editor/context": [
@@ -181,6 +191,11 @@
           "command": "one.formatFile",
           "when": "editorLangId == one",
           "group": "1_one@4"
+        },
+        {
+          "command": "one.askCopilot",
+          "when": "editorLangId == one",
+          "group": "1_one@5"
         }
       ],
       "explorer/context": [
@@ -274,6 +289,12 @@
         "key": "ctrl+shift+b",
         "mac": "cmd+shift+b",
         "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.askCopilot",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": {

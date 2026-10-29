@@ -19,6 +19,7 @@ import { ExecutablePacker } from '../packer/ExecutablePacker';
 import { ExecutableLinker } from '../packer/ExecutableLinker';
 import { ReasoningSession } from '../intelligence/reasoning/ReasoningSession';
 import { Qplayer } from '../../qplayer/index';
+import { Echo1Assistant } from '../intelligence/echo/Echo1Assistant';
 
 export interface DeveloperCLIResult {
   exitCode: number;
@@ -99,6 +100,15 @@ export class OneDeveloperCLI {
 
       case 'reason':
         res = this.handleReason(cmdArgs, log, err);
+        break;
+
+      case 'ask':
+      case 'copilot':
+        res = this.handleAsk(cmdArgs, log, err);
+        break;
+
+      case 'tutor':
+        res = this.handleTutor(cmdArgs, log, err);
         break;
 
       default:
@@ -240,13 +250,19 @@ print message
           result.compilation.diagnostics as any[],
           source
         );
-        err(formatted);
-        return { exitCode: 1, stdout: '', stderr: formatted };
+        const echo = Echo1Assistant.getInstance();
+        const firstDiag = result.compilation.diagnostics[0];
+        const echoHint = firstDiag ? echo.explainError(firstDiag.code, firstDiag.message) : '';
+        const finalError = echoHint ? `${formatted}\n${echoHint}` : formatted;
+        err(finalError);
+        return { exitCode: 1, stdout: '', stderr: finalError };
       }
 
       if (result.vmResult) {
         if (!result.vmResult.success && result.vmResult.error) {
-          const errorMsg = `\x1b[31m[${result.vmResult.error.code}] Runtime Error:\x1b[0m ${result.vmResult.error.message}`;
+          const echo = Echo1Assistant.getInstance();
+          const echoHint = echo.explainError(result.vmResult.error.code, result.vmResult.error.message);
+          const errorMsg = `\x1b[31m[${result.vmResult.error.code}] Runtime Error:\x1b[0m ${result.vmResult.error.message}\n${echoHint}`;
           err(errorMsg);
           return { exitCode: 1, stdout: '', stderr: errorMsg };
         }
@@ -258,7 +274,11 @@ print message
 
       return { exitCode: 0, stdout: '', stderr: '' };
     } catch (e: any) {
-      const errMsg = `\x1b[31mCompilation Error:\x1b[0m ${e.message || String(e)}`;
+      const echo = Echo1Assistant.getInstance();
+      const codeMatch = (e.message || '').match(/\[(E\d{4})/);
+      const errCode = codeMatch ? codeMatch[1] : 'E1001';
+      const echoHint = echo.explainError(errCode, e.message || String(e), source);
+      const errMsg = `\x1b[31mCompilation Error:\x1b[0m ${e.message || String(e)}\n${echoHint}`;
       err(errMsg);
       return { exitCode: 1, stdout: '', stderr: errMsg };
     }
@@ -305,14 +325,22 @@ print message
           result.diagnostics as any[],
           source
         );
-        err(formatted);
-        return { exitCode: 1, stdout: '', stderr: formatted };
+        const echo = Echo1Assistant.getInstance();
+        const firstDiag = result.diagnostics[0];
+        const echoHint = firstDiag ? echo.explainError(firstDiag.code, firstDiag.message) : '';
+        const finalError = echoHint ? `${formatted}\n${echoHint}` : formatted;
+        err(finalError);
+        return { exitCode: 1, stdout: '', stderr: finalError };
       }
 
       log(`\x1b[32m✔ [Check Passed]\x1b[0m ${targetName} is valid (0 errors, 0 warnings).`);
       return { exitCode: 0, stdout: '', stderr: '' };
     } catch (e: any) {
-      const errMsg = `\x1b[31mCheck Error:\x1b[0m ${e.message || String(e)}`;
+      const echo = Echo1Assistant.getInstance();
+      const codeMatch = (e.message || '').match(/\[(E\d{4})/);
+      const errCode = codeMatch ? codeMatch[1] : 'E1001';
+      const echoHint = echo.explainError(errCode, e.message || String(e), source);
+      const errMsg = `\x1b[31mCheck Error:\x1b[0m ${e.message || String(e)}\n${echoHint}`;
       err(errMsg);
       return { exitCode: 1, stdout: '', stderr: errMsg };
     }
@@ -595,6 +623,96 @@ print message
     }
   }
 
+  // ── 8. one ask ────────────────────────────────────────────────────────────
+  public static handleAsk(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    const prompt = args.join(' ').trim();
+    if (!prompt) {
+      err('\x1b[31mError:\x1b[0m Please provide a prompt or question.');
+      err('Usage: one ask "how to define a function?"');
+      return { exitCode: 1, stdout: '', stderr: 'Please provide a prompt or question' };
+    }
+
+    const echo = Echo1Assistant.getInstance();
+    const res = echo.ask(prompt);
+
+    log('\x1b[36m================================================================\x1b[0m');
+    log('\x1b[1m\x1b[35m🤖 ECHO-1 Assistant (Offline Sovereign AI)\x1b[0m');
+    log('\x1b[36m================================================================\x1b[0m');
+    log(`\x1b[32mQuestion:\x1b[0m ${prompt}\n`);
+    log(`\x1b[1mAnswer:\x1b[0m ${res.answer}\n`);
+
+    if (res.codeSnippet) {
+      log('\x1b[33mExample Code (.one):\x1b[0m');
+      log(res.codeSnippet);
+      log('');
+    }
+
+    if (res.romanUrduTip) {
+      log(`\x1b[36m💡 ${res.romanUrduTip}\x1b[0m\n`);
+    }
+
+    log(`\x1b[90m[Latency: ${res.latencyMs}ms | Status: ${res.epistemicStatus} | Offline Local CPU]\x1b[0m`);
+    log('\x1b[36m================================================================\x1b[0m');
+    return { exitCode: 0, stdout: '', stderr: '' };
+  }
+
+  // ── 9. one tutor ──────────────────────────────────────────────────────────
+  public static handleTutor(args: string[], log: (m: string) => void, _err: (m: string) => void): DeveloperCLIResult {
+    const echo = Echo1Assistant.getInstance();
+    log('\x1b[36m================================================================\x1b[0m');
+    log('\x1b[1m\x1b[35m🎓 ECHO-1 Interactive Learning Shell (Sovereign Offline AI)\x1b[0m');
+    log('\x1b[90mModel: 25.75MB Neural Checkpoint | 100% Offline Local Inference\x1b[0m');
+    log('\x1b[90mType "exit" or "quit" to leave. Ask anything about ONE Language!\x1b[0m');
+    log('\x1b[36m================================================================\x1b[0m\n');
+
+    if (args.length > 0) {
+      const q = args.join(' ');
+      const res = echo.ask(q);
+      log(`\x1b[1m${res.answer}\x1b[0m\n`);
+      if (res.codeSnippet) {
+        log('\x1b[33m' + res.codeSnippet + '\x1b[0m\n');
+      }
+      if (res.romanUrduTip) {
+        log(`\x1b[36m💡 ${res.romanUrduTip}\x1b[0m\n`);
+      }
+      return { exitCode: 0, stdout: '', stderr: '' };
+    }
+
+    try {
+      const readline = require('readline');
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+        prompt: '\x1b[35mecho1>\x1b[0m ',
+      });
+
+      rl.prompt();
+      rl.on('line', (line: string) => {
+        const q = line.trim();
+        if (q.toLowerCase() === 'exit' || q.toLowerCase() === 'quit') {
+          process.stdout.write('\x1b[32mGoodbye! Keep building with ONE Language.\x1b[0m\n');
+          rl.close();
+          return;
+        }
+        if (q) {
+          const res = echo.ask(q);
+          process.stdout.write(`\n\x1b[1m${res.answer}\x1b[0m\n\n`);
+          if (res.codeSnippet) {
+            process.stdout.write(`\x1b[33m${res.codeSnippet}\x1b[0m\n\n`);
+          }
+          if (res.romanUrduTip) {
+            process.stdout.write(`\x1b[36m💡 ${res.romanUrduTip}\x1b[0m\n\n`);
+          }
+        }
+        rl.prompt();
+      });
+    } catch {
+      log('Interactive TTY not available. Use: one ask "<question>"');
+    }
+
+    return { exitCode: 0, stdout: '', stderr: '' };
+  }
+
   public static getHelpText(): string {
     return `
 ONE Language Developer CLI (v1.0.0)
@@ -608,6 +726,8 @@ Commands:
   format <file.one>  Format ONE source file deterministically (--write for in-place)
   test [dir]         Run all *.test.one files in project
   reason <spec.json> Bounded 0/1 binary reasoning session (--trace, --json)
+  ask "<prompt>"     Ask embedded offline AI Copilot (ECHO-1) for code or concepts
+  tutor [query]      Launch interactive conversational learning terminal with ECHO-1
 
 Options:
   -v, --version      Show version number

@@ -1,6 +1,6 @@
 {
   "name": "one-language-core",
-  "version": "1.0.1",
+  "version": "1.3.0",
   "description": "ONE Language Core Compiler Backend (Lexer, Parser, Compiler/Validator)",
   "license": "MIT OR Apache-2.0",
   "private": true,
@@ -53,6 +53,7 @@
     "test:qplayer": "node --import ./scripts/esm-register.js tests/qplayer/binary_roundtrip.test.ts && node --import ./scripts/esm-register.js tests/qplayer/poc_execution.test.ts && node --import ./scripts/esm-register.js tests/qplayer/general_computation.test.ts && node --import ./scripts/esm-register.js tests/qplayer/differential_benchmark.test.ts && node --import ./scripts/esm-register.js tests/qplayer/jit_and_parallel.test.ts",
     "test:benchmark": "node --import ./scripts/esm-register.js tests/qplayer/realtime_benchmark.ts",
     "test:task26": "node --import ./scripts/esm-register.js tests/governance/task26_cross_repository_parity_and_gap_resolution.test.ts",
+    "test:echo": "node --import ./scripts/esm-register.js tests/intelligence/echo1_assistant.test.ts",
     "one:dev": "node scripts/one-dev.cjs",
     "test:spec": "ts-node scratch/cubio_neural_lattice/tests/test_phase1_specification_conformance.ts",
     "test:phase2:unified": "ts-node scratch/cubio_neural_lattice/tests/test_phase2_unified_compiler.ts",

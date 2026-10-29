@@ -4,6 +4,7 @@ import * as path from 'path';
 import { OneLanguageServer, LSPCompletionItem, LSPDocumentSymbol, LSPSymbolKind } from '../../../src/one/lsp/OneLanguageServer';
 import { OneDeveloperCLI } from '../../../src/one/cli/OneDeveloperCLI';
 import { OneFormatter } from '../../../src/one/formatter/OneFormatter';
+import { Echo1Assistant } from '../../../src/one/intelligence/echo/Echo1Assistant';
 import { OneEnvironmentsProvider, OnePackagesProvider, OneSpatialProvider } from './OneTreeProviders';
 
 function mapCompletionKind(kind: LSPCompletionItem['kind']): vscode.CompletionItemKind {
@@ -77,7 +78,7 @@ function convertLspSymbolToVsSymbol(sym: LSPDocumentSymbol): vscode.DocumentSymb
 
 export function activate(context: vscode.ExtensionContext): void {
   const outputChannel = vscode.window.createOutputChannel('ONE Language');
-  outputChannel.appendLine('[ONE Language Extension] Activated successfully (v1.2.0 Stable).');
+  outputChannel.appendLine('[ONE Language Extension] Activated successfully (v1.3.0 Stable).');
 
   const lsp = new OneLanguageServer();
   const diagnosticCollection = vscode.languages.createDiagnosticCollection('one');
@@ -100,10 +101,10 @@ export function activate(context: vscode.ExtensionContext): void {
     const config = vscode.workspace.getConfiguration('one');
     const engine = config.get<string>('defaultEngine', 'qplayer');
     if (engine === 'qplayer') {
-      statusBar.text = '$(zap) ONE v1.2.1 (Qplayer)';
+      statusBar.text = '$(zap) ONE v1.3.0 (Qplayer)';
       statusBar.tooltip = 'ONE Execution Engine: Qplayer JIT Tier (204M ops/sec) — Click to switch';
     } else {
-      statusBar.text = '$(gear) ONE v1.2.1 (UnifiedVM)';
+      statusBar.text = '$(gear) ONE v1.3.0 (UnifiedVM)';
       statusBar.tooltip = 'ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) — Click to switch';
     }
   };
@@ -111,6 +112,14 @@ export function activate(context: vscode.ExtensionContext): void {
   statusBar.command = 'one.selectEngine';
   statusBar.show();
   context.subscriptions.push(statusBar);
+
+  // ECHO-1 Offline AI Copilot Status Bar Item
+  const echoStatusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 99);
+  echoStatusBar.text = '$(sparkle) Ask ECHO-1';
+  echoStatusBar.tooltip = 'ECHO-1 Offline AI Copilot for ONE Language (Ctrl+Shift+I) — 100% Local Inference';
+  echoStatusBar.command = 'one.askCopilot';
+  echoStatusBar.show();
+  context.subscriptions.push(echoStatusBar);
 
   // Diagnostics Updater
   const updateDiagnostics = (document: vscode.TextDocument): void => {
@@ -555,6 +564,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('one.showMenu', async () => {
       const selected = await vscode.window.showQuickPick([
+        'ONE: Ask ECHO-1 (Offline AI Copilot)',
         'ONE: Run Current File (UnifiedVM)',
         'ONE: Run with Qplayer Engine (Fast OBI)',
         'ONE: Check Current File Syntax & Types',
@@ -568,6 +578,9 @@ export function activate(context: vscode.ExtensionContext): void {
       if (!selected) return;
 
       switch (selected) {
+        case 'ONE: Ask ECHO-1 (Offline AI Copilot)':
+          vscode.commands.executeCommand('one.askCopilot');
+          break;
         case 'ONE: Run Current File (UnifiedVM)':
           vscode.commands.executeCommand('one.runFile');
           break;
@@ -635,6 +648,61 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand('one.refreshEnvironments', () => envProvider.refresh()),
     vscode.commands.registerCommand('one.refreshPackages', () => pkgProvider.refresh()),
     vscode.commands.registerCommand('one.refreshSpatial', () => spatialProvider.refresh())
+  );
+
+  // 17. Command: Ask ECHO-1 (100% Offline AI Copilot)
+  context.subscriptions.push(
+    vscode.commands.registerCommand('one.askCopilot', async () => {
+      const prompt = await vscode.window.showInputBox({
+        prompt: 'Ask ECHO-1 (100% Offline AI Assistant for ONE Language)',
+        placeHolder: 'e.g. how do I declare variables? / how to use spatial memory?',
+      });
+
+      if (!prompt || prompt.trim().length === 0) return;
+
+      outputChannel.show(true);
+      outputChannel.appendLine(`\n------------------------------------------------------------`);
+      outputChannel.appendLine(`[ECHO-1 Copilot Prompt]: ${prompt}`);
+
+      const echo = Echo1Assistant.getInstance();
+      const response = echo.ask(prompt);
+
+      outputChannel.appendLine(`[ECHO-1 Response (${response.latencyMs}ms | ${response.epistemicStatus})]:`);
+      outputChannel.appendLine(response.answer);
+      if (response.codeSnippet) {
+        outputChannel.appendLine(`\n--- Code Snippet ---`);
+        outputChannel.appendLine(response.codeSnippet);
+        outputChannel.appendLine(`--------------------\n`);
+      }
+      if (response.romanUrduTip) {
+        outputChannel.appendLine(`💡 ${response.romanUrduTip}\n`);
+      }
+
+      if (response.codeSnippet) {
+        const action = await vscode.window.showInformationMessage(
+          `ECHO-1 (${response.latencyMs}ms): ${response.answer.slice(0, 70)}...`,
+          'Insert into Editor',
+          'Copy Code',
+          'Dismiss'
+        );
+
+        if (action === 'Insert into Editor') {
+          const editor = vscode.window.activeTextEditor;
+          if (editor) {
+            editor.edit((editBuilder) => {
+              const pos = editor.selection.active;
+              editBuilder.insert(pos, `\n${response.codeSnippet}\n`);
+            });
+            vscode.window.showInformationMessage('✔ Code snippet inserted into editor.');
+          }
+        } else if (action === 'Copy Code') {
+          await vscode.env.clipboard.writeText(response.codeSnippet);
+          vscode.window.showInformationMessage('✔ Code copied to clipboard.');
+        }
+      } else {
+        vscode.window.showInformationMessage(`ECHO-1: ${response.answer}`);
+      }
+    })
   );
 }
 

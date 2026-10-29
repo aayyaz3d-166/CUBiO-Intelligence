@@ -1,12 +1,12 @@
 {
   "artifact": "one.exe",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "target": "windows-x64-sea",
   "nodeBaseVersion": "24.14.1",
-  "builtAt": "2026-10-28T08:28:00.756Z",
-  "sizeBytes": 102100992,
-  "sha256": "ddccfab24779bdc14ffaa15d411d2bb1bf1c1da1b72530b664906319dccd639d",
-  "payloadSha256": "8e6dd5dd61f297502a1ce51c97da5731eb0448c9cd585a9afb533ad79c840e22",
+  "builtAt": "2026-10-29T13:42:27.538Z",
+  "sizeBytes": 102174208,
+  "sha256": "ea01313f4a054a64e28d65a770f4c68e82676ce1309cfaa87700b3371ef26b55",
+  "payloadSha256": "419bf87d9d595f8d46f109b1107f1176d6d2ba866e5bda853a299420acba760b",
   "actuationLocked": true,
   "address369Bounded": true
 }
