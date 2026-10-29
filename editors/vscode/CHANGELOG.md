@@ -2,6 +2,24 @@
 
 All notable changes to the ONE Language Visual Studio Code extension will be documented in this file.
 
+## [1.3.0] - 2026-10-29
+
+### 🤖 Built-in ECHO-1 Autonomous Offline AI Copilot
+- **100% Offline Local Neural Intelligence:** Embedded the complete 4.89M parameter neural model checkpoint (`echo1_best_loss.cubiomodel`, 24.56 MB) directly inside the extension package. Zero cloud or external API calls required.
+- **Global Keybinding (`Ctrl+Shift+I` / `Cmd+Shift+I`):** Instant prompt dialog to query ECHO-1 for ONE Language syntax, functions, spatial computing, or architecture questions.
+- **One-Click Code Insertion:** Directly insert generated code snippets into the active editor or copy them to clipboard.
+- **Status Bar Integration:** Added `$(sparkle) Ask ECHO-1` quick launcher on the VS Code status bar.
+- **Smart Compiler Error Auto-Fixer:** Automatically intercepts compiler syntax errors (`E1001` - `E1016`) and runtime errors, providing clear explanations and actionable fix recommendations.
+- **Activity Bar Panel:** Added dedicated **ECHO-1 Offline AI Assistant** sidebar panel with quick syntax guides, model architecture inspection, and instant queries.
+
+## [1.2.0] - 2026-10-28
+
+### 🚀 Qplayer Runtime & One Binary Intelligence (.obi)
+- **Qplayer Execution Engine:** Added support for executing high-throughput register VM bytecodes at up to 204.08M ops/sec.
+- **Status Bar Engine Switcher:** One-click engine switching between **Qplayer Runtime** and **UnifiedVM**.
+- **Compact Bytecode Packaging:** Build and run ultra-compact One Binary Intelligence (`.obi`) containers (~95 to 110 bytes, 94.9% bytecode reduction).
+- **Activity Bar Studio:** Added "Environments & Runtimes", "Packages & Substrates", and "Spatial Memory & Safety" sidebar panels.
+
 ## [1.0.1] - 2026-10-28
 
 ### Added
@@ -17,8 +35,7 @@ All notable changes to the ONE Language Visual Studio Code extension will be doc
   - Function definitions (`one make name(...) { ... }`)
   - Return / Completion (`one way expr;`, `one done;`)
   - Equality operator (`left one is right`)
-- 16 new code snippets for all v1.0.1 command syntax patterns (`ones`, `oneset`, `oneout`, `onein`, `oneup`, `onedown`, `oneif`, `onerepeat`, `onerepeatwhile`, `onestop`, `onemake`, `oneway`, `onedone`, `oneis`).
-- Official ONE Language icon registered in extension manifest.
+- 16 new code snippets for all v1.0.1 command syntax patterns.
 
 ## [1.0.0] - 2026-10-26
 

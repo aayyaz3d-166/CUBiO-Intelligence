@@ -228744,8 +228744,13 @@ var Echo1Assistant = class _Echo1Assistant {
   }
   resolveAndInitModel() {
     const candidates = [
+      path8.resolve(__dirname, "../models/echo1_best_loss.cubiomodel"),
+      path8.resolve(__dirname, "models/echo1_best_loss.cubiomodel"),
+      path8.resolve(process.cwd(), "models/echo1_best_loss.cubiomodel"),
       path8.resolve(process.cwd(), "data/models/echo1_best_loss.cubiomodel"),
       path8.resolve(__dirname, "../../../../data/models/echo1_best_loss.cubiomodel"),
+      path8.resolve(__dirname, "../../../../editors/vscode/models/echo1_best_loss.cubiomodel"),
+      "F:/ONE language/editors/vscode/models/echo1_best_loss.cubiomodel",
       "F:/ONE language/data/models/echo1_best_loss.cubiomodel",
       "E:/3D memory studio/data/checkpoints/one_lm_v1/backup_step12000/genesis3_best_loss.cubiomodel",
       "E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel"
@@ -229895,6 +229900,135 @@ var OneSpatialProvider = class {
     ];
   }
 };
+var OneEchoAssistantProvider = class {
+  _onDidChangeTreeData = new vscode.EventEmitter();
+  onDidChangeTreeData = this._onDidChangeTreeData.event;
+  refresh() {
+    this._onDidChangeTreeData.fire();
+  }
+  getTreeItem(element) {
+    const item = new vscode.TreeItem(
+      element.label,
+      element.collapsibleState ?? (element.children && element.children.length > 0 ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None)
+    );
+    item.id = element.id;
+    item.description = element.description;
+    item.tooltip = element.tooltip || `${element.label}: ${element.description || ""}`;
+    if (element.icon) {
+      item.iconPath = new vscode.ThemeIcon(element.icon);
+    }
+    if (element.command) {
+      item.command = element.command;
+    }
+    return item;
+  }
+  getChildren(element) {
+    if (element) {
+      return element.children || [];
+    }
+    return [
+      {
+        id: "echo.ask",
+        label: "Ask ECHO-1 AI Copilot",
+        description: "Ctrl+Shift+I (Click to Ask)",
+        tooltip: "Query the 100% offline local AI assistant",
+        icon: "sparkle",
+        command: {
+          command: "one.askCopilot",
+          title: "Ask ECHO-1"
+        }
+      },
+      {
+        id: "echo.status",
+        label: "Model Architecture",
+        description: "4.89M Parameters (24.56 MB)",
+        tooltip: "Embedded neural checkpoint with deterministic symbolic AST grounding",
+        icon: "chip",
+        collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+        children: [
+          {
+            id: "echo.status.weights",
+            label: "Weights & Checkpoint",
+            description: "echo1_best_loss.cubiomodel (24.56 MB)",
+            icon: "file-binary"
+          },
+          {
+            id: "echo.status.inference",
+            label: "Inference Engine",
+            description: "100% Offline Local CPU (~50ms)",
+            icon: "pulse"
+          },
+          {
+            id: "echo.status.safety",
+            label: "Hallucination Guard",
+            description: "Dual-Engine Symbolic Verification",
+            icon: "shield-check"
+          }
+        ]
+      },
+      {
+        id: "echo.autofix",
+        label: "Compiler Smart Auto-Fixer",
+        description: "\u25CF Active (E1001-E8005)",
+        tooltip: "Automatically intercepts compiler errors and generates actionable fix suggestions",
+        icon: "lightbulb"
+      },
+      {
+        id: "echo.quickprompts",
+        label: "Quick Syntax Guides",
+        description: "Click to query ECHO-1",
+        icon: "book",
+        collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+        children: [
+          {
+            id: "echo.q.vars",
+            label: "How to declare variables?",
+            description: "let / const syntax",
+            icon: "symbol-variable",
+            command: {
+              command: "one.askCopilot",
+              title: "Ask about variables",
+              arguments: ["how to declare variables in ONE language"]
+            }
+          },
+          {
+            id: "echo.q.funcs",
+            label: "How to define functions?",
+            description: "function / make syntax",
+            icon: "symbol-function",
+            command: {
+              command: "one.askCopilot",
+              title: "Ask about functions",
+              arguments: ["how to define a function in ONE language"]
+            }
+          },
+          {
+            id: "echo.q.spatial",
+            label: "How to use Spatial Memory?",
+            description: "Address369 [0..368] model",
+            icon: "database",
+            command: {
+              command: "one.askCopilot",
+              title: "Ask about spatial memory",
+              arguments: ["how to use spatial memory address 369"]
+            }
+          },
+          {
+            id: "echo.q.qplayer",
+            label: "How to use Qplayer & OBI?",
+            description: "204M ops/sec binary engine",
+            icon: "rocket",
+            command: {
+              command: "one.askCopilot",
+              title: "Ask about Qplayer",
+              arguments: ["how to use Qplayer and OBI binary format"]
+            }
+          }
+        ]
+      }
+    ];
+  }
+};
 
 // editors/vscode/src/extension.ts
 function mapCompletionKind(kind) {
@@ -229966,10 +230100,12 @@ function activate(context) {
   const lsp = new OneLanguageServer();
   const diagnosticCollection = vscode2.languages.createDiagnosticCollection("one");
   context.subscriptions.push(diagnosticCollection);
+  const echoProvider = new OneEchoAssistantProvider();
   const envProvider = new OneEnvironmentsProvider(context);
   const pkgProvider = new OnePackagesProvider();
   const spatialProvider = new OneSpatialProvider();
   context.subscriptions.push(
+    vscode2.window.registerTreeDataProvider("one.views.echoAssistant", echoProvider),
     vscode2.window.registerTreeDataProvider("one.views.environments", envProvider),
     vscode2.window.registerTreeDataProvider("one.views.packages", pkgProvider),
     vscode2.window.registerTreeDataProvider("one.views.spatial", spatialProvider)
@@ -230448,16 +230584,20 @@ ${res.stderr || res.stdout}`);
     })
   );
   context.subscriptions.push(
+    vscode2.commands.registerCommand("one.refreshEchoAssistant", () => echoProvider.refresh()),
     vscode2.commands.registerCommand("one.refreshEnvironments", () => envProvider.refresh()),
     vscode2.commands.registerCommand("one.refreshPackages", () => pkgProvider.refresh()),
     vscode2.commands.registerCommand("one.refreshSpatial", () => spatialProvider.refresh())
   );
   context.subscriptions.push(
-    vscode2.commands.registerCommand("one.askCopilot", async () => {
-      const prompt = await vscode2.window.showInputBox({
-        prompt: "Ask ECHO-1 (100% Offline AI Assistant for ONE Language)",
-        placeHolder: "e.g. how do I declare variables? / how to use spatial memory?"
-      });
+    vscode2.commands.registerCommand("one.askCopilot", async (prefilledQuery) => {
+      let prompt = prefilledQuery;
+      if (!prompt) {
+        prompt = await vscode2.window.showInputBox({
+          prompt: "Ask ECHO-1 (100% Offline AI Assistant for ONE Language)",
+          placeHolder: "e.g. how do I declare variables? / how to use spatial memory?"
+        });
+      }
       if (!prompt || prompt.trim().length === 0) return;
       outputChannel.show(true);
       outputChannel.appendLine(`

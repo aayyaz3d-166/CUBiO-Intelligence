@@ -5,7 +5,7 @@ import { OneLanguageServer, LSPCompletionItem, LSPDocumentSymbol, LSPSymbolKind 
 import { OneDeveloperCLI } from '../../../src/one/cli/OneDeveloperCLI';
 import { OneFormatter } from '../../../src/one/formatter/OneFormatter';
 import { Echo1Assistant } from '../../../src/one/intelligence/echo/Echo1Assistant';
-import { OneEnvironmentsProvider, OnePackagesProvider, OneSpatialProvider } from './OneTreeProviders';
+import { OneEnvironmentsProvider, OnePackagesProvider, OneSpatialProvider, OneEchoAssistantProvider } from './OneTreeProviders';
 
 function mapCompletionKind(kind: LSPCompletionItem['kind']): vscode.CompletionItemKind {
   switch (kind) {
@@ -85,11 +85,13 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(diagnosticCollection);
 
   // 0. Register Activity Bar Tree Data Providers (ONE Language Studio)
+  const echoProvider = new OneEchoAssistantProvider();
   const envProvider = new OneEnvironmentsProvider(context);
   const pkgProvider = new OnePackagesProvider();
   const spatialProvider = new OneSpatialProvider();
 
   context.subscriptions.push(
+    vscode.window.registerTreeDataProvider('one.views.echoAssistant', echoProvider),
     vscode.window.registerTreeDataProvider('one.views.environments', envProvider),
     vscode.window.registerTreeDataProvider('one.views.packages', pkgProvider),
     vscode.window.registerTreeDataProvider('one.views.spatial', spatialProvider)
@@ -645,6 +647,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // 16. Refresh Commands for Tree Views
   context.subscriptions.push(
+    vscode.commands.registerCommand('one.refreshEchoAssistant', () => echoProvider.refresh()),
     vscode.commands.registerCommand('one.refreshEnvironments', () => envProvider.refresh()),
     vscode.commands.registerCommand('one.refreshPackages', () => pkgProvider.refresh()),
     vscode.commands.registerCommand('one.refreshSpatial', () => spatialProvider.refresh())
@@ -652,11 +655,14 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // 17. Command: Ask ECHO-1 (100% Offline AI Copilot)
   context.subscriptions.push(
-    vscode.commands.registerCommand('one.askCopilot', async () => {
-      const prompt = await vscode.window.showInputBox({
-        prompt: 'Ask ECHO-1 (100% Offline AI Assistant for ONE Language)',
-        placeHolder: 'e.g. how do I declare variables? / how to use spatial memory?',
-      });
+    vscode.commands.registerCommand('one.askCopilot', async (prefilledQuery?: string) => {
+      let prompt = prefilledQuery;
+      if (!prompt) {
+        prompt = await vscode.window.showInputBox({
+          prompt: 'Ask ECHO-1 (100% Offline AI Assistant for ONE Language)',
+          placeHolder: 'e.g. how do I declare variables? / how to use spatial memory?',
+        });
+      }
 
       if (!prompt || prompt.trim().length === 0) return;
 

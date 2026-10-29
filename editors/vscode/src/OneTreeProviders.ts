@@ -336,3 +336,140 @@ export class OneSpatialProvider implements vscode.TreeDataProvider<OneTreeElemen
     ];
   }
 }
+
+// ============================================================================
+// 4. ECHO-1 Offline AI Assistant Provider
+// ============================================================================
+export class OneEchoAssistantProvider implements vscode.TreeDataProvider<OneTreeElement> {
+  private _onDidChangeTreeData: vscode.EventEmitter<OneTreeElement | undefined | void> = new vscode.EventEmitter<OneTreeElement | undefined | void>();
+  readonly onDidChangeTreeData: vscode.Event<OneTreeElement | undefined | void> = this._onDidChangeTreeData.event;
+
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
+
+  getTreeItem(element: OneTreeElement): vscode.TreeItem {
+    const item = new vscode.TreeItem(
+      element.label,
+      element.collapsibleState ?? (element.children && element.children.length > 0 ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None)
+    );
+    item.id = element.id;
+    item.description = element.description;
+    item.tooltip = element.tooltip || `${element.label}: ${element.description || ''}`;
+    if (element.icon) {
+      item.iconPath = new vscode.ThemeIcon(element.icon);
+    }
+    if (element.command) {
+      item.command = element.command;
+    }
+    return item;
+  }
+
+  getChildren(element?: OneTreeElement): vscode.ProviderResult<OneTreeElement[]> {
+    if (element) {
+      return element.children || [];
+    }
+
+    return [
+      {
+        id: 'echo.ask',
+        label: 'Ask ECHO-1 AI Copilot',
+        description: 'Ctrl+Shift+I (Click to Ask)',
+        tooltip: 'Query the 100% offline local AI assistant',
+        icon: 'sparkle',
+        command: {
+          command: 'one.askCopilot',
+          title: 'Ask ECHO-1',
+        },
+      },
+      {
+        id: 'echo.status',
+        label: 'Model Architecture',
+        description: '4.89M Parameters (24.56 MB)',
+        tooltip: 'Embedded neural checkpoint with deterministic symbolic AST grounding',
+        icon: 'chip',
+        collapsibleState: vscode.TreeItemCollapsibleState.Collapsed,
+        children: [
+          {
+            id: 'echo.status.weights',
+            label: 'Weights & Checkpoint',
+            description: 'echo1_best_loss.cubiomodel (24.56 MB)',
+            icon: 'file-binary',
+          },
+          {
+            id: 'echo.status.inference',
+            label: 'Inference Engine',
+            description: '100% Offline Local CPU (~50ms)',
+            icon: 'pulse',
+          },
+          {
+            id: 'echo.status.safety',
+            label: 'Hallucination Guard',
+            description: 'Dual-Engine Symbolic Verification',
+            icon: 'shield-check',
+          },
+        ],
+      },
+      {
+        id: 'echo.autofix',
+        label: 'Compiler Smart Auto-Fixer',
+        description: '● Active (E1001-E8005)',
+        tooltip: 'Automatically intercepts compiler errors and generates actionable fix suggestions',
+        icon: 'lightbulb',
+      },
+      {
+        id: 'echo.quickprompts',
+        label: 'Quick Syntax Guides',
+        description: 'Click to query ECHO-1',
+        icon: 'book',
+        collapsibleState: vscode.TreeItemCollapsibleState.Expanded,
+        children: [
+          {
+            id: 'echo.q.vars',
+            label: 'How to declare variables?',
+            description: 'let / const syntax',
+            icon: 'symbol-variable',
+            command: {
+              command: 'one.askCopilot',
+              title: 'Ask about variables',
+              arguments: ['how to declare variables in ONE language'],
+            },
+          },
+          {
+            id: 'echo.q.funcs',
+            label: 'How to define functions?',
+            description: 'function / make syntax',
+            icon: 'symbol-function',
+            command: {
+              command: 'one.askCopilot',
+              title: 'Ask about functions',
+              arguments: ['how to define a function in ONE language'],
+            },
+          },
+          {
+            id: 'echo.q.spatial',
+            label: 'How to use Spatial Memory?',
+            description: 'Address369 [0..368] model',
+            icon: 'database',
+            command: {
+              command: 'one.askCopilot',
+              title: 'Ask about spatial memory',
+              arguments: ['how to use spatial memory address 369'],
+            },
+          },
+          {
+            id: 'echo.q.qplayer',
+            label: 'How to use Qplayer & OBI?',
+            description: '204M ops/sec binary engine',
+            icon: 'rocket',
+            command: {
+              command: 'one.askCopilot',
+              title: 'Ask about Qplayer',
+              arguments: ['how to use Qplayer and OBI binary format'],
+            },
+          },
+        ],
+      },
+    ];
+  }
+}
