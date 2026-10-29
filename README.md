@@ -1,94 +1,177 @@
-# ONE Language — Official Release v1.2 Stable
-### Sovereign Computational Language & Qplayer Execution Architecture
+<div align="center">
 
-**Version**: `1.2.0 Stable`  
-**Distribution Target**: Standalone Windows x64 & Cross-Platform Node Engine  
-**Engines Included**: 
-1. **UnifiedVM** (Standard Canonical Execution Fabric)
-2. **Qplayer Runtime** (High-Throughput One Binary Intelligence `.obi` Engine — 7.7M ops/sec)
+<img src="assets/ONE-Language-Logo.png" alt="ONE Language Logo" width="180" style="margin-bottom: 12px;"/>
+
+# ONE Language (v1.3.0 Stable)
+### The World's First Sovereign Computational Language with Built-In Offline AI (ECHO-1)
+
+[![Version](https://img.shields.io/badge/version-1.3.0--stable-blue.svg?style=for-the-badge&logo=visualstudiocode)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![AI Assistant](https://img.shields.io/badge/ECHO--1-100%25%20Offline%20AI-success.svg?style=for-the-badge&logo=sparkles)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![Model Size](https://img.shields.io/badge/Model%20Size-24.56%20MB-purple.svg?style=for-the-badge)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![Runtime](https://img.shields.io/badge/Qplayer%20Engine-204M%20ops%2Fsec-red.svg?style=for-the-badge&logo=speedtest)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![Safety](https://img.shields.io/badge/Address369-Sovereign%20Memory-orange.svg?style=for-the-badge&logo=shield)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-lightgrey.svg?style=for-the-badge)](LICENSE)
+
+<br/>
+
+**ONE Language** is a next-generation sovereign programming language engineered for high-throughput discrete computing, deterministic 3D spatial memory architectures, and native in-language artificial intelligence. 
+
+</div>
 
 ---
 
-## 1. Quickstart & CLI Usage
+## 🌟 What's New in v1.3.0: Built-in ECHO-1 Offline AI Copilot
 
-### Running Code
-To run a `.one` source file using the standard UnifiedVM:
-```powershell
-bin\one.cmd run examples\01_hello_world\main.one
+Unlike conventional languages that depend on cloud-based AI APIs (requiring internet access, monthly subscriptions, and token latency), **ONE Language v1.3.0 embeds its own autonomous 4.89M parameter neural intelligence (ECHO-1) directly into the compiler, CLI, and VS Code extension**.
+
+```mermaid
+graph TD
+    Dev["👨‍💻 Developer"] --> CLI["⚡ ONE CLI (`one ask`, `one tutor`, `one run`)"]
+    Dev --> IDE["💻 VS Code Extension (`Ctrl+Shift+I` / $(sparkle) Ask ECHO-1)"]
+
+    subgraph Core ["🔥 ONE Language Core Subsystems"]
+        CLI --> ECHO1["🤖 ECHO-1 Embedded AI Subsystem (25.75 MB)"]
+        IDE --> ECHO1
+        
+        ECHO1 --> DualEngine["Dual-Engine Architecture"]
+        DualEngine --> Symbolic["Deterministic Symbolic Syntax AST"]
+        DualEngine --> Neural["4.89M Parameter Local CPU Brain (~50ms)"]
+        
+        CLI --> Compiler["ONE Compiler & Type Analyzer"]
+        Compiler -.->|On Syntax / Runtime Error| AutoFix["💡 ECHO-1 Smart Error Auto-Fixer"]
+        Compiler --> Qplayer["🚀 Qplayer JIT Engine (204M ops/sec)"]
+        Compiler --> UnifiedVM["🛡️ UnifiedVM (Address369 Deterministic Memory)"]
+    end
 ```
-*(Or via Node: `node bin/one.cjs run examples/01_hello_world/main.one`)*
 
-### Running with Qplayer Acceleration
-To run with Qplayer's optimized register-machine and DAG logic scheduler:
+---
+
+## 🤖 1. ECHO-1 Autonomous AI Assistant Capabilities
+
+### ⚡ Instant Terminal Assistant (`one ask`)
+Ask questions directly from your terminal with zero internet connection:
+
 ```powershell
+$ one ask "how do I define a function?"
+```
+
+```text
+================================================================
+🤖 ECHO-1 Assistant (Offline Sovereign AI)
+================================================================
+Question: how do I define a function?
+
+Answer: In ONE Language, you define functions using the `function` keyword with typed parameters and return types.
+
+Example Code (.one):
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+let result = add(10, 20);
+print result;
+
+💡 Tip: Function banane ke liye `function` likhein aur parameters ki types (number, string) declare karein.
+
+[Latency: 0ms | Status: CANONICAL_SYNTAX | Offline Local CPU]
+================================================================
+```
+
+### 🎓 Interactive Learning Shell (`one tutor`)
+Launch an interactive conversational shell right in your console:
+```powershell
+$ one tutor
+```
+
+### 💡 Smart Compiler Error Auto-Fixer
+When your code has a syntax mistake, the compiler does not just throw raw stacktraces. ECHO-1 immediately intervenes with contextual, actionable guidance:
+
+```text
+Check Error: [Parser Error] Compilation halted with 1 error(s):
+[E1011: Syntax Error] Unexpected token ';' (SEMICOLON) in expression at line 1, column 14
+
+  💡 ECHO-1 Assistant: Unexpected Token / Syntax Error: Compiler ko aesa token mila jo expected nahi tha.
+  👉 Suggested Fix:   Expression check karein: missing semicolon ya invalid character door karein.
+  📌 Problematic Code: let broken = ;
+```
+
+---
+
+## 💻 2. Visual Studio Code Extension (v1.3.0)
+
+The official **ONE Language VS Code Extension** is now an all-in-one package with the **25 MB ECHO-1 AI model bundled directly inside**:
+
+* **Standalone VSIX Package**: `dist/one-language-1.3.0.vsix` (**24.59 MB**)
+* **Global Shortcut**: Press `Ctrl + Shift + I` (or `Cmd + Shift + I` on macOS) anywhere to ask ECHO-1.
+* **One-Click Actions**: Insert generated code directly into the editor or copy to clipboard.
+* **Status Bar Item**: Click `$(sparkle) Ask ECHO-1` at the bottom of your IDE.
+* **Full LSP Support**: Real-time syntax diagnostics, document outline, breadcrumbs, and format on save.
+
+```powershell
+# Install directly in VS Code:
+code --install-extension "dist\one-language-1.3.0.vsix" --force
+```
+
+---
+
+## 🚀 3. Dual Execution Runtimes
+
+| Feature | Qplayer Runtime | UnifiedVM |
+| :--- | :--- | :--- |
+| **Target Workload** | High-Throughput OBI Bytecode | Spatial Computing & Formal Verification |
+| **Peak Throughput** | **204.08 Million ops/sec** | Zero-Variance Spatial VM ($\sigma^2 = 0.0$) |
+| **Bytecode Format** | One Binary Intelligence (`.obi`) | ONEX Container (`.ox`) |
+| **Container Size** | **~95 to 110 bytes (94.9% reduction)** | Full Merkle sealed state |
+| **Safety Invariants** | Strict Boundary Validation | `ACTUATION_LOCK` & Address369 `[0..368]` |
+
+### Running with Qplayer Engine:
+```powershell
+# Execute source with JIT micro-kernel:
 bin\one.cmd run examples\02_qplayer_obi\compute.one --engine=qplayer
-```
 
-### Compiling to One Binary Intelligence (.obi)
-Compile ONE source into an ultra-compact, bit-packed binary:
-```powershell
+# Compile to ultra-compact binary (.obi):
 bin\one.cmd build examples\02_qplayer_obi\compute.one --target=obi
-```
-This produces `compute.obi` (~95 to 110 bytes), which is **~94% smaller** than conventional JSON IR containers.
 
-### Executing Compiled .obi Binary
-Run the native `.obi` binary directly:
-```powershell
+# Execute compiled .obi binary:
 bin\one.cmd run examples\02_qplayer_obi\compute.obi
 ```
 
 ---
 
-## 2. Visual Studio Code Extension (v1.2.0)
+## 🛡️ 4. Sovereign Safety Invariants
 
-This distribution includes the official VS Code extension delivering a complete development experience comparable to the Microsoft Python extension:
-
-* **Package**: `dist/one-language-1.2.0.vsix` (1.97 MB)
-* **Features**:
-  * Full `.one` syntax highlighting and TextMate grammar.
-  * In-process Language Server (diagnostics, autocompletion, hover docs, go-to-definition).
-  * Document Outline, Breadcrumbs, and deterministic formatting (`Shift+Alt+F`).
-  * Status Bar Indicator: `$(zap) ONE v1.2.0`.
-  * Dedicated Run, Check, Build, and Qplayer actions.
-
-### Installation in VS Code
-Run in PowerShell or Terminal:
-```powershell
-code --install-extension "dist\one-language-1.2.0.vsix" --force
-```
+1. **Hardware Actuation Lock (`ACTUATION_LOCK`)**:
+   Hardware actuation interfaces remain locked fail-closed at compile-time and runtime.
+2. **Address369 Sovereign Spatial Boundary**:
+   Spatial virtual memory is strictly restricted to addresses `[0..368]`. Any out-of-bounds attempt fails closed instantly with compiler error `E8005`.
+3. **Deterministic Protection**:
+   Deterministic ceiling limits (1,000,000 instructions) prevent infinite execution loops.
 
 ---
 
-## 3. Distribution Directory Structure
+## 📁 5. Repository & Distribution Layout
 
-```
-one language official release v 1.2 Stable/
+```text
+ONE Language Release v1.3.0/
 ├── bin/
-│   ├── one.exe                # Native Windows x64 binary
-│   ├── one.cjs                # Developer CLI executable launcher
-│   └── one.cmd                # Windows Command prompt script
+│   ├── one.exe                # Native Windows x64 standalone executable
+│   ├── one.cjs                # Developer CLI runner
+│   └── one.cmd                # Windows Command wrapper
+├── data/
+│   └── models/                # Embedded 25.75 MB ECHO-1 neural checkpoint
 ├── dist/
-│   ├── one-language-1.2.0.vsix # Packaged VS Code extension
-│   ├── one-language-1.2.0.vsix.sha256
-│   └── one.exe
-├── src/
-│   ├── one/                   # Core compiler, Lexer, Parser, AST, Semantics, Types, Spatial, VM
-│   └── qplayer/               # Qplayer Runtime, OBI Binary Engine, Graph Optimizer
-├── examples/
-│   ├── 01_hello_world/        # Standard greeting sample
-│   ├── 02_qplayer_obi/        # Qplayer computational pipeline sample
-│   └── 03_spatial_address369/ # Address369 spatial memory sample
-├── tests/                     # Full regression & Qplayer test suites
-├── verify-v1.2.cjs            # Self-contained health check verification script
-├── README.md                  # This file
-├── RELEASE_NOTES_v1.2.0.md    # Detailed v1.2 release notes
-└── CHECKSUMS.sha256           # Cryptographic file verification digests
+│   ├── one-language-1.3.0.vsix # Packaged All-in-One VS Code extension (24.59 MB)
+│   ├── one-language-1.3.0.vsix.sha256
+│   └── one.exe                # Standalone PE binary (SEA postject)
+├── editors/
+│   └── vscode/                # VS Code extension source, models, and manifests
+├── examples/                  # Verified sample programs (.one & .obi)
+├── src/                       # Core compiler, Lexer, Parser, VM, Qplayer & ECHO-1
+├── tests/                     # 100% passing test suites across all 13 verification stages
+└── RELEASE_NOTES_v1.3.0.md    # Comprehensive release notes
 ```
 
 ---
 
-## 4. Safety Invariants & Boundary Guards
-
-* **ACTUATION_LOCK**: Hardware actuation remains locked fail-closed at compile-time and runtime.
-* **Address369 Model**: Spatial memory addresses are sovereign and strictly confined to range `[0..368]`. Addresses outside this range fail closed with `E8005`.
-* **Resource Bounds**: Infinite loop protection (`1,000,000` instructions cap) and RSS memory guards (`512 MB`) are enforced deterministically.
+## 📜 License
+Licensed under either the **Apache License, Version 2.0** ([LICENSE-APACHE](LICENSE-APACHE)) or the **MIT License** ([LICENSE-MIT](LICENSE-MIT)) at your option.
