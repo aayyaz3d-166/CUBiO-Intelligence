@@ -51,17 +51,19 @@ function packageVSCodeExtension(options = {}) {
   const tmLanguagePath = path.join(editorDir, 'syntaxes', 'one.tmLanguage.json');
   const snippetsPath = path.join(editorDir, 'snippets', 'one.code-snippets');
   const iconPath = path.join(editorDir, 'assets', 'ONE-Language-Logo.png');
+  const modelPath = path.join(editorDir, 'models', 'echo1_best_loss.cubiomodel');
 
   assert(fs.existsSync(pkgJsonPath), 'Missing package.json in extension directory');
   assert(fs.existsSync(langConfigPath), 'Missing language-configuration.json');
   assert(fs.existsSync(tmLanguagePath), 'Missing syntaxes/one.tmLanguage.json');
   assert(fs.existsSync(snippetsPath), 'Missing snippets/one.code-snippets');
   assert(fs.existsSync(iconPath), 'Missing extension icon at assets/ONE-Language-Logo.png');
+  assert(fs.existsSync(modelPath), 'Missing embedded ECHO-1 model at models/echo1_best_loss.cubiomodel');
 
   const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
   console.log(`  - Extension: ${pkg.publisher}.${pkg.name} v${pkg.version}`);
   console.log(`  - Target VS Code: ${pkg.engines.vscode}`);
-  console.log('  ✔ All grammar, language configuration, and snippet assets verified.');
+  console.log(`  ✔ All grammar, language configuration, snippets, and embedded ECHO-1 model (${(fs.statSync(modelPath).size / (1024 * 1024)).toFixed(2)} MB) verified.`);
 
   // ── Stage 3: Package VSIX via @vscode/vsce ─────────────────────────────────
   console.log('\n[Stage 3] Packaging .vsix Package via @vscode/vsce...');

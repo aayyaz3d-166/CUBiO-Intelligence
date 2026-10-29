@@ -247,6 +247,7 @@ export async function runVSCodeExtensionTests(): Promise<void> {
   assert(zipText.includes('extension/package.json'), 'VSIX must contain extension/package.json');
   assert(zipText.includes('extension/syntaxes/one.tmLanguage.json'), 'VSIX must contain syntaxes/one.tmLanguage.json');
   assert(zipText.includes('extension/dist/extension.js'), 'VSIX must contain extension/dist/extension.js');
+  assert(zipText.includes('echo1_best_loss.cubiomodel'), 'VSIX must contain embedded echo1_best_loss.cubiomodel');
   console.log('  ✓ VSIX zip container structure validated.');
 
   // ── Suite 9: Local Installation via VS Code CLI ──────────────────────────

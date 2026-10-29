@@ -38,8 +38,13 @@ export class Echo1Assistant {
 
   private resolveAndInitModel(): void {
     const candidates = [
+      path.resolve(__dirname, '../models/echo1_best_loss.cubiomodel'),
+      path.resolve(__dirname, 'models/echo1_best_loss.cubiomodel'),
+      path.resolve(process.cwd(), 'models/echo1_best_loss.cubiomodel'),
       path.resolve(process.cwd(), 'data/models/echo1_best_loss.cubiomodel'),
       path.resolve(__dirname, '../../../../data/models/echo1_best_loss.cubiomodel'),
+      path.resolve(__dirname, '../../../../editors/vscode/models/echo1_best_loss.cubiomodel'),
+      'F:/ONE language/editors/vscode/models/echo1_best_loss.cubiomodel',
       'F:/ONE language/data/models/echo1_best_loss.cubiomodel',
       'E:/3D memory studio/data/checkpoints/one_lm_v1/backup_step12000/genesis3_best_loss.cubiomodel',
       'E:/3D memory studio/data/checkpoints/one_lm_v1/one_lm_best.cubiomodel',
