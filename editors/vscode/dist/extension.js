@@ -230096,7 +230096,7 @@ function convertLspSymbolToVsSymbol(sym) {
 }
 function activate(context) {
   const outputChannel = vscode2.window.createOutputChannel("ONE Language");
-  outputChannel.appendLine("[ONE Language Extension] Activated successfully (v1.3.0 Stable).");
+  outputChannel.appendLine("[ONE Language Extension] Activated successfully (v1.3.1 Stable).");
   const lsp = new OneLanguageServer();
   const diagnosticCollection = vscode2.languages.createDiagnosticCollection("one");
   context.subscriptions.push(diagnosticCollection);
@@ -230115,10 +230115,10 @@ function activate(context) {
     const config = vscode2.workspace.getConfiguration("one");
     const engine = config.get("defaultEngine", "qplayer");
     if (engine === "qplayer") {
-      statusBar.text = "$(zap) ONE v1.3.0 (Qplayer)";
+      statusBar.text = "$(zap) ONE v1.3.1 (Qplayer)";
       statusBar.tooltip = "ONE Execution Engine: Qplayer JIT Tier (204M ops/sec) \u2014 Click to switch";
     } else {
-      statusBar.text = "$(gear) ONE v1.3.0 (UnifiedVM)";
+      statusBar.text = "$(gear) ONE v1.3.1 (UnifiedVM)";
       statusBar.tooltip = "ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) \u2014 Click to switch";
     }
   };

@@ -78,7 +78,7 @@ function convertLspSymbolToVsSymbol(sym: LSPDocumentSymbol): vscode.DocumentSymb
 
 export function activate(context: vscode.ExtensionContext): void {
   const outputChannel = vscode.window.createOutputChannel('ONE Language');
-  outputChannel.appendLine('[ONE Language Extension] Activated successfully (v1.3.0 Stable).');
+  outputChannel.appendLine('[ONE Language Extension] Activated successfully (v1.3.1 Stable).');
 
   const lsp = new OneLanguageServer();
   const diagnosticCollection = vscode.languages.createDiagnosticCollection('one');
@@ -103,10 +103,10 @@ export function activate(context: vscode.ExtensionContext): void {
     const config = vscode.workspace.getConfiguration('one');
     const engine = config.get<string>('defaultEngine', 'qplayer');
     if (engine === 'qplayer') {
-      statusBar.text = '$(zap) ONE v1.3.0 (Qplayer)';
+      statusBar.text = '$(zap) ONE v1.3.1 (Qplayer)';
       statusBar.tooltip = 'ONE Execution Engine: Qplayer JIT Tier (204M ops/sec) — Click to switch';
     } else {
-      statusBar.text = '$(gear) ONE v1.3.0 (UnifiedVM)';
+      statusBar.text = '$(gear) ONE v1.3.1 (UnifiedVM)';
       statusBar.tooltip = 'ONE Execution Engine: UnifiedVM (Deterministic Spatial 369) — Click to switch';
     }
   };

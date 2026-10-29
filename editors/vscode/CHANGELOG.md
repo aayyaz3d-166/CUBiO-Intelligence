@@ -2,6 +2,13 @@
 
 All notable changes to the ONE Language Visual Studio Code extension will be documented in this file.
 
+## [1.3.1] - 2026-10-29
+
+### 🤖 Built-in ECHO-1 Autonomous Offline AI Copilot & Visual Studio Marketplace Release
+- **All-in-One Self-Contained VSIX:** Complete embedded 24.56 MB local AI model (`echo1_best_loss.cubiomodel`) included directly inside extension package.
+- **Dedicated Sidebar Panel:** ONE Language Studio Activity Bar with instant AI queries and quick syntax guides.
+- **100% Offline Local CPU Inference:** Zero cloud API or internet requirement.
+
 ## [1.3.0] - 2026-10-29
 
 ### 🤖 Built-in ECHO-1 Autonomous Offline AI Copilot

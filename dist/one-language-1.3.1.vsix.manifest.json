@@ -1,0 +1,22 @@
+{
+  "extension": "ayyaz3d.one-language",
+  "version": "1.3.1",
+  "artifact": "one-language-1.3.1.vsix",
+  "sizeBytes": 25785369,
+  "sha256": "0908ea0b1bf100ecb27d88ba885b990046bdad418ae62ad91eeb9817d864da63",
+  "builtAt": "2026-10-29T14:16:18.060Z",
+  "supportedEngines": "^1.80.0",
+  "languages": [
+    "one"
+  ],
+  "features": [
+    "TextMate Syntax Highlighting (source.one)",
+    "Language Configuration (comments, brackets, auto-closing)",
+    "Code Snippets (16 constructs)",
+    "In-Process Diagnostics (OneLanguageServer)",
+    "Autocomplete / Completions",
+    "Hover Signatures & Docstrings",
+    "Go-to-Definition",
+    "Run & Check Editor Commands"
+  ]
+}
