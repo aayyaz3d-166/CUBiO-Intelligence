@@ -1,28 +1,50 @@
 {
   "name": "one-language",
   "displayName": "ONE Language",
-  "description": "Rich language support for ONE Language (.one) — syntax highlighting, spatial computing directives, diagnostics, completions, and snippets.",
-  "version": "1.0.1",
-  "publisher": "one-language",
+  "description": "Built-in 100% offline AI Copilot (ECHO-1, 25MB), Qplayer OBI runtime, compiler diagnostics, autocompletion, hover docs, formatting, and one-click execution for ONE Language (.one).",
+  "version": "1.3.1",
+  "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
   "icon": "assets/ONE-Language-Logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aayyaz3d-166/CUBiO-Intelligence.git"
+  },
+  "homepage": "https://github.com/aayyaz3d-166/CUBiO-Intelligence",
+  "bugs": {
+    "url": "https://github.com/aayyaz3d-166/CUBiO-Intelligence/issues"
+  },
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
     "Programming Languages",
-    "Snippets"
+    "Machine Learning",
+    "Snippets",
+    "Linters",
+    "Formatters",
+    "Education"
   ],
   "keywords": [
     "one",
     "one-language",
+    "ai",
+    "copilot",
+    "offline-ai",
+    "echo-1",
+    "qplayer",
     "spatial",
     "compiler",
-    "cubio"
+    "cubio",
+    "reasoning",
+    "intelligence"
   ],
   "activationEvents": [
-    "onLanguage:one"
+    "onLanguage:one",
+    "onLanguage:olto",
+    "onView:one.views.echoAssistant",
+    "onView:one.views.environments"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -38,6 +60,18 @@
           ".one"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "olto",
+        "aliases": [
+          "OLTO Frontend Language",
+          "OLTO",
+          "olto"
+        ],
+        "extensions": [
+          ".olto"
+        ],
+        "configuration": "./olto-language-configuration.json"
       }
     ],
     "grammars": [
@@ -45,27 +79,308 @@
         "language": "one",
         "scopeName": "source.one",
         "path": "./syntaxes/one.tmLanguage.json"
+      },
+      {
+        "language": "olto",
+        "scopeName": "source.olto",
+        "path": "./syntaxes/olto.tmLanguage.json"
       }
     ],
     "snippets": [
       {
         "language": "one",
         "path": "./snippets/one.code-snippets"
+      },
+      {
+        "language": "olto",
+        "path": "./snippets/olto.code-snippets"
       }
     ],
     "commands": [
       {
         "command": "one.runFile",
-        "title": "ONE: Run Current File"
+        "title": "ONE: Run Current File",
+        "icon": "$(play)"
+      },
+      {
+        "command": "one.askCopilot",
+        "title": "ONE: Ask ECHO-1 (Offline AI Copilot)",
+        "icon": "$(sparkle)"
       },
       {
         "command": "one.checkFile",
-        "title": "ONE: Check Current File Syntax & Types"
+        "title": "ONE: Check Current File Syntax & Types",
+        "icon": "$(check)"
+      },
+      {
+        "command": "one.buildFile",
+        "title": "ONE: Build Current File (.ox)",
+        "icon": "$(package)"
+      },
+      {
+        "command": "one.runQplayer",
+        "title": "ONE: Run with Qplayer Engine (Fast OBI)",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "one.buildObi",
+        "title": "ONE: Build One Binary Intelligence (.obi)",
+        "icon": "$(archive)"
+      },
+      {
+        "command": "one.runObiFile",
+        "title": "ONE: Run Compiled .obi File",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "one.runOxFile",
+        "title": "ONE: Run Compiled .ox File",
+        "icon": "$(file-binary)"
+      },
+      {
+        "command": "one.formatFile",
+        "title": "ONE: Format Current Document",
+        "icon": "$(symbol-event)"
+      },
+      {
+        "command": "one.selectCli",
+        "title": "ONE: Select ONE CLI Path",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "one.showOutput",
+        "title": "ONE: Show Runtime Output",
+        "icon": "$(output)"
+      },
+      {
+        "command": "one.showMenu",
+        "title": "ONE: Quick Action Menu",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "one.selectEngine",
+        "title": "ONE: Switch Execution Engine (Qplayer / UnifiedVM)",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "one.refreshEchoAssistant",
+        "title": "ONE: Refresh ECHO-1 Assistant View",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "one.refreshEnvironments",
+        "title": "ONE: Refresh Environments",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "one.refreshPackages",
+        "title": "ONE: Refresh Packages",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "one.refreshSpatial",
+        "title": "ONE: Refresh Spatial Memory View",
+        "icon": "$(refresh)"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "one.runFile",
+          "when": "editorLangId == one",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.checkFile",
+          "when": "editorLangId == one",
+          "group": "navigation@2"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "editorLangId == one",
+          "group": "navigation@3"
+        },
+        {
+          "command": "one.askCopilot",
+          "when": "editorLangId == one",
+          "group": "navigation@4"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "one.runFile",
+          "when": "editorLangId == one",
+          "group": "1_one@1"
+        },
+        {
+          "command": "one.checkFile",
+          "when": "editorLangId == one",
+          "group": "1_one@2"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "editorLangId == one",
+          "group": "1_one@3"
+        },
+        {
+          "command": "one.formatFile",
+          "when": "editorLangId == one",
+          "group": "1_one@4"
+        },
+        {
+          "command": "one.askCopilot",
+          "when": "editorLangId == one",
+          "group": "1_one@5"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "one.runFile",
+          "when": "resourceExtname == .one",
+          "group": "1_one@1"
+        },
+        {
+          "command": "one.buildFile",
+          "when": "resourceExtname == .one",
+          "group": "1_one@2"
+        },
+        {
+          "command": "one.runOxFile",
+          "when": "resourceExtname == .ox",
+          "group": "1_one@3"
+        },
+        {
+          "command": "one.runObiFile",
+          "when": "resourceExtname == .obi",
+          "group": "1_one@4"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "one.askCopilot",
+          "when": "view == one.views.echoAssistant",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.refreshEchoAssistant",
+          "when": "view == one.views.echoAssistant",
+          "group": "navigation@2"
+        },
+        {
+          "command": "one.selectEngine",
+          "when": "view == one.views.environments",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.refreshEnvironments",
+          "when": "view == one.views.environments",
+          "group": "navigation@2"
+        },
+        {
+          "command": "one.refreshPackages",
+          "when": "view == one.views.packages",
+          "group": "navigation@1"
+        },
+        {
+          "command": "one.refreshSpatial",
+          "when": "view == one.views.spatial",
+          "group": "navigation@1"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "one-language",
+          "title": "ONE Language Studio",
+          "icon": "assets/one-activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "one-language": [
+        {
+          "id": "one.views.echoAssistant",
+          "name": "ECHO-1 Offline AI Assistant",
+          "contextualTitle": "ECHO-1 AI Copilot"
+        },
+        {
+          "id": "one.views.environments",
+          "name": "Environments & Runtimes",
+          "contextualTitle": "ONE Environments"
+        },
+        {
+          "id": "one.views.packages",
+          "name": "Packages & Substrates",
+          "contextualTitle": "ONE Packages"
+        },
+        {
+          "id": "one.views.spatial",
+          "name": "Spatial Memory & Safety",
+          "contextualTitle": "ONE Spatial Memory"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "one.runFile",
+        "key": "ctrl+f5",
+        "mac": "cmd+f5",
+        "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.checkFile",
+        "key": "shift+f5",
+        "mac": "shift+f5",
+        "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.buildFile",
+        "key": "ctrl+shift+b",
+        "mac": "cmd+shift+b",
+        "when": "editorTextFocus && editorLangId == one"
+      },
+      {
+        "command": "one.askCopilot",
+        "key": "ctrl+shift+i",
+        "mac": "cmd+shift+i",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "ONE Language",
+      "properties": {
+        "one.cliPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to ONE Developer CLI executable (one.exe or one.cjs). If empty, auto-detects from workspace."
+        },
+        "one.defaultEngine": {
+          "type": "string",
+          "enum": ["unifiedvm", "qplayer"],
+          "default": "unifiedvm",
+          "description": "Default execution engine for ONE files (unifiedvm or qplayer)."
+        },
+        "one.checkOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically run compiler syntax & type checks when saving a .one file."
+        },
+        "one.formatOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically run deterministic formatter when saving a .one file."
+        },
+        "one.traceReasoning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Emit full binary trace telemetry envelopes during discrete reasoning sessions."
+        }
+      }
+    }
   },
   "scripts": {
     "build": "esbuild src/extension.ts --bundle --platform=node --format=cjs --external:vscode --outfile=dist/extension.js",
-    "package": "vsce package --out ../../dist/one-language-1.0.0.vsix --no-dependencies --allow-missing-repository"
+    "package": "node ../../scripts/package-vscode-extension.cjs --out ../../dist/one-language-1.1.0.vsix"
   }
 }

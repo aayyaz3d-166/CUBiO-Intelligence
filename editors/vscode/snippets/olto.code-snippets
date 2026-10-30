@@ -1,0 +1,70 @@
+{
+  "OLTO Component": {
+    "prefix": "olto-comp",
+    "body": [
+      "component ${1:MyComponent} {",
+      "  state ${2:count}: ${3:number} = ${4:0};",
+      "",
+      "  action ${5:increment}() {",
+      "    ${2:count} += 1;",
+      "  }",
+      "",
+      "  view {",
+      "    <Container maxWidth={600} padding={24}>",
+      "      <Card radius={12} padding={16}>",
+      "        <Text size={20} weight=\"bold\">${1:MyComponent}</Text>",
+      "        <Row align=\"center\" gap={12}>",
+      "          <Button label=\"+\" onClick={${5:increment}} />",
+      "        </Row>",
+      "      </Card>",
+      "    </Container>",
+      "  }",
+      "}"
+    ],
+    "description": "Scaffold a new OLTO Component"
+  },
+  "OLTO Page": {
+    "prefix": "olto-page",
+    "body": [
+      "page ${1:MyPage} {",
+      "  state ${2:isLoading}: boolean = false;",
+      "",
+      "  onMount {",
+      "    // Initialize page data",
+      "  }",
+      "",
+      "  view {",
+      "    <Container maxWidth={1200} padding={32}>",
+      "      <Text size={28} weight=\"bold\">${1:MyPage}</Text>",
+      "    </Container>",
+      "  }",
+      "}"
+    ],
+    "description": "Scaffold a new OLTO Page"
+  },
+  "OLTO State": {
+    "prefix": "olto-state",
+    "body": [
+      "state ${1:name}: ${2:string} = ${3:\"\"};"
+    ],
+    "description": "Declare an OLTO reactive state signal"
+  },
+  "OLTO Computed": {
+    "prefix": "olto-computed",
+    "body": [
+      "computed ${1:doubleCount}: ${2:number} {",
+      "  return ${3:count} * 2;",
+      "}"
+    ],
+    "description": "Declare an OLTO computed reactive value"
+  },
+  "OLTO Action": {
+    "prefix": "olto-action",
+    "body": [
+      "action ${1:handleClick}() {",
+      "  $0",
+      "}"
+    ],
+    "description": "Declare an OLTO event action"
+  }
+}
