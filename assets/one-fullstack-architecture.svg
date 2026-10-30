@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="fsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+
+    <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="tier1Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+
+    <linearGradient id="tier2Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+
+    <linearGradient id="tier3Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <linearGradient id="tier4Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#f43f5e" />
+    </linearGradient>
+
+    <filter id="fsglow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="680" fill="url(#fsBg)" />
+
+  <!-- Ambient Light -->
+  <circle cx="250" cy="200" r="180" fill="#38bdf8" opacity="0.08" filter="url(#fsglow)" />
+  <circle cx="950" cy="480" r="180" fill="#a855f7" opacity="0.08" filter="url(#fsglow)" />
+
+  <!-- Title & Subtitle -->
+  <text x="600" y="55" fill="url(#neonGradient)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="32" font-weight="900" letter-spacing="-0.5" text-anchor="middle" filter="url(#fsglow)">ONE LANGUAGE v1.4.0 FULL-STACK ARCHITECTURE</text>
+  <text x="600" y="85" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="400" text-anchor="middle">From High-Performance Spatial Computing to Autonomous AI &amp; Reactive Frontend UIs</text>
+
+  <!-- TIER 1: FRONTEND LAYER (OLTO) -->
+  <g transform="translate(80, 115)">
+    <rect width="1040" height="110" rx="14" fill="#0f172a" stroke="#0284c7" stroke-width="1.8" />
+    <rect x="0" y="0" width="8" height="110" rx="4" fill="url(#tier1Grad)" />
+    
+    <text x="32" y="38" fill="#38bdf8" font-family="-apple-system, sans-serif" font-size="13" font-weight="800" letter-spacing="1">TIER 1 · REACTIVE FRONTEND TECHNOLOGY</text>
+    <text x="32" y="68" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="22" font-weight="700">OLTO Frontend Subsystem (.olto)</text>
+    <text x="32" y="92" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="13">Declarative UI Components · Fine-Grained Signals · Direct DOM Patching (0.70 µs) · Zero-Dependency HTML Bundler · Live DevServer</text>
+
+    <!-- Mini badges -->
+    <rect x="760" y="24" width="125" height="26" rx="6" fill="#1e293b" stroke="#0284c7" />
+    <text x="822" y="41" fill="#7dd3fc" font-family="monospace" font-size="11" text-anchor="middle">No Virtual DOM</text>
+
+    <rect x="895" y="24" width="120" height="26" rx="6" fill="#1e293b" stroke="#0284c7" />
+    <text x="955" y="41" fill="#7dd3fc" font-family="monospace" font-size="11" text-anchor="middle">one olto dev</text>
+  </g>
+
+  <!-- Connective Arrows 1 -> 2 -->
+  <path d="M 600 225 L 600 248" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,4" />
+  <polygon points="595,248 605,248 600,256" fill="#38bdf8" />
+
+  <!-- TIER 2: AI BRAIN LAYER (ECHO-1) -->
+  <g transform="translate(80, 258)">
+    <rect width="1040" height="110" rx="14" fill="#0f172a" stroke="#7c3aed" stroke-width="1.8" />
+    <rect x="0" y="0" width="8" height="110" rx="4" fill="url(#tier2Grad)" />
+    
+    <text x="32" y="38" fill="#c084fc" font-family="-apple-system, sans-serif" font-size="13" font-weight="800" letter-spacing="1">TIER 2 · EMBEDDED SOVEREIGN AI COPILOT</text>
+    <text x="32" y="68" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="22" font-weight="700">ECHO-1 Autonomous Neural Assistant</text>
+    <text x="32" y="92" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="13">24.56 MB Local Model · Prompt-to-App Generator · Self-Healing Compiler Auto-Fixer · 100% Offline CPU Inference (~4ms)</text>
+
+    <rect x="730" y="24" width="145" height="26" rx="6" fill="#1e293b" stroke="#7c3aed" />
+    <text x="802" y="41" fill="#d8b4fe" font-family="monospace" font-size="11" text-anchor="middle">100% Local Neural</text>
+
+    <rect x="885" y="24" width="130" height="26" rx="6" fill="#1e293b" stroke="#7c3aed" />
+    <text x="950" y="41" fill="#d8b4fe" font-family="monospace" font-size="11" text-anchor="middle">one olto ai</text>
+  </g>
+
+  <!-- Connective Arrows 2 -> 3 -->
+  <path d="M 600 368 L 600 391" stroke="#818cf8" stroke-width="2.5" stroke-dasharray="4,4" />
+  <polygon points="595,391 605,391 600,399" fill="#818cf8" />
+
+  <!-- TIER 3: SERVICES & IPC LAYER -->
+  <g transform="translate(80, 401)">
+    <rect width="1040" height="110" rx="14" fill="#0f172a" stroke="#059669" stroke-width="1.8" />
+    <rect x="0" y="0" width="8" height="110" rx="4" fill="url(#tier3Grad)" />
+    
+    <text x="32" y="38" fill="#34d399" font-family="-apple-system, sans-serif" font-size="13" font-weight="800" letter-spacing="1">TIER 3 · SOVEREIGN SERVICE BRIDGE &amp; NETWORKING</text>
+    <text x="32" y="68" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="22" font-weight="700">OneServiceBridge &amp; Reactive OltoClient</text>
+    <text x="32" y="92" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="13">In-Process Zero-Latency RPC (0.03 ms) · Signal-Bound REST Hooks · Reactive WebSockets · E9001 Secret Leakage Prevention</text>
+
+    <rect x="750" y="24" width="135" height="26" rx="6" fill="#1e293b" stroke="#059669" />
+    <text x="817" y="41" fill="#6ee7b7" font-family="monospace" font-size="11" text-anchor="middle">Zero Secret Leak</text>
+
+    <rect x="895" y="24" width="120" height="26" rx="6" fill="#1e293b" stroke="#059669" />
+    <text x="955" y="41" fill="#6ee7b7" font-family="monospace" font-size="11" text-anchor="middle">0.03 ms IPC</text>
+  </g>
+
+  <!-- Connective Arrows 3 -> 4 -->
+  <path d="M 600 511 L 600 534" stroke="#10b981" stroke-width="2.5" stroke-dasharray="4,4" />
+  <polygon points="595,534 605,534 600,542" fill="#10b981" />
+
+  <!-- TIER 4: COMPUTE RUNTIME & HARDWARE LAYER -->
+  <g transform="translate(80, 544)">
+    <rect width="1040" height="110" rx="14" fill="#0f172a" stroke="#e11d48" stroke-width="1.8" />
+    <rect x="0" y="0" width="8" height="110" rx="4" fill="url(#tier4Grad)" />
+    
+    <text x="32" y="38" fill="#fb7185" font-family="-apple-system, sans-serif" font-size="13" font-weight="800" letter-spacing="1">TIER 4 · SOVEREIGN COMPUTATION &amp; MEMORY RUNTIME</text>
+    <text x="32" y="68" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="22" font-weight="700">Qplayer Register VM (204M ops/sec) &amp; UnifiedVM</text>
+    <text x="32" y="92" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="13">Compact Binary Bytecode (.obi) · Address369 Sovereign Memory [0..368] · Actuation Lockout Guards · Deterministic Hardware Alignment</text>
+
+    <rect x="740" y="24" width="145" height="26" rx="6" fill="#1e293b" stroke="#e11d48" />
+    <text x="812" y="41" fill="#fda4af" font-family="monospace" font-size="11" text-anchor="middle">204M Ops / Sec</text>
+
+    <rect x="895" y="24" width="120" height="26" rx="6" fill="#1e293b" stroke="#e11d48" />
+    <text x="955" y="41" fill="#fda4af" font-family="monospace" font-size="11" text-anchor="middle">Address369</text>
+  </g>
+</svg>

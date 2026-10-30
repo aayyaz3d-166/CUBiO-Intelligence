@@ -2,176 +2,168 @@
 
 <img src="assets/ONE-Language-Logo.png" alt="ONE Language Logo" width="180" style="margin-bottom: 12px;"/>
 
-# ONE Language (v1.3.0 Stable)
-### The World's First Sovereign Computational Language with Built-In Offline AI (ECHO-1)
+# ONE Language (v1.4.0 Stable)
+### The Sovereign Computational Language with Built-In Offline AI (ECHO-1) & OLTO Frontend
 
-[![Version](https://img.shields.io/badge/version-1.3.0--stable-blue.svg?style=for-the-badge&logo=visualstudiocode)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![Version](https://img.shields.io/badge/version-1.4.0--stable-blue.svg?style=for-the-badge&logo=visualstudiocode)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![OLTO Frontend](https://img.shields.io/badge/OLTO-Reactive%20Frontend%20(0.70µs)-06b6d4.svg?style=for-the-badge&logo=html5)](docs/olto/DEVELOPER_GUIDE.md)
 [![AI Assistant](https://img.shields.io/badge/ECHO--1-100%25%20Offline%20AI-success.svg?style=for-the-badge&logo=sparkles)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
-[![Model Size](https://img.shields.io/badge/Model%20Size-24.56%20MB-purple.svg?style=for-the-badge)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
 [![Runtime](https://img.shields.io/badge/Qplayer%20Engine-204M%20ops%2Fsec-red.svg?style=for-the-badge&logo=speedtest)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
 [![Safety](https://img.shields.io/badge/Address369-Sovereign%20Memory-orange.svg?style=for-the-badge&logo=shield)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
 [![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-lightgrey.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-**ONE Language** is a next-generation sovereign programming language engineered for high-throughput discrete computing, deterministic 3D spatial memory architectures, and native in-language artificial intelligence. 
+**ONE Language** is an all-in-one sovereign programming language and execution ecosystem engineered for high-throughput discrete computing, deterministic 3D spatial memory architectures, native in-language offline neural intelligence (**ECHO-1**), and sovereign reactive frontend web technology (**OLTO**).
 
 </div>
 
 ---
 
-## 🌟 What's New in v1.3.0: Built-in ECHO-1 Offline AI Copilot
+## 🌐 1. Introducing OLTO: Sovereign Reactive Frontend Language
 
-Unlike conventional languages that depend on cloud-based AI APIs (requiring internet access, monthly subscriptions, and token latency), **ONE Language v1.3.0 embeds its own autonomous 4.89M parameter neural intelligence (ECHO-1) directly into the compiler, CLI, and VS Code extension**.
+<div align="center">
+  <img src="assets/olto-banner.svg" alt="OLTO Frontend Subsystem Banner" width="100%"/>
+</div>
 
-```mermaid
-graph TD
-    Dev["👨‍💻 Developer"] --> CLI["⚡ ONE CLI (`one ask`, `one tutor`, `one run`)"]
-    Dev --> IDE["💻 VS Code Extension (`Ctrl+Shift+I` / $(sparkle) Ask ECHO-1)"]
+<br/>
 
-    subgraph Core ["🔥 ONE Language Core Subsystems"]
-        CLI --> ECHO1["🤖 ECHO-1 Embedded AI Subsystem (25.75 MB)"]
-        IDE --> ECHO1
-        
-        ECHO1 --> DualEngine["Dual-Engine Architecture"]
-        DualEngine --> Symbolic["Deterministic Symbolic Syntax AST"]
-        DualEngine --> Neural["4.89M Parameter Local CPU Brain (~50ms)"]
-        
-        CLI --> Compiler["ONE Compiler & Type Analyzer"]
-        Compiler -.->|On Syntax / Runtime Error| AutoFix["💡 ECHO-1 Smart Error Auto-Fixer"]
-        Compiler --> Qplayer["🚀 Qplayer JIT Engine (204M ops/sec)"]
-        Compiler --> UnifiedVM["🛡️ UnifiedVM (Address369 Deterministic Memory)"]
-    end
+**OLTO** is a native frontend technology inside the ONE Language ecosystem. It completely replaces traditional multi-file HTML, CSS, and JavaScript boilerplate with a single, expressive declarative grammar:
+
+* **Zero-Dependency Architecture:** Applications compile into standalone single-file HTML bundles with **zero `node_modules`**, no external CDN scripts, and zero runtime dependencies.
+* **Fine-Grained Signal Reactivity:** Updates completely bypass the Virtual DOM. Mutating a `Signal` directly updates the corresponding browser DOM node in **0.70 microseconds** (sub-millisecond rendering).
+* **AI-Native Grammar:** Designed from the ground up for LLMs and **ECHO-1**. Clean single-file syntax prevents bracket hallucinations, CSS collisions, and runtime registration failures.
+* **Security Invariant `E9001`:** Hardened against secret leakage. The compiler fail-closes if sensitive server keys (`STRIPE_SECRET_KEY`, database passwords) are placed in client state.
+
+### 📝 Example: Declarative Reactive Component (`Counter.olto`)
+```olto
+component Counter(initialValue: Number = 0) {
+    // 1. Reactive State Signals
+    state count: Number = initialValue
+    state step: Number = 1
+
+    // 2. Computed Read-Only Property
+    computed isPositive: Boolean = {
+        return count > 0
+    }
+
+    // 3. Event Handlers
+    action increment() { count += step }
+    action decrement() { count -= step }
+
+    // 4. Declarative Layout Tree
+    view {
+        Card(padding: 24, radius: 16) {
+            Text("OLTO Reactive Counter", size: 22, weight: "bold", marginBottom: 12)
+
+            Row(align: "center", gap: 16, marginBottom: 16) {
+                Button(label: "-", variant: "outline", onClick: { decrement })
+                Text("\(count)", size: 32, weight: "bold")
+                Button(label: "+", variant: "outline", onClick: { increment })
+            }
+
+            if isPositive {
+                Badge(label: "Positive Value", variant: "success")
+            }
+        }
+    }
+}
 ```
 
 ---
 
-## 🤖 1. ECHO-1 Autonomous AI Assistant Capabilities
+## 🏛️ 2. Full-Stack System Architecture
 
-### ⚡ Instant Terminal Assistant (`one ask`)
-Ask questions directly from your terminal with zero internet connection:
+<div align="center">
+  <img src="assets/one-fullstack-architecture.svg" alt="ONE Language Full-Stack Architecture" width="100%"/>
+</div>
 
+---
+
+## ⚡ 3. Developer Tooling & CLI Workflows
+
+The ONE Language Developer CLI (`one`) gives you a complete toolchain for sovereign computing, AI synthesis, and frontend development:
+
+### 🌐 OLTO Frontend Commands (`one olto`)
 ```powershell
-$ one ask "how do I define a function?"
+# Validate syntax, semantics, and security rules
+$ one olto check Component.olto
+
+# Compile into a standalone zero-dependency HTML web app
+$ one olto build Component.olto --out dist/app.html --theme dark
+
+# Launch local development server with instant live reload on save
+$ one olto dev Component.olto --port 3000
+
+# Synthesize a complete working application from natural language prompt
+$ one olto ai "Build a course academy website with catalog and cart" --out Academy.olto
 ```
 
-```text
-================================================================
-🤖 ECHO-1 Assistant (Offline Sovereign AI)
-================================================================
-Question: how do I define a function?
+### 🤖 ECHO-1 Embedded AI Assistant Commands
+Ask programming questions or get instant code generated with zero internet connection:
 
-Answer: In ONE Language, you define functions using the `function` keyword with typed parameters and return types.
-
-Example Code (.one):
-function add(a: number, b: number): number {
-    return a + b;
-}
-
-let result = add(10, 20);
-print result;
-
-💡 Tip: Function banane ke liye `function` likhein aur parameters ki types (number, string) declare karein.
-
-[Latency: 0ms | Status: CANONICAL_SYNTAX | Offline Local CPU]
-================================================================
-```
-
-### 🎓 Interactive Learning Shell (`one tutor`)
-Launch an interactive conversational shell right in your console:
 ```powershell
+# Instant terminal programming queries
+$ one ask "how do I define a function in ONE Language?"
+
+# Ask for OLTO frontend UI components
+$ one ask "create a responsive login card in olto"
+
+# Interactive conversational terminal tutor
 $ one tutor
 ```
 
-### 💡 Smart Compiler Error Auto-Fixer
-When your code has a syntax mistake, the compiler does not just throw raw stacktraces. ECHO-1 immediately intervenes with contextual, actionable guidance:
-
-```text
-Check Error: [Parser Error] Compilation halted with 1 error(s):
-[E1011: Syntax Error] Unexpected token ';' (SEMICOLON) in expression at line 1, column 14
-
-  💡 ECHO-1 Assistant: Unexpected Token / Syntax Error: Compiler ko aesa token mila jo expected nahi tha.
-  👉 Suggested Fix:   Expression check karein: missing semicolon ya invalid character door karein.
-  📌 Problematic Code: let broken = ;
-```
-
----
-
-## 💻 2. Visual Studio Code Extension (v1.3.0)
-
-The official **ONE Language VS Code Extension** is now an all-in-one package with the **25 MB ECHO-1 AI model bundled directly inside**:
-
-* **Standalone VSIX Package**: `dist/one-language-1.3.0.vsix` (**24.59 MB**)
-* **Global Shortcut**: Press `Ctrl + Shift + I` (or `Cmd + Shift + I` on macOS) anywhere to ask ECHO-1.
-* **One-Click Actions**: Insert generated code directly into the editor or copy to clipboard.
-* **Status Bar Item**: Click `$(sparkle) Ask ECHO-1` at the bottom of your IDE.
-* **Full LSP Support**: Real-time syntax diagnostics, document outline, breadcrumbs, and format on save.
-
+### 🚀 High-Speed Execution (`one run`)
 ```powershell
-# Install directly in VS Code:
-code --install-extension "dist\one-language-1.3.0.vsix" --force
+# Execute with Qplayer JIT engine (204M ops/sec)
+$ one run app.one --engine=qplayer
+
+# Compile to ultra-compact One Binary Intelligence (.obi) bytecode
+$ one build app.one --target=obi
+$ one run app.obi
 ```
 
 ---
 
-## 🚀 3. Dual Execution Runtimes
+## 💻 4. VS Code Extension (`v1.4.0`)
 
-| Feature | Qplayer Runtime | UnifiedVM |
-| :--- | :--- | :--- |
-| **Target Workload** | High-Throughput OBI Bytecode | Spatial Computing & Formal Verification |
-| **Peak Throughput** | **204.08 Million ops/sec** | Zero-Variance Spatial VM ($\sigma^2 = 0.0$) |
-| **Bytecode Format** | One Binary Intelligence (`.obi`) | ONEX Container (`.ox`) |
-| **Container Size** | **~95 to 110 bytes (94.9% reduction)** | Full Merkle sealed state |
-| **Safety Invariants** | Strict Boundary Validation | `ACTUATION_LOCK` & Address369 `[0..368]` |
+The official **ONE Language VS Code Extension** is fully self-contained with the embedded 24.56 MB ECHO-1 AI model:
 
-### Running with Qplayer Engine:
+* **OLTO Language Support:** Full syntax highlighting, brackets, auto-closing tags, and snippets (`olto-comp`, `olto-page`, `olto-state`, `olto-action`).
+* **ECHO-1 Sidebar Activity Panel:** Launch conversations, inspect model weights, or press `Ctrl+Shift+I` for instant in-editor code completions.
+* **One-Click Execution:** Run `.one` files using either **Qplayer (JIT)** or **UnifiedVM** with live status bar switching.
+* **Compiler Error Auto-Fixer:** Automatically catches errors (`E1001` - `E9005`) and suggests instant fixes in Roman Urdu and English.
+
+### Quick Extension Installation:
 ```powershell
-# Execute source with JIT micro-kernel:
-bin\one.cmd run examples\02_qplayer_obi\compute.one --engine=qplayer
-
-# Compile to ultra-compact binary (.obi):
-bin\one.cmd build examples\02_qplayer_obi\compute.one --target=obi
-
-# Execute compiled .obi binary:
-bin\one.cmd run examples\02_qplayer_obi\compute.obi
+# Install the self-contained VSIX package directly
+$ code --install-extension dist/one-language-1.4.0.vsix
 ```
 
 ---
 
-## 🛡️ 4. Sovereign Safety Invariants
+## 📊 5. Verification & Test Suite Matrix
 
-1. **Hardware Actuation Lock (`ACTUATION_LOCK`)**:
-   Hardware actuation interfaces remain locked fail-closed at compile-time and runtime.
-2. **Address369 Sovereign Spatial Boundary**:
-   Spatial virtual memory is strictly restricted to addresses `[0..368]`. Any out-of-bounds attempt fails closed instantly with compiler error `E8005`.
-3. **Deterministic Protection**:
-   Deterministic ceiling limits (1,000,000 instructions) prevent infinite execution loops.
+ONE Language enforces rigorous automated verification across all layers:
 
----
-
-## 📁 5. Repository & Distribution Layout
-
-```text
-ONE Language Release v1.3.0/
-├── bin/
-│   ├── one.exe                # Native Windows x64 standalone executable
-│   ├── one.cjs                # Developer CLI runner
-│   └── one.cmd                # Windows Command wrapper
-├── data/
-│   └── models/                # Embedded 25.75 MB ECHO-1 neural checkpoint
-├── dist/
-│   ├── one-language-1.3.0.vsix # Packaged All-in-One VS Code extension (24.59 MB)
-│   ├── one-language-1.3.0.vsix.sha256
-│   └── one.exe                # Standalone PE binary (SEA postject)
-├── editors/
-│   └── vscode/                # VS Code extension source, models, and manifests
-├── examples/                  # Verified sample programs (.one & .obi)
-├── src/                       # Core compiler, Lexer, Parser, VM, Qplayer & ECHO-1
-├── tests/                     # 100% passing test suites across all 13 verification stages
-└── RELEASE_NOTES_v1.3.0.md    # Comprehensive release notes
-```
+| Subsystem | Test Suites | Passing | Benchmark Highlights |
+| :--- | :---: | :---: | :--- |
+| **OLTO Compiler & AST** | 6 Suites | 100% | Lexer, Parser, Invariants `E9001`–`E9003` |
+| **OLTO Reactive Runtime** | 6 Suites | 100% | **0.70 µs direct DOM patching** (No Virtual DOM) |
+| **OLTO UI Components** | 6 Suites | 100% | 12 standard components, responsive layouts, theme switching |
+| **OLTO Dev Server & Bundler** | 6 Suites | 100% | Zero-dependency standalone HTML bundle, live HTTP watcher |
+| **AI Synthesis & ECHO-1** | 6 Suites | 100% | JSON Schema IR, Self-Healing compiler loop, `one olto ai` |
+| **Backend & Sovereign Net** | 6 Suites | 100% | In-process RPC (0.03 ms), `OltoClient.useFetch()`, WebSockets |
+| **Master Production Benchmark** | 6 Suites | 100% | **End-to-End prompt-to-app pipeline executed in 204 ms** |
+| **VS Code Extension (T11)** | 13 Suites | 100% | VSIX packaging, LSP diagnostics, Address369 invariants |
+| **Total Test Suites** | **55 Suites** | **100% PASS** | Zero regressions |
 
 ---
 
-## 📜 License
-Licensed under either the **Apache License, Version 2.0** ([LICENSE-APACHE](LICENSE-APACHE)) or the **MIT License** ([LICENSE-MIT](LICENSE-MIT)) at your option.
+## 📄 License & Sovereignty
+
+Licensed under either of:
+* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE))
+* MIT License ([LICENSE-MIT](LICENSE-MIT))
+
+*ONE Language and OLTO are sovereign computational technologies engineered for high performance and offline independence.*
