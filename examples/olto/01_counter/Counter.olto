@@ -1,0 +1,48 @@
+// OLTO Reference Example 1: Interactive Counter Component
+// =======================================================
+// Demonstrates reactive state, fine-grained event handlers, and layout flow.
+
+component Counter(initialValue: Number = 0) {
+    state count: Number = initialValue
+    state step: Number = 1
+
+    computed isPositive: Boolean = {
+        return count > 0
+    }
+
+    view {
+        Card(padding: 24, radius: 16, elevation: 3) {
+            Text("OLTO Counter", size: 22, weight: "bold", marginBottom: 12)
+
+            Row(align: "center", gap: 16, marginBottom: 16) {
+                Button(
+                    label: "-", 
+                    variant: "outline", 
+                    onClick: { count -= step }
+                )
+
+                Text(
+                    "\(count)", 
+                    size: 32, 
+                    weight: "bold", 
+                    color: isPositive ? "green" : "gray"
+                )
+
+                Button(
+                    label: "+", 
+                    variant: "outline", 
+                    onClick: { count += step }
+                )
+            }
+
+            Row(align: "center", gap: 8) {
+                Text("Step size: \(step)", size: 14, color: "gray")
+                Button(
+                    label: "Toggle Step (1 / 5)", 
+                    variant: "ghost", 
+                    onClick: { step = (step == 1 ? 5 : 1) }
+                )
+            }
+        }
+    }
+}

@@ -1,0 +1,53 @@
+// OLTO Reference Example 2: E-Commerce Course Store
+// ===================================================
+// Demonstrates shared ONE structs, conditional loading states,
+// list iteration, and declarative responsive grid layout.
+
+import { Course } from "backend/courses.one"
+
+page StorePage(category: String = "all") {
+    state currentCategory: String = category
+    state cartItems: List<String> = []
+    state isLoading: Boolean = false
+    state courses: List<Course> = []
+
+    onMount {
+        isLoading = true
+        courses = await CourseService.getAvailable()
+        isLoading = false
+    }
+
+    action enroll(courseId: String) {
+        cartItems.push(courseId)
+        Toast.show("Enrolled in course successfully!", type: "success")
+    }
+
+    view {
+        Container(maxWidth: 1100, padding: 24) {
+            Row(justify: "between", align: "center", marginBottom: 28) {
+                Text("ONE Language Academy", size: 30, weight: "bold")
+                Badge(label: "Enrolled: \(cartItems.length())", color: "blue")
+            }
+
+            if isLoading {
+                LoadingSpinner(message: "Loading Academy catalog...")
+            } else {
+                Grid(columns: [1, 2, 3], gap: 20) {
+                    each course in courses {
+                        Card(padding: 16, radius: 12) {
+                            Text(course.title, size: 18, weight: "bold")
+                            Text("$\(course.price)", size: 16, color: "green", marginTop: 4)
+                            
+                            Spacer(12)
+                            Button(
+                                label: "Enroll Now", 
+                                variant: "solid", 
+                                onClick: { enroll(course.id) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
