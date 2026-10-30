@@ -1,6 +1,6 @@
 {
   "name": "one-language-core",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "ONE Language Core Compiler Backend (Lexer, Parser, Compiler/Validator)",
   "license": "MIT OR Apache-2.0",
   "private": true,

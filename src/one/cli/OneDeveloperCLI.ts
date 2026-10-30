@@ -65,7 +65,7 @@ export class OneDeveloperCLI {
     }
 
     if (cleanArgs[0] === '--version' || cleanArgs[0] === '-v' || cleanArgs[0] === 'version') {
-      log('ONE Language Developer CLI v1.0.0');
+      log('ONE Language Developer CLI v1.4.0 (with OLTO Frontend & ECHO-1 AI)');
       return { exitCode: 0, stdout: stdoutLines.join('\n'), stderr: '' };
     }
 
@@ -944,7 +944,7 @@ Options for 'dev':
 
   public static getHelpText(): string {
     return `
-ONE Language Developer CLI (v1.0.0)
+ONE Language Developer CLI (v1.4.0)
 Usage: one <command> [options]
 
 Commands:
