@@ -20,6 +20,8 @@ import { ExecutableLinker } from '../packer/ExecutableLinker';
 import { ReasoningSession } from '../intelligence/reasoning/ReasoningSession';
 import { Qplayer } from '../../qplayer/index';
 import { Echo1Assistant } from '../intelligence/echo/Echo1Assistant';
+import { OltoCompiler } from '../../olto/compiler/index';
+import { OltoWebBundler, OltoDevServer } from '../../olto/tooling/index';
 
 export interface DeveloperCLIResult {
   exitCode: number;
@@ -63,7 +65,7 @@ export class OneDeveloperCLI {
     }
 
     if (cleanArgs[0] === '--version' || cleanArgs[0] === '-v' || cleanArgs[0] === 'version') {
-      log('ONE Language Developer CLI v1.0.0');
+      log('ONE Language Developer CLI v1.4.0 (with OLTO Frontend & ECHO-1 AI)');
       return { exitCode: 0, stdout: stdoutLines.join('\n'), stderr: '' };
     }
 
@@ -109,6 +111,10 @@ export class OneDeveloperCLI {
 
       case 'tutor':
         res = this.handleTutor(cmdArgs, log, err);
+        break;
+
+      case 'olto':
+        res = this.handleOlto(cmdArgs, log, err);
         break;
 
       default:
@@ -713,9 +719,232 @@ print message
     return { exitCode: 0, stdout: '', stderr: '' };
   }
 
+  // ── 8. one olto ───────────────────────────────────────────────────────────
+  public static handleOlto(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    if (args.length === 0 || args[0] === '--help' || args[0] === '-h' || args[0] === 'help') {
+      log(`
+OLTO Frontend CLI — Developer Commands
+Usage: one olto <subcommand> [options]
+
+Subcommands:
+  check <file.olto>                Parse and validate OLTO component syntax & security rules
+  build <file.olto> [options]      Compile OLTO source into a standalone zero-dependency HTML app
+  dev   <file.olto> [options]      Start local development server with auto-recompile & live reload
+  ai    "<prompt>"  [options]      Generate complete sovereign OLTO application using ECHO-1 AI
+
+Options for 'ai':
+  --out, -o <path>                 Save generated source to .olto file
+
+Options for 'build':
+  --out, -o <path>                 Output HTML destination (default: dist/<name>.html)
+  --theme <dark|light>             Default visual theme (default: dark)
+  --title <string>                 Document title (default: component name)
+
+Options for 'dev':
+  --port, -p <number>              HTTP port for development server (default: 3000)
+  --theme <dark|light>             Default visual theme (default: dark)
+`);
+      return { exitCode: 0, stdout: '', stderr: '' };
+    }
+
+    const sub = args[0].toLowerCase();
+    const subArgs = args.slice(1);
+
+    switch (sub) {
+      case 'check':
+        return this.handleOltoCheck(subArgs, log, err);
+      case 'build':
+        return this.handleOltoBuild(subArgs, log, err);
+      case 'dev':
+        return this.handleOltoDev(subArgs, log, err);
+      case 'ai':
+      case 'generate':
+        return this.handleOltoAI(subArgs, log, err);
+      default:
+        err(`\x1b[31mError:\x1b[0m Unknown OLTO subcommand '${sub}'. Run 'one olto --help' for available subcommands.`);
+        return { exitCode: 1, stdout: '', stderr: '' };
+    }
+  }
+
+  private static handleOltoCheck(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    if (args.length === 0) {
+      err('\x1b[31mError:\x1b[0m Missing OLTO source file. Usage: one olto check <file.olto>');
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    const filePath = path.resolve(args[0]);
+    if (!fs.existsSync(filePath)) {
+      err(`\x1b[31mError:\x1b[0m OLTO source file not found: ${filePath}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    try {
+      const source = fs.readFileSync(filePath, 'utf-8');
+      const res = OltoCompiler.compile(source);
+
+      if (!res.success) {
+        err(`\x1b[31mOLTO Diagnostic Check Failed:\x1b[0m ${res.diagnostics.length} issue(s) found in ${path.basename(filePath)}`);
+        for (const d of res.diagnostics) {
+          err(`  [${d.code}] Line ${d.line}, Col ${d.column}: ${d.message}`);
+        }
+        return { exitCode: 1, stdout: '', stderr: '' };
+      }
+
+      log(`\x1b[32m✓ [OLTO]\x1b[0m Syntax and semantic checks passed for: ${path.basename(filePath)}`);
+      if (res.ast && res.ast.declarations.length > 0) {
+        const names = res.ast.declarations.map(d => d.name).join(', ');
+        const stateCount = res.ast.declarations.reduce((acc, d) => acc + d.state.length, 0);
+        const actionCount = res.ast.declarations.reduce((acc, d) => acc + d.actions.length, 0);
+        log(`  Declared components: ${names}`);
+        log(`  Reactive state count: ${stateCount} | Actions: ${actionCount}`);
+      }
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      err(`\x1b[31mOLTO Check Exception:\x1b[0m ${e.message}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+  }
+
+  private static handleOltoBuild(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    if (args.length === 0) {
+      err('\x1b[31mError:\x1b[0m Missing OLTO source file. Usage: one olto build <file.olto> [--out <dest.html>]');
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    const filePath = path.resolve(args[0]);
+    if (!fs.existsSync(filePath)) {
+      err(`\x1b[31mError:\x1b[0m OLTO source file not found: ${filePath}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    let outPath = path.resolve(process.cwd(), 'dist', `${path.basename(filePath, path.extname(filePath))}.html`);
+    let theme: 'dark' | 'light' = 'dark';
+    let title: string | undefined = undefined;
+
+    for (let i = 1; i < args.length; i++) {
+      if ((args[i] === '--out' || args[i] === '-o') && args[i + 1]) {
+        outPath = path.resolve(args[i + 1]);
+        i++;
+      } else if (args[i] === '--theme' && args[i + 1]) {
+        theme = args[i + 1].toLowerCase() === 'light' ? 'light' : 'dark';
+        i++;
+      } else if (args[i] === '--title' && args[i + 1]) {
+        title = args[i + 1];
+        i++;
+      }
+    }
+
+    try {
+      OltoWebBundler.bundleToFile(filePath, outPath, { theme, title });
+      const sizeKb = (fs.statSync(outPath).size / 1024).toFixed(2);
+      log(`\x1b[32m✓ [OLTO]\x1b[0m Standalone web application bundled successfully!`);
+      log(`  Source: ${path.relative(process.cwd(), filePath) || filePath}`);
+      log(`  Output: ${path.relative(process.cwd(), outPath) || outPath} (${sizeKb} KB)`);
+      log(`  Theme:  ${theme}`);
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      err(`\x1b[31mOLTO Build Error:\x1b[0m ${e.message}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+  }
+
+  private static handleOltoDev(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    if (args.length === 0) {
+      err('\x1b[31mError:\x1b[0m Missing OLTO source file. Usage: one olto dev <file.olto> [--port 3000]');
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    const filePath = path.resolve(args[0]);
+    if (!fs.existsSync(filePath)) {
+      err(`\x1b[31mError:\x1b[0m OLTO source file not found: ${filePath}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    let port = 3000;
+    let theme: 'dark' | 'light' = 'dark';
+
+    for (let i = 1; i < args.length; i++) {
+      if ((args[i] === '--port' || args[i] === '-p') && args[i + 1]) {
+        const parsed = parseInt(args[i + 1], 10);
+        if (!isNaN(parsed) && parsed > 0) port = parsed;
+        i++;
+      } else if (args[i] === '--theme' && args[i + 1]) {
+        theme = args[i + 1].toLowerCase() === 'light' ? 'light' : 'dark';
+        i++;
+      }
+    }
+
+    try {
+      const server = new OltoDevServer({
+        entryFile: filePath,
+        port,
+        theme,
+        verbose: true,
+      });
+
+      // Start server asynchronously; it keeps Node.js event loop alive
+      server.start().catch((err: any) => {
+        console.error(`[OLTO DevServer Startup Error]`, err);
+      });
+
+      log(`\x1b[32m🚀 [OLTO DevServer]\x1b[0m Running at http://localhost:${port}`);
+      log(`  Watching: ${filePath}`);
+      log(`  Theme:    ${theme}`);
+      log(`  Press Ctrl+C to terminate.`);
+
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      err(`\x1b[31mOLTO DevServer Error:\x1b[0m ${e.message}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+  }
+
+  private static handleOltoAI(args: string[], log: (m: string) => void, err: (m: string) => void): DeveloperCLIResult {
+    if (args.length === 0) {
+      err('\x1b[31mError:\x1b[0m Missing prompt for AI application generator. Usage: one olto ai "<prompt>" [--out <file.olto>]');
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+
+    const prompt = args[0];
+    let outPath: string | null = null;
+
+    for (let i = 1; i < args.length; i++) {
+      if ((args[i] === '--out' || args[i] === '-o') && args[i + 1]) {
+        outPath = path.resolve(args[i + 1]);
+        i++;
+      }
+    }
+
+    try {
+      const echo1 = Echo1Assistant.getInstance();
+      const generated = echo1.generateOltoApp(prompt);
+
+      if (outPath) {
+        fs.mkdirSync(path.dirname(outPath), { recursive: true });
+        fs.writeFileSync(outPath, generated.code, 'utf-8');
+        log(`\x1b[32m✓ [ECHO-1 AI]\x1b[0m Successfully generated sovereign OLTO application!`);
+        log(`  Prompt: "${prompt}"`);
+        log(`  Target: ${path.relative(process.cwd(), outPath) || outPath} (${generated.code.length} bytes)`);
+        if (generated.repaired) {
+          log(`  Status: Auto-repaired and verified by self-healing compiler loop.`);
+        }
+        log(`\nTo run live: one olto dev "${path.relative(process.cwd(), outPath) || outPath}"`);
+      } else {
+        log(`\x1b[32m✓ [ECHO-1 AI]\x1b[0m Generated OLTO Application for: "${prompt}"\n`);
+        log(generated.code);
+        log(`\n\x1b[36mTip:\x1b[0m Save with '--out ${generated.schema.name}.olto' to build or serve.`);
+      }
+
+      return { exitCode: 0, stdout: '', stderr: '' };
+    } catch (e: any) {
+      err(`\x1b[31mECHO-1 Generator Error:\x1b[0m ${e.message}`);
+      return { exitCode: 1, stdout: '', stderr: '' };
+    }
+  }
+
   public static getHelpText(): string {
     return `
-ONE Language Developer CLI (v1.0.0)
+ONE Language Developer CLI (v1.4.0)
 Usage: one <command> [options]
 
 Commands:
@@ -728,6 +957,7 @@ Commands:
   reason <spec.json> Bounded 0/1 binary reasoning session (--trace, --json)
   ask "<prompt>"     Ask embedded offline AI Copilot (ECHO-1) for code or concepts
   tutor [query]      Launch interactive conversational learning terminal with ECHO-1
+  olto <subcommand>  Build, validate, or live-serve OLTO reactive frontend web apps
 
 Options:
   -v, --version      Show version number

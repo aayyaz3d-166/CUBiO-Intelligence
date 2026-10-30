@@ -2,6 +2,17 @@
 
 All notable changes to the ONE Language Visual Studio Code extension will be documented in this file.
 
+## [1.4.0] - 2026-10-30
+
+### 🌐 OLTO Native Reactive Frontend Subsystem & AI App Generator
+- **OLTO Language Support:** Added syntax highlighting (`olto.tmLanguage.json`), bracket matching, and auto-closing configuration for `.olto` files.
+- **Declarative Reactive Components:** Full IDE support for `component`, `page`, `state`, `computed`, `action`, and standard UI primitives.
+- **Standard UI Snippets:** Built-in snippets `olto-comp`, `olto-page`, `olto-state`, `olto-computed`, and `olto-action`.
+- **ECHO-1 AI Bridge:** Query ECHO-1 to generate complete frontend apps from natural language (`one olto ai "..."`).
+- **Live-Reload Development Server:** Launch instant-recompile server via `one olto dev <file.olto>`.
+- **Zero-Dependency Web Bundling:** One-click compilation to standalone zero-dependency HTML applications.
+- **Sovereign Service Bridge:** Seamless typed RPC/IPC connecting OLTO frontends with backend `.one` services.
+
 ## [1.3.1] - 2026-10-29
 
 ### 🤖 Built-in ECHO-1 Autonomous Offline AI Copilot & Visual Studio Marketplace Release

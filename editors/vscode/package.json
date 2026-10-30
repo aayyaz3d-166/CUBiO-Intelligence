@@ -1,8 +1,8 @@
 {
   "name": "one-language",
   "displayName": "ONE Language",
-  "description": "Built-in 100% offline AI Copilot (ECHO-1, 25MB), Qplayer OBI runtime, compiler diagnostics, autocompletion, hover docs, formatting, and one-click execution for ONE Language (.one).",
-  "version": "1.3.1",
+  "description": "OLTO Reactive Frontend Subsystem, built-in 100% offline AI Copilot (ECHO-1, 25MB), Qplayer OBI runtime, compiler diagnostics, and one-click execution for ONE Language (.one) and OLTO (.olto).",
+  "version": "1.4.0",
   "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",
@@ -42,6 +42,7 @@
   ],
   "activationEvents": [
     "onLanguage:one",
+    "onLanguage:olto",
     "onView:one.views.echoAssistant",
     "onView:one.views.environments"
   ],
@@ -59,6 +60,18 @@
           ".one"
         ],
         "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "olto",
+        "aliases": [
+          "OLTO Frontend Language",
+          "OLTO",
+          "olto"
+        ],
+        "extensions": [
+          ".olto"
+        ],
+        "configuration": "./olto-language-configuration.json"
       }
     ],
     "grammars": [
@@ -66,12 +79,21 @@
         "language": "one",
         "scopeName": "source.one",
         "path": "./syntaxes/one.tmLanguage.json"
+      },
+      {
+        "language": "olto",
+        "scopeName": "source.olto",
+        "path": "./syntaxes/olto.tmLanguage.json"
       }
     ],
     "snippets": [
       {
         "language": "one",
         "path": "./snippets/one.code-snippets"
+      },
+      {
+        "language": "olto",
+        "path": "./snippets/olto.code-snippets"
       }
     ],
     "commands": [
