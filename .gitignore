@@ -80,3 +80,5 @@ numerical_equivalence_report.md
 /research/
 tests/_*.py
 verify-v1.2.cjs
+
+/legacy_experiments/
