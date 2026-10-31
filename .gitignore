@@ -48,3 +48,8 @@ temp_*.3dmemory
 /reports/
 /scratch/
 /PHASE_0_TO_PHASE_3_END_TO_END_FORENSIC_REPORT.md
+
+# 11. Oview OS Subsystem
+/src/oview/
+/tests/oview/
+/scripts/serve_oview.cjs
