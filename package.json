@@ -49,7 +49,6 @@
     "test:task21": "node --import ./scripts/esm-register.js tests/vig/task21_vig_compiler_provenance.test.ts",
     "test:task22": "node --import ./scripts/esm-register.js tests/workers/task22_worker_pool_scheduler_runtime_limits.test.ts",
     "test:task23": "node --import ./scripts/esm-register.js tests/training/task23_dataset_training_model_registry.test.ts",
-    "test:task24": "node --import ./scripts/esm-register.js tests/studio/task24_ipc_studio_rendering_interfaces.test.ts",
     "test:task25": "node --import ./scripts/esm-register.js tests/net/task25_optional_subsystems_mesh_omail_dns_pqc.test.ts",
     "test:qplayer": "node --import ./scripts/esm-register.js tests/qplayer/binary_roundtrip.test.ts && node --import ./scripts/esm-register.js tests/qplayer/poc_execution.test.ts && node --import ./scripts/esm-register.js tests/qplayer/general_computation.test.ts && node --import ./scripts/esm-register.js tests/qplayer/differential_benchmark.test.ts && node --import ./scripts/esm-register.js tests/qplayer/jit_and_parallel.test.ts",
     "test:benchmark": "node --import ./scripts/esm-register.js tests/qplayer/realtime_benchmark.ts",

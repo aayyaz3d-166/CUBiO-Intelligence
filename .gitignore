@@ -53,3 +53,30 @@ temp_*.3dmemory
 /src/oview/
 /tests/oview/
 /scripts/serve_oview.cjs
+
+# 12. 3D Memory Studio Subsystem
+/src/studio/
+/tests/studio/
+
+# 13. Experimental and legacy prototypes
+/experimental/
+
+# 14. 3D Memory Studio historical artifacts and benchmarks
+*.3dmemory
+*.csv
+OPTIMIZATION_MANIFEST.json
+*_REPORT.md
+TASK_*.md
+PHASE_*.md
+ONE_LANGUAGE_*.md
+ONE_0*.md
+ONE-06_*.md
+ONE_END_TO_END_*.md
+CPU_GPU_comparison.md
+GATE25_RESEARCH_PROPOSAL.md
+TEST03_FAST_BENCHMARK_REPORT.md
+memory_gc_report.md
+numerical_equivalence_report.md
+/research/
+tests/_*.py
+verify-v1.2.cjs
