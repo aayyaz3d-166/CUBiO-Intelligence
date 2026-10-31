@@ -1,0 +1,54 @@
+// ==============================================================================
+// SPACE MANAGER — ADDRESS369 SPATIAL ALLOCATOR & VIRTUAL DESKTOPS
+// Written 100% in Pure ONE Language (Zero External Dependencies)
+// ==============================================================================
+
+function getSpaceName(spaceId: number): string {
+    if (spaceId == 1) {
+        return "Core Workspace (Terminal, Explorer, Shell)";
+    }
+    if (spaceId == 2) {
+        return "Dev & Web (CUBiO Browser, Code)";
+    }
+    if (spaceId == 3) {
+        return "Creative Studio (Art Canvas)";
+    }
+    if (spaceId == 4) {
+        return "Media & Play (Rebel X Play, Arcade)";
+    }
+    return "Unknown Space";
+}
+
+function calculateSlotBound(slot: number): boolean {
+    if (slot >= 0) {
+        if (slot < 369) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function main(): void {
+    print "Space Manager — Address369 Spatial Allocator v1.0.0";
+    print "--------------------------------------------------------------------------------";
+
+    let slotValid: boolean = calculateSlotBound(40);
+    if (slotValid) {
+        print "✓ Address369 Slot #40 Bounded and Assigned to CUBiO Browser";
+    }
+
+    let s1: string = getSpaceName(1);
+    let s2: string = getSpaceName(2);
+    let s3: string = getSpaceName(3);
+    let s4: string = getSpaceName(4);
+
+    print "--- Configured Sovereign Spaces (Virtual Desktops) ---";
+    print "• Space 1: " + s1;
+    print "• Space 2: " + s2;
+    print "• Space 3: " + s3;
+    print "• Space 4: " + s4;
+    print "--------------------------------------------------------------------------------";
+    print "Status: SPACE MANAGER OPERATIONAL";
+}
+
+main();

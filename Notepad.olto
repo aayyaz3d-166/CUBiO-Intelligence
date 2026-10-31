@@ -1,0 +1,40 @@
+// OLTO Frontend System: Sovereign Desktop Notepad Specification (.olto)
+// =======================================================================
+// Modern Portable GUI Notepad with Fine-grained Reactive Signals,
+// Live Word/Character Counting, File Persistence & Theme Switching.
+// =======================================================================
+
+component OltoNotepad {
+    state noteTitle: String = "Untitled Note"
+    state noteContent: String = ""
+    state currentTheme: String = "dark"
+    state wordCount: Number = 0
+    state charCount: Number = 0
+    state savedNotesCount: Number = 0
+
+    computed isDark: Boolean = {
+        return currentTheme == "dark"
+    }
+
+    view {
+        Card(padding: 24, radius: 18, elevation: 3) {
+            Row(justify: "between", align: "center", marginBottom: 18) {
+                Text("✦ OLTO Sovereign Notepad", size: 22, weight: "bold")
+                Row(gap: 12, align: "center") {
+                    Text("Words: \(wordCount) | Chars: \(charCount)", size: 14)
+                    Button(label: "🌙 / ☀️ Toggle Theme", variant: "outline")
+                }
+            }
+
+            Row(gap: 10, marginBottom: 16) {
+                Button(label: "📄 New Note", variant: "primary")
+                Button(label: "💾 Save (.txt)", variant: "success")
+                Button(label: "🗑️ Clear", variant: "danger")
+            }
+
+            Card(padding: 16, radius: 12) {
+                Input(placeholder: "Note title...", value: noteTitle)
+            }
+        }
+    }
+}

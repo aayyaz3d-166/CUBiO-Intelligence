@@ -1,0 +1,82 @@
+// Oview OS — Sovereign Desktop Surface & Icon Grid
+// ==================================================
+// DesktopSurface.olto: Desktop wallpaper canvas, shortcut icon grid,
+// and right-click desktop quick actions.
+
+component DesktopSurface(
+    osName: String = "Oview OS",
+    wallpaperStyle: String = "emerald-glass"
+) {
+    state selectedIcon: String = ""
+    state isContextMenuOpen: Boolean = false
+
+    view {
+        Container(maxWidth: 1920, padding: 24) {
+            // Header Cyber Branding
+            Row(justify: "between", align: "center", marginBottom: 32) {
+                Row(align: "center", gap: 12) {
+                    Text("◈", size: 36, weight: "bold", color: "#10b981")
+                    Column(gap: 2) {
+                        Text("\(osName)", size: 22, weight: "bold", color: "#f8fafc")
+                        Text("ONE Language • OLTO Engine • ECHO-1 Brain", size: 12, color: "#10b981")
+                    }
+                }
+
+                Badge(label: "Sovereign Desktop Substrate", color: "#10b981")
+            }
+
+            // Desktop App Shortcut Grid (Left Column)
+            Column(gap: 16) {
+                Card(padding: 12, radius: 12) {
+                    Row(align: "center", gap: 12) {
+                        Text("📝", size: 28)
+                        Column(gap: 2) {
+                            Text("Oview Notepad", size: 14, weight: "bold", color: "#f8fafc")
+                            Text("Double-click to open", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 12, radius: 12) {
+                    Row(align: "center", gap: 12) {
+                        Text("📁", size: 28)
+                        Column(gap: 2) {
+                            Text("File Explorer", size: 14, weight: "bold", color: "#f8fafc")
+                            Text("Browse /system, /apps", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 12, radius: 12) {
+                    Row(align: "center", gap: 12) {
+                        Text("⚡", size: 28)
+                        Column(gap: 2) {
+                            Text("Oview Terminal", size: 14, weight: "bold", color: "#f8fafc")
+                            Text("Run ONE commands", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 12, radius: 12) {
+                    Row(align: "center", gap: 12) {
+                        Text("🧮", size: 28)
+                        Column(gap: 2) {
+                            Text("Calculator", size: 14, weight: "bold", color: "#f8fafc")
+                            Text("Scientific math", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 12, radius: 12) {
+                    Row(align: "center", gap: 12) {
+                        Text("⚙️", size: 28)
+                        Column(gap: 2) {
+                            Text("Settings", size: 14, weight: "bold", color: "#f8fafc")
+                            Text("Display & Themes", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -82,6 +82,24 @@ export class ReasoningEngine<T = unknown> {
       };
     }
 
+    // Pre-flight cancellation guard
+    if (spec.isCancelled && spec.isCancelled()) {
+      return {
+        status: ReasoningStatus.CANCELLED,
+        isSolved: false,
+        rankedCandidates: [],
+        trace,
+        metrics: {
+          stepsUsed: 0,
+          candidatesGenerated: 0,
+          candidatesEvaluated: 0,
+          depthReached: 0,
+          elapsedMs: performance.now() - startTime,
+        },
+        stopReason: 'Reasoning execution cancelled prior to start',
+      };
+    }
+
     // Initialize State Explorer with a real trace recorder
     const explorer = new StateExplorer<T>(
       this.ruleRegistry,
@@ -178,6 +196,18 @@ export class ReasoningEngine<T = unknown> {
 
     // Main Bounded Reasoning Loop
     while (!isSolved && stepsUsed < maxSteps) {
+      // Check cancellation and timeout limits
+      if (
+        (spec.isCancelled && spec.isCancelled()) ||
+        (spec.timeoutMs !== undefined && (performance.now() - startTime) >= spec.timeoutMs)
+      ) {
+        finalStatus = ReasoningStatus.CANCELLED;
+        stopReason = spec.isCancelled && spec.isCancelled()
+          ? 'Reasoning execution cancelled by caller'
+          : `Execution timed out (${spec.timeoutMs}ms limit exceeded)`;
+        break;
+      }
+
       // Step budget check
       stepsUsed++;
 
@@ -247,7 +277,7 @@ export class ReasoningEngine<T = unknown> {
       }
     }
 
-    if (!isSolved && stepsUsed >= maxSteps && finalStatus !== ReasoningStatus.CANDIDATE_LIMIT) {
+    if (!isSolved && stepsUsed >= maxSteps && finalStatus !== ReasoningStatus.CANDIDATE_LIMIT && finalStatus !== ReasoningStatus.CANCELLED) {
       finalStatus = ReasoningStatus.STEP_LIMIT;
       stopReason = `Step budget limit (${maxSteps}) reached`;
     }

@@ -22,7 +22,7 @@ import { ReasoningInput,
   ReasoningRule,
   ReasoningStatus,
 } from '../reasoning/types';
-import { Native5MAdapter } from './Native5MAdapter';
+import { Native5MAdapter, Native5MGenerationOptions, Native5MGenerationResult } from './Native5MAdapter';
 import { IntentParser } from './IntentParser';
 import {
   DerivationStep,
@@ -106,7 +106,7 @@ export class HybridConversationEngine {
   constructor(
     private readonly memory: SelectiveMemory,
     private readonly _genericEngine?: ReasoningEngine<unknown>,
-    customCheckpointPath?: string,
+    customCheckpointPathOrAdapter?: string | Native5MAdapter,
   ) {
     this.parser = new IntentParser();
 
@@ -142,9 +142,31 @@ export class HybridConversationEngine {
     this.incrementEngine = new ReasoningEngine<number>(incrementRegistry);
 
     // Initialize Native 5M-v2 adapter (isolated, fail-safe)
-    this.native5m = customCheckpointPath !== undefined
-      ? new Native5MAdapter(customCheckpointPath)
-      : Native5MAdapter.getInstance();
+    if (customCheckpointPathOrAdapter instanceof Native5MAdapter) {
+      this.native5m = customCheckpointPathOrAdapter;
+    } else if (typeof customCheckpointPathOrAdapter === 'string') {
+      this.native5m = new Native5MAdapter(customCheckpointPathOrAdapter);
+    } else {
+      this.native5m = Native5MAdapter.getInstance();
+    }
+  }
+
+  /**
+   * Safely generate neural completion text, catching any model/GPU exceptions.
+   */
+  private safeGenerate(prompt: string, options: Native5MGenerationOptions): Native5MGenerationResult {
+    try {
+      return this.native5m.generate(prompt, options);
+    } catch (err: any) {
+      return {
+        text: '',
+        tokenIds: [],
+        epistemicStatus: 'UNKNOWN',
+        latencyMs: 0,
+        isModelOutput: false,
+        error: `Inference exception: ${err?.message ?? String(err)}`,
+      };
+    }
   }
 
   // ──────────────────────────────────────────────────────────────────────────
@@ -179,10 +201,24 @@ export class HybridConversationEngine {
     // Detect follow-up mentions in the current turn
     let followUp: ReferenceEntity | undefined;
     const lowerText = req.text.toLowerCase().trim();
-    if (lowerText === 'it' || lowerText === 'its' || lowerText === 'their' || lowerText === 'them' || lowerText === 'those') {
+    const isPurePronoun = ['it', 'its', 'their', 'them', 'those'].includes(lowerText);
+    const isPureRelationFollowUp = ['its relations', 'their relations', 'show its relations', 'show their relations', 'relations'].includes(lowerText);
+    const isNumericFollowUp = /^(?:subtract|add|decrease|increase|decrement|increment)\s+(?:by\s+)?\d+/i.test(lowerText) || lowerText === 'chain';
+
+    if (isPurePronoun || isPureRelationFollowUp || isNumericFollowUp || lowerText.includes('chain')) {
       followUp = resolveFollowUpEntity(sessionState, req.text, sessionState);
-    } else if (lowerText.includes('relation') || lowerText.includes('relat') || lowerText.includes('relations') || lowerText.includes('chain') || lowerText.includes('show')) {
-      followUp = resolveFollowUpEntity(sessionState, req.text, sessionState);
+      if (!followUp && (isPurePronoun || isPureRelationFollowUp)) {
+        return {
+          status: HybridResponseStatus.CLARIFICATION_NEEDED,
+          intentType: UserIntentType.UNKNOWN_REQUEST,
+          naturalLanguageText:
+            `I could not resolve what "${req.text}" refers to because I do not have a visible numeric chain or concept in this session. Please restate the starting value and target or specify the concept.`,
+          isSolved: false,
+          isUncertain: true,
+          meta: this.makeMeta(sessionId, false),
+          episodeLogged: false,
+        };
+      }
     }
 
     if (followUp) {
@@ -191,39 +227,43 @@ export class HybridConversationEngine {
       // Record turn before returning
       recordTurn(sessionState, req.text, followUp.lastIntentType, req.taskHints ?? intent.entities);
       this.dialogueState.set(sessionId, sessionState);
-      this.recordSessionEpisode(sessionId, {
-        episodeId: `ep_dialogue_${Date.now()}`,
-        taskGoal: req.text,
-        inputSummary: JSON.stringify({ followUp, raw: req.text }),
-        rulesApplied: [],
-        isSuccess: followUpResponse.status === HybridResponseStatus.RESOLVED,
-        outcomeSummary: followUpResponse.naturalLanguageText,
-        stepsUsed: 0,
-        timestamp: Date.now(),
-      });
       followUpResponse.meta.sessionId = sessionId;
-      followUpResponse.meta.episodeLogged = true;
-      followUpResponse.episodeLogged = true;
+      followUpResponse.meta.episodeLogged = false;
+      followUpResponse.episodeLogged = false;
       return followUpResponse;
     }
 
     // 3. Dispatch (normal path)
+    let response: HybridResponse;
     try {
       switch (intent.intentType) {
         case UserIntentType.REASONING_TASK:
-          return this.dispatchReasoning(intent, req);
+          response = this.dispatchReasoning(intent, req);
+          break;
         case UserIntentType.CONCEPT_QUERY:
-          return this.dispatchConceptQuery(intent, req);
+          response = this.dispatchConceptQuery(intent, req);
+          break;
         case UserIntentType.CONVERSATIONAL_FACT:
-          return this.dispatchConversationalFact(intent, req);
+          response = this.dispatchConversationalFact(intent, req);
+          break;
         case UserIntentType.UNKNOWN_REQUEST:
-          return this.dispatchUnknown(intent, req);
+          response = this.dispatchUnknown(intent, req);
+          break;
         default:
-          return this.makeError(`Unhandled intent type: ${intent.intentType}`, req.sessionId);
+          response = this.makeError(`Unhandled intent type: ${intent.intentType}`, req.sessionId);
+          break;
       }
     } catch (err: unknown) {
-      return this.makeError(`Dispatch error: ${String(err)}`, req.sessionId);
+      response = this.makeError(`Dispatch error: ${String(err)}`, req.sessionId);
     }
+
+    // Record turn in dialogueState for session reference window
+    recordTurn(sessionState, req.text, intent.intentType, req.taskHints ?? intent.entities);
+    this.dialogueState.set(sessionId, sessionState);
+    if (!response.meta.sessionId) {
+      response.meta.sessionId = sessionId;
+    }
+    return response;
   }
 
   /** Session-activated: reset all dialogue state for a named session (GATE 14). */
@@ -622,7 +662,7 @@ export class HybridConversationEngine {
     // If neural inference is NOT explicitly enabled, or the model is
     // unavailable, skip neural path entirely (safe fallback).
     if (req.enableNeuralInference === true && this.native5m.isAvailable()) {
-      const gen = this.native5m.generate(
+      const gen = this.safeGenerate(
         `Reasoning task: start=${startValue}, target=${targetValue}. ` +
         `Derive the chain to reach the target using +1/-1 steps. ` +
         `Return a JSON object with: { text, isSolved, stepsUsed }`,
@@ -868,7 +908,7 @@ export class HybridConversationEngine {
     // presentation.  It NEVER writes to long-term memory, NEVER overrides the
     // symbolic graph result, and NEVER replaces the resolved concepts.
     if (req.enableNeuralInference === true && this.native5m.isAvailable()) {
-      const gen = this.native5m.generate(
+      const gen = this.safeGenerate(
         `Concept query: conceptId=${conceptId}, relationType=${entities.relationType ?? 'all'}. ` +
         `Return a JSON object with: { text, resolvedConcepts, isSolved }`,
         {
@@ -915,7 +955,7 @@ export class HybridConversationEngine {
     // Use Native 5M model for fluent natural language if explicitly enabled and model available
     const useNeural = req.enableNeuralInference === true;
     if (useNeural && this.native5m.isAvailable()) {
-      const gen = this.native5m.generate(intent.rawText, {
+      const gen = this.safeGenerate(intent.rawText, {
         maxTokens: 35,
         temperature: 0.1,
         repetitionPenalty: 1.2,
@@ -986,7 +1026,7 @@ export class HybridConversationEngine {
     const useNeural = req.enableNeuralInference === true;
     if (useNeural && this.native5m.isAvailable()) {
       const prompt = `Please clarify how I can assist with reasoning or concept queries: "${intent.rawText.slice(0, 100)}"`;
-      const gen = this.native5m.generate(prompt, {
+      const gen = this.safeGenerate(prompt, {
         maxTokens: 35,
         temperature: 0.1,
         repetitionPenalty: 1.2,

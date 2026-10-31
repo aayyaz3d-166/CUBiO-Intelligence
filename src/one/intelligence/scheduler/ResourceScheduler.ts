@@ -50,9 +50,11 @@ export class ResourceScheduler {
   private taskQueue: Array<ScheduledTask<unknown>> = [];
   private totalVirtualJoulesConsumed: number = 0;
   private energyBudgetPerWindow: number = 10_000; // Virtual Joules
+  private maxQueueCapacity: number;
 
-  constructor(rssCeilingBytes: number = 512 * 1024 * 1024) {
+  constructor(rssCeilingBytes: number = 512 * 1024 * 1024, maxQueueCapacity: number = 1000) {
     this.rssGuard = new RSSGuard(rssCeilingBytes);
+    this.maxQueueCapacity = maxQueueCapacity;
   }
 
   // ── Capability 49: Curriculum Generation ───────────────────────────────────
@@ -127,6 +129,10 @@ export class ResourceScheduler {
   // ── Capability 54: Intelligent Scheduling (Priority Queue) ─────────────────
 
   public enqueueTask<T>(taskId: string, priority: TaskPriority, taskName: string, run: () => Promise<T> | T): void {
+    if (this.taskQueue.length >= this.maxQueueCapacity) {
+      throw new Error(`ResourceScheduler queue capacity exceeded (${this.maxQueueCapacity})`);
+    }
+
     this.taskQueue.push({
       taskId,
       priority,
@@ -138,6 +144,18 @@ export class ResourceScheduler {
     // Priority sort: CRITICAL > INTERACTIVE > BACKGROUND
     const priorityWeights = { CRITICAL: 1, INTERACTIVE: 2, BACKGROUND: 3 };
     this.taskQueue.sort((a, b) => priorityWeights[a.priority] - priorityWeights[b.priority]);
+  }
+
+  /**
+   * Cancels a pending task in the queue by taskId.
+   */
+  public cancelTask(taskId: string): boolean {
+    const idx = this.taskQueue.findIndex((t) => t.taskId === taskId);
+    if (idx !== -1) {
+      this.taskQueue.splice(idx, 1);
+      return true;
+    }
+    return false;
   }
 
   /**

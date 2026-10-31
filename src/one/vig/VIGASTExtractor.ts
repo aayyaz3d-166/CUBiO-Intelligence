@@ -844,8 +844,8 @@ export class VIGASTExtractor {
       signatures.push(`class:${className}{${members.join(';')}}`);
     }
 
-    // 9. Top-level functions: fn name(params): retType
-    const fnRegex = /\b(?:export\s+)?fn\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)\s*(?::\s*([A-Za-z0-9_<>\[\]]+))?/g;
+    // 9. Top-level functions: fn name(params): retType or one make name(params): retType
+    const fnRegex = /\b(?:export\s+)?(?:fn|one\s+make)\s+([A-Za-z0-9_]+)\s*\(([^)]*)\)\s*(?::\s*([A-Za-z0-9_<>\[\]]+))?/g;
     let fnMatch: RegExpExecArray | null;
     while ((fnMatch = fnRegex.exec(clean)) !== null) {
       const fnName = fnMatch[1];
@@ -1508,8 +1508,8 @@ export class VIGASTExtractor {
         continue;
       }
 
-      // Function: fn FunctionName() or export fn FunctionName()
-      const fnMatch = line.match(/^(?:export\s+)?fn\s+([A-Za-z0-9_]+)/i);
+      // Function: fn FunctionName() or export fn FunctionName() or one make FunctionName()
+      const fnMatch = line.match(/^(?:export\s+)?(?:fn|one\s+make)\s+([A-Za-z0-9_]+)/i);
       if (fnMatch) {
         const fnName = fnMatch[1];
         const isExported = line.toLowerCase().startsWith('export ');

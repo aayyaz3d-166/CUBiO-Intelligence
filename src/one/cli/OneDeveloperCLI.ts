@@ -65,7 +65,7 @@ export class OneDeveloperCLI {
     }
 
     if (cleanArgs[0] === '--version' || cleanArgs[0] === '-v' || cleanArgs[0] === 'version') {
-      log('ONE Language Developer CLI v1.4.0 (with OLTO Frontend & ECHO-1 AI)');
+      log('ONE Language Developer CLI v1.5.0 (with Sovereign 3-6-9 Tokenizer, OLTO Frontend & ECHO-1 AI)');
       return { exitCode: 0, stdout: stdoutLines.join('\n'), stderr: '' };
     }
 

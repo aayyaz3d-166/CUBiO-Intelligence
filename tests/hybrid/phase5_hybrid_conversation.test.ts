@@ -511,6 +511,7 @@ suite('G: Follow-Up Resolution', () => {
   const parser = new IntentParser();
   const ruleRegistry = new RuleRegistry<number>();
   const memory = new SelectiveMemory(ruleRegistry as RuleRegistry<unknown>, 50);
+  populateConceptGraph(memory);
   const engine = new HybridConversationEngine(memory);
 
   // Helper: build a session with a prior numeric turn, then a follow-up.

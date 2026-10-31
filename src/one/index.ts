@@ -34,6 +34,11 @@ export * from './packer/ExecutableArtifact';
 export * from './packer/ExecutableValidator';
 export * from './packer/ExecutablePacker';
 export * from './packer/ExecutableLinker';
+export * from './agi_one_core_orchestrator';
+export * from './agi_one_ipc_bridge';
+export * from './native_model_registry';
+export * from './native_spatial_renderer';
+export * from '../tokenizer/index';
 
 // Disambiguate duplicate ExecutionMode export between ./runtime and ./jit
 export type { ExecutionMode } from './runtime';

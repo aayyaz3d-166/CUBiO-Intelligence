@@ -1,0 +1,49 @@
+// Oview Flow — Sovereign Visual AI Workflow & Automation Engine
+// ==============================================================================
+// Pure Canonical OLTO Component.
+// Zero external dependencies — 100% Sovereign ONE Language substrate.
+// ==============================================================================
+
+component FlowApp {
+    state totalNodes: Number = 3
+    state isExecuting: Boolean = false
+    state executionStep: Number = 0
+    state activeWorkflowName: String = "Smart Note Summarizer"
+
+    action runWorkflow() {
+        isExecuting = true
+        executionStep = 1
+    }
+
+    action stopWorkflow() {
+        isExecuting = false
+        executionStep = 0
+    }
+
+    action addNode() {
+        totalNodes = totalNodes + 1
+    }
+
+    view {
+        Container(maxWidth: 1200, padding: 16) {
+            Card(padding: 16, radius: 12, elevation: 2) {
+                Row(justify: "between", align: "center", marginBottom: 14) {
+                    Text("Oview Flow — In-Built AI Automation", size: 22, weight: "bold", color: "white")
+                    Badge(label: "\(totalNodes) Active Nodes", color: "green")
+                }
+
+                Row(gap: 8, marginBottom: 16) {
+                    Button(label: "▶ Run Workflow", variant: "solid", onClick: { runWorkflow() })
+                    Button(label: "+ Add Node", variant: "outline", onClick: { addNode() })
+                    Button(label: "Reset", variant: "ghost", onClick: { stopWorkflow() })
+                }
+
+                Card(padding: 18, radius: 10, background: "#060914", marginBottom: 14) {
+                    Text("Workflow: \(activeWorkflowName)", size: 14, weight: "bold", color: "white", marginBottom: 8)
+                    Text("Execution Engine: Status = \(isExecuting ? 'RUNNING' : 'IDLE')", size: 12, color: isExecuting ? "green" : "gray", marginBottom: 6)
+                    Text("Powered by ECHO-1 Offline Local AI & Address369 Slot #85", size: 11, color: "gray")
+                }
+            }
+        }
+    }
+}

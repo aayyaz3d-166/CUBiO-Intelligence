@@ -1,0 +1,635 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&#8203;</title>
+  <meta name="theme-color" content="#080D16">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 10% 20%, rgba(6, 32, 31, 0.85) 0%, transparent 45%),
+                     radial-gradient(circle at 90% 85%, rgba(33, 24, 23, 0.85) 0%, transparent 45%),
+                     #080D16;
+      --glass-bg: rgba(14, 22, 35, 0.65);
+      --glass-card: rgba(18, 27, 43, 0.6);
+      --glass-card-hover: rgba(24, 35, 54, 0.8);
+      --glass-border: #18232D;
+      --glass-border-focus: rgba(16, 185, 129, 0.5);
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.35);
+      --emerald-light: #6ee7b7;
+      --orange: #f97316;
+      --orange-glow: rgba(249, 115, 22, 0.35);
+      --orange-light: #fdba74;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --blur: blur(25px);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 8px;
+      --shadow-glass: 0 16px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navbar */
+    header.glass-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: transparent;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      border-bottom: none;
+      padding: 16px 36px 12px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: none;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--emerald), var(--orange));
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--emerald-glow);
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .logo-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #fff, var(--emerald-light) 50%, var(--orange-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-search {
+      position: relative;
+      width: 380px;
+    }
+
+    .nav-search input {
+      width: 100%;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 10px 18px 10px 42px;
+      color: var(--text-main);
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .nav-search input:focus {
+      border-color: var(--emerald);
+      box-shadow: 0 0 18px var(--emerald-glow);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    .nav-search svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      fill: var(--text-muted);
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .badge-pill {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--emerald-light);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    /* Main Workspace */
+    main.workspace {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 32px auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* Note Creator Glass Box */
+    .creator-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 22px 26px;
+      box-shadow: var(--shadow-glass);
+      max-width: 720px;
+      width: 100%;
+      margin: 0 auto;
+      transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .creator-card:focus-within {
+      border-color: rgba(249, 115, 22, 0.45);
+      box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.7), 0 0 25px var(--orange-glow);
+    }
+
+    .creator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .creator-title {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.15rem;
+      font-weight: 700;
+      outline: none;
+    }
+
+    .pin-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.25rem;
+      opacity: 0.5;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .pin-btn.active {
+      opacity: 1;
+      filter: drop-shadow(0 0 8px var(--orange));
+      transform: rotate(30deg) scale(1.15);
+    }
+
+    .creator-body {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      resize: none;
+      min-height: 80px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .creator-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .cat-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cat-btn.selected {
+      background: var(--emerald-glow);
+      border-color: var(--emerald);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: white;
+      border: none;
+      padding: 8px 22px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 16px var(--emerald-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+    }
+
+    /* Section Styles */
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title span.dot-green {
+      width: 8px;
+      height: 8px;
+      background: var(--emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--emerald);
+    }
+
+    .section-title span.dot-orange {
+      width: 8px;
+      height: 8px;
+      background: var(--orange);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--orange);
+    }
+
+    /* Notes Grid */
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 22px;
+    }
+
+    .note-card {
+      background: var(--glass-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .note-card:hover {
+      background: var(--glass-card-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 35px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .note-card.pinned-border {
+      border-left: 4px solid var(--orange);
+      box-shadow: 0 10px 30px -5px rgba(249, 115, 22, 0.15);
+    }
+
+    .note-card.green-border {
+      border-left: 4px solid var(--emerald);
+      box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.15);
+    }
+
+    .note-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .note-card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .note-card-body {
+      font-size: 0.92rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      flex: 1;
+      margin-bottom: 16px;
+    }
+
+    .note-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .note-tag {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+    }
+
+    .tag-dev { color: var(--emerald-light); background: rgba(16, 185, 129, 0.15); }
+    .tag-design { color: var(--orange-light); background: rgba(249, 115, 22, 0.15); }
+    .tag-ideas { color: #a78bfa; background: rgba(167, 139, 250, 0.15); }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .action-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      font-size: 1rem;
+      border-radius: 4px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .action-icon:hover { 
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .action-icon.delete:hover { 
+      color: #f43f5e; 
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      grid-column: 1 / -1;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="glass-nav">
+    <div class="logo-container">
+      <div class="logo-title">ONE Notes</div>
+    </div>
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-5.01-5.01C17.54 13.68 18 11.91 18 10c0-4.41-3.59-8-8-8S2 5.59 2 10s3.59 8 8 8c1.91 0 3.68-.46 5.28-1.3l5.01 5.01c.39.39 1.02.39 1.41 0 .39-.39.39-1.01.01-1.42zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+      <input type="text" id="search-input" placeholder="Search your notes & tags...">
+    </div>
+    <div class="nav-actions">
+      <span class="badge-pill">⚡ Sovereign ONE Engine</span>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <!-- Note Creator -->
+    <div class="creator-card">
+      <div class="creator-header">
+        <input type="text" id="note-title" class="creator-title" placeholder="Title of your note...">
+        <button id="pin-toggle" class="pin-btn" title="Pin note">📌</button>
+      </div>
+      <textarea id="note-body" class="creator-body" placeholder="Write down your thoughts, ideas or tasks..."></textarea>
+      <div class="creator-footer">
+        <div class="category-pills">
+          <button class="cat-btn selected" data-cat="DEV">DEV</button>
+          <button class="cat-btn" data-cat="DESIGN">DESIGN</button>
+          <button class="cat-btn" data-cat="IDEAS">IDEAS</button>
+        </div>
+        <button id="save-note-btn" class="save-btn">Save Note</button>
+      </div>
+    </div>
+
+    <!-- Pinned Notes Stream -->
+    <section id="pinned-section">
+      <div class="section-title"><span class="dot-orange"></span> Pinned Notes</div>
+      <div class="notes-grid" id="pinned-grid"></div>
+    </section>
+
+    <!-- All Other Notes Stream -->
+    <section id="others-section">
+      <div class="section-title"><span class="dot-green"></span> All Notes</div>
+      <div class="notes-grid" id="others-grid"></div>
+    </section>
+  </main>
+
+  <script>
+    // 100% Zero-Dependency Local State Engine with Auto-Save
+    const defaultNotes = [
+      {
+        id: 1,
+        title: 'ONE Language Compiler Architecture',
+        body: 'Deterministic single-pass parser with bit-exact UnifiedIR and zero external host dependencies.',
+        category: 'DEV',
+        pinned: true,
+        date: 'Oct 30, 2026'
+      },
+      {
+        id: 2,
+        title: 'Glassmorphism Concept: Emerald & Sunset Orange',
+        body: 'Frosted dark slate panels with deep green glow accents and energetic sunset orange pin highlights.',
+        category: 'DESIGN',
+        pinned: true,
+        date: 'Oct 30, 2026'
+      },
+      {
+        id: 3,
+        title: 'Zero Dependency Web App',
+        body: 'Runs standalone on any PC browser with local storage persistence and instantaneous load speed.',
+        category: 'IDEAS',
+        pinned: false,
+        date: 'Oct 30, 2026'
+      }
+    ];
+
+    let notes = JSON.parse(localStorage.getItem('one_notes_data')) || defaultNotes;
+    let currentCategory = 'DEV';
+    let isPinnedCurrent = false;
+
+    const pinnedGrid = document.getElementById('pinned-grid');
+    const othersGrid = document.getElementById('others-grid');
+    const pinnedSection = document.getElementById('pinned-section');
+    const pinToggleBtn = document.getElementById('pin-toggle');
+    const catButtons = document.querySelectorAll('.cat-btn');
+    const saveBtn = document.getElementById('save-note-btn');
+    const titleInput = document.getElementById('note-title');
+    const bodyInput = document.getElementById('note-body');
+    const searchInput = document.getElementById('search-input');
+
+    function persist() {
+      localStorage.setItem('one_notes_data', JSON.stringify(notes));
+    }
+
+    pinToggleBtn.addEventListener('click', () => {
+      isPinnedCurrent = !isPinnedCurrent;
+      pinToggleBtn.classList.toggle('active', isPinnedCurrent);
+    });
+
+    catButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        catButtons.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        currentCategory = btn.getAttribute('data-cat');
+      });
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const title = titleInput.value.trim();
+      const body = bodyInput.value.trim();
+      if (!title && !body) return;
+
+      const newNote = {
+        id: Date.now(),
+        title: title || 'Untitled Note',
+        body: body,
+        category: currentCategory,
+        pinned: isPinnedCurrent,
+        date: 'Just now'
+      };
+
+      notes.unshift(newNote);
+      persist();
+      render();
+
+      titleInput.value = '';
+      bodyInput.value = '';
+      isPinnedCurrent = false;
+      pinToggleBtn.classList.remove('active');
+    });
+
+    window.togglePin = function(id) {
+      const note = notes.find(n => n.id === id);
+      if (note) {
+        note.pinned = !note.pinned;
+        persist();
+        render();
+      }
+    };
+
+    window.deleteNote = function(id) {
+      notes = notes.filter(n => n.id !== id);
+      persist();
+      render();
+    };
+
+    searchInput.addEventListener('input', (e) => {
+      render(e.target.value.toLowerCase());
+    });
+
+    function createNoteCard(note) {
+      const borderClass = note.pinned ? 'pinned-border' : 'green-border';
+      const tagClass = 'tag-' + (note.category ? note.category.toLowerCase() : 'dev');
+      return 
+        <div class="note-card ">
+          <div class="note-card-header">
+            <div class="note-card-title"></div>
+            <button class="action-icon" onclick="togglePin()" title="Toggle pin">
+              
+            </button>
+          </div>
+          <div class="note-card-body"></div>
+          <div class="note-card-footer">
+            <span class="note-tag "></span>
+            <div class="card-actions">
+              <span></span>
+              <button class="action-icon delete" onclick="deleteNote()" title="Delete note">🗑️</button>
+            </div>
+          </div>
+        </div>
+      ;
+    }
+
+    function escapeHTML(str) {
+      return (str || '').replace(/[&<>'"]/g,
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+
+    function render(query = '') {
+      const filtered = notes.filter(n =>
+        n.title.toLowerCase().includes(query) ||
+        n.body.toLowerCase().includes(query) ||
+        (n.category && n.category.toLowerCase().includes(query))
+      );
+
+      const pinnedNotes = filtered.filter(n => n.pinned);
+      const otherNotes = filtered.filter(n => !n.pinned);
+
+      if (pinnedNotes.length === 0) {
+        pinnedSection.style.display = 'none';
+      } else {
+        pinnedSection.style.display = 'block';
+        pinnedGrid.innerHTML = pinnedNotes.map(createNoteCard).join('');
+      }
+
+      if (otherNotes.length === 0 && pinnedNotes.length === 0) {
+        othersGrid.innerHTML = '<div class="empty-state">No notes found. Create your first note above!</div>';
+      } else {
+        othersGrid.innerHTML = otherNotes.map(createNoteCard).join('');
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
+
+

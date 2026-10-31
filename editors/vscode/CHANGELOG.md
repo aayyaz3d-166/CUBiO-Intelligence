@@ -2,6 +2,18 @@
 
 All notable changes to the ONE Language Visual Studio Code extension will be documented in this file.
 
+## [1.5.0] - 2026-10-31
+
+### 🔮 Sovereign 3-6-9 Branching Tokenizer & Vocabulary Engine
+- **Sovereign 3-6-9 Tokenizer:** Zero third-party cloud/npm dependencies (no HuggingFace, no TikToken). Pure sovereign mathematical tokenization.
+- **Vortex Branching Hierarchy:** Mathematical tokens representing the central 3-6-9 spine:
+  - Branch (1, 2) -> Anchor 3 (Input & Observation -> Foundation)
+  - Branch (4, 5) -> Anchor 6 (Context & Memory -> Process & Logic)
+  - Branch (7, 8) -> Anchor 9 (Analysis & Verification -> Singularity)
+- **High-Capacity Vocabulary (8,192 Tokens):** Exact power-of-2 boundary ($2^{13}$) with deterministic SHA-256 manifest hash `20d87a8714cf4447e7320aa58c4b15a443792aede85faf6984f1105badac0c89`.
+- **100% Roundtrip Text Fidelity:** Guaranteed zero `<UNK>` tokens on standard English dialogue, complete ASCII 0..127 safety floor, and exact bit-level decoding.
+- **High Performance Int32Array Buffers:** Direct C-speed tensor buffer serialization for model training and real-time inference.
+
 ## [1.4.0] - 2026-10-30
 
 ### 🌐 OLTO Native Reactive Frontend Subsystem & AI App Generator

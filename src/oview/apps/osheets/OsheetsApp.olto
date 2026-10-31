@@ -1,0 +1,66 @@
+// Oview OS — Sovereign Spreadsheet Application (Phase 12: Osheets)
+// ====================================================================
+// OsheetsApp.olto: Tabular data grid, ONE formula evaluation engine,
+// cell styling, auto-sum calculations, and CSV export.
+
+component OsheetsApp(
+    initialTitle: String = "Untitled Spreadsheet"
+) {
+    state sheetTitle: String = initialTitle
+    state selectedCell: String = "A1"
+    state formulaInput: String = ""
+    state activeSum: Number = 0
+    state activeAvg: Number = 0
+    state activeCount: Number = 0
+
+    action selectCell(cellId: String) {
+        selectedCell = cellId
+        Toast.show("Selected cell: \(selectedCell)", type: "info")
+    }
+
+    action updateFormula(expr: String) {
+        formulaInput = expr
+    }
+
+    action exportCSV() {
+        Toast.show("Exported to CSV successfully", type: "success")
+    }
+
+    view {
+        Card(padding: 0, radius: 10) {
+            // Toolbar
+            Row(justify: "between", align: "center", padding: 8) {
+                Row(align: "center", gap: 8) {
+                    Text("📊 Osheets", size: 14, weight: "bold", color: "#10b981")
+                    Button(label: "B", variant: "ghost")
+                    Button(label: "I", variant: "ghost")
+                    Button(label: "$ Format", variant: "outline")
+                    Button(label: "📥 CSV", variant: "outline", onClick: { exportCSV() })
+                }
+                Row(align: "center", gap: 6) {
+                    Button(label: "💾 Save", variant: "solid")
+                }
+            }
+
+            // Formula Bar
+            Row(align: "center", gap: 8, padding: 6) {
+                Text("fx:", size: 12, weight: "bold", color: "#38bdf8")
+                Text("\(formulaInput)", size: 12, color: "#fff")
+            }
+
+            // Grid Placeholder
+            Column(gap: 2, padding: 8) {
+                Row(gap: 2) {
+                    Text("A", size: 11, weight: "bold")
+                    Text("B", size: 11, weight: "bold")
+                    Text("C", size: 11, weight: "bold")
+                }
+                Row(gap: 2) {
+                    Text("100", size: 11)
+                    Text("200", size: 11)
+                    Text("=SUM(A1:B1)", size: 11)
+                }
+            }
+        }
+    }
+}

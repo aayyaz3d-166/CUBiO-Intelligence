@@ -14,7 +14,22 @@
 
 import * as crypto from 'crypto';
 import { CanonicalObject } from './CanonicalObject';
-import { NativeValue, isEqual, formatNativeValue } from '../runtime/NativeValues';
+import { NativeValue, isEqual, formatNativeValue, fromRaw } from '../runtime/NativeValues';
+
+function safeIsEqual(a: any, b: any): boolean {
+  if (a === b) return true;
+  if (a === undefined || b === undefined) return false;
+  const nvA = (a && typeof a === 'object' && 'kind' in a) ? a : fromRaw(a);
+  const nvB = (b && typeof b === 'object' && 'kind' in b) ? b : fromRaw(b);
+  return isEqual(nvA, nvB);
+}
+
+function safeFormatValue(val: any): string {
+  if (val && typeof val === 'object' && 'kind' in val) {
+    return formatNativeValue(val);
+  }
+  return typeof val === 'object' ? JSON.stringify(val) : String(val);
+}
 
 export interface StateRevision {
   revisionId: number;
@@ -117,6 +132,17 @@ export class CanonicalState {
     return true;
   }
 
+  /**
+   * Restores state from an external canonical snapshot dictionary and commits revision.
+   */
+  public restoreFromSnapshotData(snapshotData: Record<string, NativeValue>, targetRevisionId?: number): StateRevision {
+    this.currentData = new CanonicalObject(snapshotData);
+    if (targetRevisionId !== undefined) {
+      this.revisionId = targetRevisionId - 1; // commit() will increment to targetRevisionId
+    }
+    return this.commit();
+  }
+
   public getRevision(revisionId: number): StateRevision | undefined {
     return this.history.get(revisionId);
   }
@@ -153,11 +179,11 @@ export class CanonicalState {
       } else {
         const vMy = this.currentData.get(k)!;
         const vOther = other.currentData.get(k)!;
-        if (!isEqual(vMy, vOther)) {
+        if (!safeIsEqual(vMy, vOther)) {
           modifiedKeys.push({
             key: k,
-            oldValue: formatNativeValue(vMy),
-            newValue: formatNativeValue(vOther),
+            oldValue: safeFormatValue(vMy),
+            newValue: safeFormatValue(vOther),
           });
         }
       }

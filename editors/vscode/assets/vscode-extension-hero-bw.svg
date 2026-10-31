@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" width="100%" height="100%">
+  <defs>
+    <!-- Monochrome Background Gradients -->
+    <linearGradient id="vsDarkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050505" />
+      <stop offset="50%" stop-color="#0c0c0c" />
+      <stop offset="100%" stop-color="#020202" />
+    </linearGradient>
+
+    <!-- Card Background Gradient -->
+    <linearGradient id="vsCardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#181818" stop-opacity="0.96" />
+      <stop offset="100%" stop-color="#0c0c0c" stop-opacity="0.98" />
+    </linearGradient>
+
+    <!-- Platinum Header Gradient -->
+    <linearGradient id="vsPlatinum" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#DDDDDD" />
+      <stop offset="100%" stop-color="#999999" />
+    </linearGradient>
+
+    <!-- Glow Effect -->
+    <filter id="vsWhiteGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Grid Pattern -->
+    <pattern id="vsGrid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#202020" stroke-width="0.75" stroke-opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Deep Dark Background -->
+  <rect width="1200" height="520" fill="url(#vsDarkBg)" />
+  <rect width="1200" height="520" fill="url(#vsGrid)" />
+
+  <!-- Outer Frame -->
+  <rect x="18" y="18" width="1164" height="484" rx="14" fill="none" stroke="#2d2d2d" stroke-width="1.5" />
+
+  <!-- Top Pill -->
+  <g transform="translate(435, 32)">
+    <rect x="0" y="0" width="330" height="30" rx="15" fill="#141414" stroke="#444444" stroke-width="1" />
+    <circle cx="16" cy="15" r="4" fill="#FFFFFF" filter="url(#vsWhiteGlow)" />
+    <text x="165" y="20" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">OFFICIAL VS CODE EXTENSION v1.5.0</text>
+  </g>
+
+  <!-- Main Title -->
+  <text x="600" y="104" fill="url(#vsPlatinum)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="3" text-anchor="middle" filter="url(#vsWhiteGlow)">ONE LANGUAGE STUDIO</text>
+  <text x="600" y="132" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="500" letter-spacing="2" text-anchor="middle">SOVEREIGN AI COPILOT, OLTO REACTIVE FRONTEND &amp; 3-6-9 TOKENIZER</text>
+
+  <!-- Divider -->
+  <line x1="280" y1="150" x2="920" y2="150" stroke="#282828" stroke-width="1" />
+
+  <!-- ── 3 COLUMN IDE CAPABILITIES ── -->
+
+  <!-- Column 1: Language & Frontend Grammar -->
+  <g transform="translate(48, 175)">
+    <rect width="344" height="235" rx="12" fill="url(#vsCardBg)" stroke="#333333" stroke-width="1.2" />
+    <!-- Header -->
+    <rect x="16" y="16" width="32" height="32" rx="6" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="32" y="37" fill="#FFFFFF" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">.one</text>
+    <text x="58" y="31" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700">Language &amp; Frontend</text>
+    <text x="58" y="47" fill="#888888" font-family="monospace" font-size="10">Syntax, LSP &amp; Signals</text>
+    <line x1="16" y1="60" x2="328" y2="60" stroke="#282828" stroke-width="1" />
+
+    <!-- Feature Items -->
+    <g transform="translate(16, 80)">
+      <circle cx="6" cy="6" r="3" fill="#FFFFFF" />
+      <text x="18" y="10" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Dual Grammar Support</text>
+      <text x="18" y="26" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">.one (Backend/Spatial) + .olto (Frontend)</text>
+
+      <circle cx="6" cy="46" r="3" fill="#FFFFFF" />
+      <text x="18" y="50" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Instant Compiler Diagnostics</text>
+      <text x="18" y="66" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Address369 guards &amp; E9001 client safety</text>
+
+      <circle cx="6" cy="86" r="3" fill="#FFFFFF" />
+      <text x="18" y="90" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Zero-Dependency Bundler</text>
+      <text x="18" y="106" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Single-click standalone web compilation</text>
+
+      <circle cx="6" cy="126" r="3" fill="#FFFFFF" />
+      <text x="18" y="130" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Live Reload DevServer</text>
+      <text x="18" y="146" fill="#888888" font-family="monospace" font-size="10.5">one olto dev &lt;app.olto&gt; (Instant)</text>
+    </g>
+  </g>
+
+  <!-- Column 2: Offline AI Copilot (ECHO-1) -->
+  <g transform="translate(428, 175)">
+    <rect width="344" height="235" rx="12" fill="url(#vsCardBg)" stroke="#333333" stroke-width="1.2" />
+    <!-- Header -->
+    <rect x="16" y="16" width="32" height="32" rx="6" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="32" y="37" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">AI</text>
+    <text x="58" y="31" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700">ECHO-1 Offline Copilot</text>
+    <text x="58" y="47" fill="#888888" font-family="monospace" font-size="10">24.56 MB Embedded Model</text>
+    <line x1="16" y1="60" x2="328" y2="60" stroke="#282828" stroke-width="1" />
+
+    <!-- Feature Items -->
+    <g transform="translate(16, 80)">
+      <circle cx="6" cy="6" r="3" fill="#FFFFFF" />
+      <text x="18" y="10" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">100% Offline Local Neural Weights</text>
+      <text x="18" y="26" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Zero API keys, zero cloud latency</text>
+
+      <circle cx="6" cy="46" r="3" fill="#FFFFFF" />
+      <text x="18" y="50" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Ctrl + Shift + I Quick Prompt</text>
+      <text x="18" y="66" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Generate ONE code snippets in ~50ms</text>
+
+      <circle cx="6" cy="86" r="3" fill="#FFFFFF" />
+      <text x="18" y="90" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Smart Error Auto-Fixer</text>
+      <text x="18" y="106" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Explains &amp; repairs compiler syntax bugs</text>
+
+      <circle cx="6" cy="126" r="3" fill="#FFFFFF" />
+      <text x="18" y="130" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Natural Language App Generator</text>
+      <text x="18" y="146" fill="#888888" font-family="monospace" font-size="10.5">one olto ai "Build Notes App"</text>
+    </g>
+  </g>
+
+  <!-- Column 3: Sovereign 3-6-9 Tokenizer & Qplayer -->
+  <g transform="translate(808, 175)">
+    <rect width="344" height="235" rx="12" fill="url(#vsCardBg)" stroke="#333333" stroke-width="1.2" />
+    <!-- Header -->
+    <rect x="16" y="16" width="32" height="32" rx="6" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="32" y="37" fill="#FFFFFF" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle">369</text>
+    <text x="58" y="31" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="700">3-6-9 Tokenizer &amp; OBI</text>
+    <text x="58" y="47" fill="#888888" font-family="monospace" font-size="10">8,192 Vocab &amp; 204M ops/sec</text>
+    <line x1="16" y1="60" x2="328" y2="60" stroke="#282828" stroke-width="1" />
+
+    <!-- Feature Items -->
+    <g transform="translate(16, 80)">
+      <circle cx="6" cy="6" r="3" fill="#FFFFFF" />
+      <text x="18" y="10" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">3-6-9 Vortex Spine Tokenizer</text>
+      <text x="18" y="26" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Exact power-of-2 (8,192 tokens), 100% fidelity</text>
+
+      <circle cx="6" cy="46" r="3" fill="#FFFFFF" />
+      <text x="18" y="50" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Qplayer OBI Runtime</text>
+      <text x="18" y="66" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">204M ops/sec binary bytecode execution</text>
+
+      <circle cx="6" cy="86" r="3" fill="#FFFFFF" />
+      <text x="18" y="90" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">One-Click Runner (Ctrl + F5)</text>
+      <text x="18" y="106" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11">Direct execution of active .one file</text>
+
+      <circle cx="6" cy="126" r="3" fill="#FFFFFF" />
+      <text x="18" y="130" fill="#E0E0E0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600">Side-by-Side Model Trainer</text>
+      <text x="18" y="146" fill="#888888" font-family="monospace" font-size="10.5">Direct bridge to 3D Memory Studio</text>
+    </g>
+  </g>
+
+  <!-- Bottom Terminal Status Bar Indicator -->
+  <g transform="translate(48, 435)">
+    <rect width="1104" height="42" rx="8" fill="#111111" stroke="#2e2e2e" stroke-width="1" />
+    <circle cx="24" cy="21" r="5" fill="#FFFFFF" filter="url(#vsWhiteGlow)" />
+    <text x="42" y="26" fill="#CCCCCC" font-family="monospace" font-size="11.5">ONE IDE STATUS: ALL SYSTEMS ONLINE (3-6-9 Tokenizer 8192 | ECHO-1 Offline AI | OLTO Reactive Engine | Qplayer 204M)</text>
+    <rect x="990" y="8" width="98" height="26" rx="6" fill="#222222" stroke="#444444" stroke-width="1" />
+    <text x="1039" y="25" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700" text-anchor="middle">v1.5.0 STABLE</text>
+  </g>
+</svg>

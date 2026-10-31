@@ -27,7 +27,9 @@ function packageVSCodeExtension(options = {}) {
   const distDir = path.join(repoRoot, 'dist');
   fs.mkdirSync(distDir, { recursive: true });
 
-  const vsixOut = options.out ? path.resolve(options.out) : path.join(distDir, 'one-language-1.0.0.vsix');
+  const pkgJsonPath = path.join(editorDir, 'package.json');
+  const pkgData = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+  const vsixOut = options.out ? path.resolve(options.out) : path.join(distDir, `one-language-${pkgData.version}.vsix`);
   fs.mkdirSync(path.dirname(vsixOut), { recursive: true });
 
   // ── Stage 1: Build Extension Bundle with esbuild ──────────────────────────
@@ -45,22 +47,23 @@ function packageVSCodeExtension(options = {}) {
 
   // ── Stage 2: Validate Manifest & Assets ────────────────────────────────────
   console.log('\n[Stage 2] Validating Extension Manifest and Assets...');
-  const pkgJsonPath = path.join(editorDir, 'package.json');
   const langConfigPath = path.join(editorDir, 'language-configuration.json');
   const tmLanguagePath = path.join(editorDir, 'syntaxes', 'one.tmLanguage.json');
   const snippetsPath = path.join(editorDir, 'snippets', 'one.code-snippets');
   const iconPath = path.join(editorDir, 'assets', 'ONE-Language-Logo.png');
+  const modelPath = path.join(editorDir, 'models', 'echo1_best_loss.cubiomodel');
 
   assert(fs.existsSync(pkgJsonPath), 'Missing package.json in extension directory');
   assert(fs.existsSync(langConfigPath), 'Missing language-configuration.json');
   assert(fs.existsSync(tmLanguagePath), 'Missing syntaxes/one.tmLanguage.json');
   assert(fs.existsSync(snippetsPath), 'Missing snippets/one.code-snippets');
   assert(fs.existsSync(iconPath), 'Missing extension icon at assets/ONE-Language-Logo.png');
+  assert(fs.existsSync(modelPath), 'Missing embedded ECHO-1 model at models/echo1_best_loss.cubiomodel');
 
   const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
   console.log(`  - Extension: ${pkg.publisher}.${pkg.name} v${pkg.version}`);
   console.log(`  - Target VS Code: ${pkg.engines.vscode}`);
-  console.log('  ✔ All grammar, language configuration, and snippet assets verified.');
+  console.log(`  ✔ All grammar, language configuration, snippets, and embedded ECHO-1 model (${(fs.statSync(modelPath).size / (1024 * 1024)).toFixed(2)} MB) verified.`);
 
   // ── Stage 3: Package VSIX via @vscode/vsce ─────────────────────────────────
   console.log('\n[Stage 3] Packaging .vsix Package via @vscode/vsce...');

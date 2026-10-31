@@ -40,12 +40,16 @@ export interface ThreadPoolConfig {
   maxThreads?: number;
   /** Optional worker script path for offloading heavy tasks */
   workerScript?: string;
+  /** Optional maximum pending queue size to prevent unbounded queue saturation */
+  maxQueueSize?: number;
 }
 
 export type TaskHandler<T = any, R = any> = (payload: T, sequence: number) => Promise<R> | R;
 
 export class ThreadPool {
   private maxThreads: number = 1;
+  private maxQueueSize: number = 0;
+  private isShutdown: boolean = false;
   private activeWorkers: any[] = [];
   private taskQueue: Array<{
     task: Task;
@@ -69,6 +73,8 @@ export class ThreadPool {
     }
 
     this.maxThreads = config.maxThreads ?? Math.max(1, os.cpus().length - 1);
+    this.maxQueueSize = config.maxQueueSize ?? 0;
+    this.isShutdown = false;
     this.activeWorkers = [];
     this.taskQueue = [];
     this.runningTasks = new Map();
@@ -179,6 +185,12 @@ export class ThreadPool {
     if (!this.isMain) {
       throw new Error('ThreadPool.executeTask: called from worker thread — use main thread');
     }
+    if (this.isShutdown) {
+      throw new Error('ThreadPool is shut down');
+    }
+    if (this.maxQueueSize > 0 && this.taskQueue.length >= this.maxQueueSize) {
+      throw new Error(`ThreadPool queue saturated: max capacity ${this.maxQueueSize} reached`);
+    }
 
     const taskId = `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const task: Task<T, R> = { id: taskId, type, payload, sequence, handler };
@@ -242,6 +254,10 @@ export class ThreadPool {
    * Gracefully shutdown the pool.
    */
   public shutdown(): void {
+    this.isShutdown = true;
+    for (const item of this.taskQueue) {
+      item.reject(new Error('ThreadPool shut down'));
+    }
     this.taskQueue = [];
     for (const worker of this.activeWorkers) {
       if (worker?.terminate) worker.terminate();

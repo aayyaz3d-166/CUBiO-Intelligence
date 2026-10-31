@@ -93,7 +93,14 @@ export class PlanningEngine {
       });
     }
 
-    if (goal.toLowerCase().includes('reason') || goal.toLowerCase().includes('infer')) {
+    if (goal.toLowerCase().includes('binary') && goal.toLowerCase().includes('reason')) {
+      steps.push({
+        stepId: 'step_binary_reason',
+        toolId: 'cubio:reasoning',
+        description: 'Solve bounded binary reasoning search and serialize bitstream',
+        params: { mode: 'BINARY', input: 0, target: 10 },
+      });
+    } else if (goal.toLowerCase().includes('reason') || goal.toLowerCase().includes('infer')) {
       steps.push({
         stepId: 'step_2_reason',
         toolId: 'cubio:reasoning',
@@ -345,5 +352,32 @@ export class PlanningEngine {
       selfCorrectionsCount: selfCorrections,
       finalOutput: lastOutput,
     };
+  }
+
+  /**
+   * Plans and executes a bounded binary reasoning task via cubio:reasoning tool.
+   */
+  public executeReasoningPlan(
+    goalDescription: string,
+    input: number,
+    target: number,
+    context: ToolExecutionContext,
+    maxSteps: number = 50
+  ): { plan: Plan; report: WorkflowExecutionReport } {
+    const plan: Plan = {
+      planId: `plan_reason_${Date.now()}`,
+      goal: goalDescription,
+      steps: [
+        {
+          stepId: 'step_binary_reason',
+          toolId: 'cubio:reasoning',
+          description: `Derive target ${target} from input ${input}`,
+          params: { mode: 'BINARY', input, target, maxSteps },
+        },
+      ],
+      estimatedCost: 1.0,
+    };
+    const report = this.executeWorkflow(plan.planId, plan.steps, context);
+    return { plan, report };
   }
 }

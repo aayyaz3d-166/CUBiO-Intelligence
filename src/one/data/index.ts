@@ -12,3 +12,4 @@ export * from './CanonicalState';
 export * from './CanonicalRef';
 export * from './CanonicalStruct';
 export * from './CanonicalSerializer';
+export * from './TimeTravelStateManager';

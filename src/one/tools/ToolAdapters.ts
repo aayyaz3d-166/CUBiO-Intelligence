@@ -37,6 +37,7 @@ import { RSSGuard } from '../../core/memory/rssGuard';
 import { HarmonicAlignmentTrainer } from '../../core/training/harmonicAlignment';
 import { NativeModelRegistry } from '../native_model_registry';
 import { NativeMemoryAPI } from '../memory/NativeMemoryAPI';
+import { ReasoningSession } from '../intelligence/reasoning/ReasoningSession';
 
 // ── 1. Reasoning Tool Adapter ────────────────────────────────────────────────
 
@@ -74,6 +75,63 @@ export class ReasoningToolAdapter implements INativeTool {
         return {
           toolId: this.id,
           success: true,
+          result: resultVal,
+          latencyMs: latency,
+          stateHash,
+        };
+      }
+
+      if (mode === 'BINARY' || mode === 'SYMBOLIC') {
+        const inputVal = params.input !== undefined ? toRaw(params.input) : 0;
+        const targetVal = params.target !== undefined ? toRaw(params.target) : 0;
+        const maxSteps = params.maxSteps !== undefined ? Number(toRaw(params.maxSteps)) : 50;
+
+        const session = new ReasoningSession<number>();
+        session.registerRule({
+          id: 'increment',
+          description: 'Increment by 1',
+          priority: 5,
+          isApplicable: (n) => typeof n === 'number' && n < Number(targetVal),
+          apply: (n) => [Number(n) + 1],
+        });
+        session.registerRule({
+          id: 'decrement',
+          description: 'Decrement by 1',
+          priority: 5,
+          isApplicable: (n) => typeof n === 'number' && n > Number(targetVal),
+          apply: (n) => [Number(n) - 1],
+        });
+        session.registerRule({
+          id: 'double',
+          description: 'Double integer towards target',
+          priority: 10,
+          isApplicable: (n) => typeof n === 'number' && n > 0 && n * 2 <= Number(targetVal),
+          apply: (n) => [Number(n) * 2],
+        });
+
+        const bundle = session.solveWithBinaryTrace({
+          input: Number(inputVal),
+          goal: (n) => n === Number(targetVal),
+          maxSteps,
+        });
+
+        const latency = performance.now() - t0;
+        const resultVal = fromRaw({
+          isSolved: bundle.result.isSolved,
+          status: bundle.result.status,
+          bestValue: bundle.result.bestCandidate ? bundle.result.bestCandidate.value : null,
+          stepsUsed: bundle.result.metrics.stepsUsed,
+          envelopesCount: bundle.solutionEnvelopes.length,
+          isBitExact: bundle.isBitExact,
+        });
+        const stateHash = CanonicalSerializer.packEnvelope({
+          solved: bundle.result.isSolved,
+          best: bundle.result.bestCandidate ? bundle.result.bestCandidate.value : null,
+        }).payloadHash;
+
+        return {
+          toolId: this.id,
+          success: bundle.result.isSolved,
           result: resultVal,
           latencyMs: latency,
           stateHash,

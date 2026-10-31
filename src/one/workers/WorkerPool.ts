@@ -254,6 +254,27 @@ export class WorkerPool {
   }
 
   /**
+   * Cancels a pending or active task by taskId.
+   */
+  public cancelTask(taskId: string): boolean {
+    const callback = this.pendingCallbacks.get(taskId);
+    if (!callback) return false;
+    this.pendingCallbacks.delete(taskId);
+
+    for (const [wId, pending] of this.activeTasks.entries()) {
+      if ((pending.message as any).taskId === taskId) {
+        this.activeTasks.delete(wId);
+        this.healthRecords[wId].currentTaskId = null;
+        this.healthRecords[wId].currentSequence = null;
+        break;
+      }
+    }
+
+    callback.reject(new Error(`Task '${taskId}' was cancelled`));
+    return true;
+  }
+
+  /**
    * Dispatches a message to a specific worker and awaits completion.
    */
   public async dispatchToWorker(workerId: number, message: MasterToWorkerMessage): Promise<WorkerResultMessage> {
@@ -267,11 +288,33 @@ export class WorkerPool {
     (message as any).sequence = sequence;
 
     return new Promise((resolve, reject) => {
-      this.pendingCallbacks.set(taskId, { resolve, reject });
+      let timeoutHandle: any = null;
+      if (this.taskTimeoutMs > 0 && Number.isFinite(this.taskTimeoutMs)) {
+        timeoutHandle = setTimeout(() => {
+          this.pendingCallbacks.delete(taskId);
+          this.activeTasks.delete(workerId);
+          this.healthRecords[workerId].totalTasksFailed++;
+          this.healthRecords[workerId].currentTaskId = null;
+          this.healthRecords[workerId].currentSequence = null;
+          reject(new Error(`Worker task '${taskId}' timed out after ${this.taskTimeoutMs}ms`));
+        }, this.taskTimeoutMs);
+      }
+
+      const safeResolve = (res: WorkerResultMessage) => {
+        if (timeoutHandle) clearTimeout(timeoutHandle);
+        resolve(res);
+      };
+
+      const safeReject = (err: any) => {
+        if (timeoutHandle) clearTimeout(timeoutHandle);
+        reject(err);
+      };
+
+      this.pendingCallbacks.set(taskId, { resolve: safeResolve, reject: safeReject });
       this.activeTasks.set(workerId, {
         message,
-        resolve,
-        reject,
+        resolve: safeResolve,
+        reject: safeReject,
         timestamp: Date.now(),
       });
 
@@ -280,13 +323,19 @@ export class WorkerPool {
 
       if (this.isVirtual) {
         const state = this.virtualStates[workerId];
-        executeWorkerTask(message, state, (res: WorkerToMasterMessage) => {
-          this.handleWorkerResponse(workerId, res);
+        setImmediate(() => {
+          if (!this.pendingCallbacks.has(taskId)) {
+            // Task was cancelled or aborted prior to execution
+            return;
+          }
+          executeWorkerTask(message, state, (res: WorkerToMasterMessage) => {
+            this.handleWorkerResponse(workerId, res);
+          });
         });
       } else {
         const worker = this.workers[workerId];
         if (!worker) {
-          reject(new Error(`Worker ${workerId} is not available`));
+          safeReject(new Error(`Worker ${workerId} is not available`));
           return;
         }
         worker.postMessage(message);

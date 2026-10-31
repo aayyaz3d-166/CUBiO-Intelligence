@@ -200,5 +200,22 @@
       "}"
     ],
     "description": "Function definition using ONE Language v1.0.1 command syntax"
+  },
+  "Spatial Funnel Stream": {
+    "prefix": "funnel",
+    "body": [
+      "funnel  from  to  {",
+      "\\tbuffer  MB;",
+      "\\tpriority ;",
+      "}"
+    ],
+    "description": "Establish a streaming pipeline between spatial nodes"
+  },
+  "RSS Guard": {
+    "prefix": "rss_max",
+    "body": [
+      "rss_max  MB;"
+    ],
+    "description": "Declare maximum physical memory RSS guard for execution"
   }
 }

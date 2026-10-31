@@ -188,9 +188,10 @@ async function runTests(): Promise<void> {
   const workerGrad3 = arena.getWorkerGradients(3);
 
   // Assert that each worker slice has distinct non-zero values computed by its respective batch
-  assert(workerGrad0[0] !== workerGrad1[0], 'Worker 0 and 1 computed distinct gradients for distinct batches');
-  assert(workerGrad1[0] !== workerGrad2[0], 'Worker 1 and 2 computed distinct gradients for distinct batches');
-  assert(workerGrad2[0] !== workerGrad3[0], 'Worker 2 and 3 computed distinct gradients for distinct batches');
+  const lastParamIdx = PARAMETER_COUNT - 1;
+  assert(workerGrad0[lastParamIdx] !== workerGrad1[lastParamIdx], 'Worker 0 and 1 computed distinct gradients for distinct batches');
+  assert(workerGrad1[lastParamIdx] !== workerGrad2[lastParamIdx], 'Worker 1 and 2 computed distinct gradients for distinct batches');
+  assert(workerGrad2[lastParamIdx] !== workerGrad3[lastParamIdx], 'Worker 2 and 3 computed distinct gradients for distinct batches');
 
   // 2. Out-of-order task arrival simulation: verify fixed-order reduction is independent of completion order
   arena.deterministicReduceGradients(WORKER_COUNT);

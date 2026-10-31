@@ -30,3 +30,4 @@ export * from './VirtualSpaceQueryEngine';
 export * from './VirtualPhysicalCostAnalyzer';
 export * from './ExtremeScaleBenchmarkEngine';
 export * from './UnifiedExtremeMemoryToolchain';
+export * from './ExtremeMemoryVMAdapter';

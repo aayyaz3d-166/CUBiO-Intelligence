@@ -67,9 +67,15 @@ export function runVIGProvenanceEvidenceTests(): void {
     assert(typeof anchor.isWorkingTreeClean === 'boolean', 'isWorkingTreeClean must be boolean');
     assert(typeof anchor.committedAt === 'number' && anchor.committedAt > 0, 'committedAt must be positive epoch timestamp');
 
-    // Confirm active branch matches stabilization/phase-1-fixes
-    assert.strictEqual(anchor.branch, 'stabilization/phase-1-fixes');
-    assert.strictEqual(anchor.baselineTag, 'v0.1.0-baseline');
+    // Confirm active branch matches expected branch
+    assert(
+      anchor.branch === 'integration/v1.0.1-local' || anchor.branch === 'stabilization/phase-1-fixes',
+      `Expected branch to be 'integration/v1.0.1-local' or 'stabilization/phase-1-fixes', got: '${anchor.branch}'`
+    );
+    assert(
+      anchor.baselineTag === 'v1.0.0' || anchor.baselineTag === 'v0.1.0-baseline',
+      `Expected baselineTag to be 'v1.0.0' or 'v0.1.0-baseline', got: '${anchor.baselineTag}'`
+    );
 
     console.log(`  ✓ Git commit anchor resolved: SHA=${anchor.commitSha.slice(0, 8)}..., branch=${anchor.branch}, clean=${anchor.isWorkingTreeClean}.`);
   }

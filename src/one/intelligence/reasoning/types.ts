@@ -67,6 +67,8 @@ export interface ReasoningInput<T = unknown> {
   policy?: ReasoningPolicy;
   /** Optional timeout in milliseconds */
   timeoutMs?: number;
+  /** Optional cancellation token / check function */
+  isCancelled?: () => boolean;
 }
 
 /**

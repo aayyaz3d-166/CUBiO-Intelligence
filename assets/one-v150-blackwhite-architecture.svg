@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="100%" height="100%">
+  <defs>
+    <!-- Monochrome Background Gradients -->
+    <linearGradient id="bwBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050505" />
+      <stop offset="50%" stop-color="#0a0a0a" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+
+    <!-- Card Background Gradient -->
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161616" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#0a0a0a" stop-opacity="0.98" />
+    </linearGradient>
+
+    <!-- Platinum Accent Gradient -->
+    <linearGradient id="platinumGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="50%" stop-color="#E0E0E0" />
+      <stop offset="100%" stop-color="#AAAAAA" />
+    </linearGradient>
+
+    <!-- Subtle White Glow Filter -->
+    <filter id="whiteGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Subtle Line Dash Pattern -->
+    <pattern id="gridPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#222222" stroke-width="0.75" stroke-opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Deep Obsidian Background -->
+  <rect width="1200" height="640" fill="url(#bwBg)" />
+  <rect width="1200" height="640" fill="url(#gridPattern)" />
+
+  <!-- Ambient Monochrome Radial Orbs -->
+  <circle cx="600" cy="80" r="180" fill="#FFFFFF" opacity="0.04" filter="url(#whiteGlow)" />
+  <circle cx="200" cy="400" r="160" fill="#FFFFFF" opacity="0.02" />
+  <circle cx="1000" cy="400" r="160" fill="#FFFFFF" opacity="0.02" />
+
+  <!-- Outer Border Frame -->
+  <rect x="20" y="20" width="1160" height="600" rx="16" fill="none" stroke="#333333" stroke-width="1.5" />
+  <rect x="24" y="24" width="1152" height="592" rx="12" fill="none" stroke="#1f1f1f" stroke-width="1" />
+
+  <!-- Top Release Pill -->
+  <g transform="translate(450, 42)">
+    <rect x="0" y="0" width="300" height="32" rx="16" fill="#141414" stroke="#444444" stroke-width="1.2" />
+    <circle cx="18" cy="16" r="4" fill="#FFFFFF" filter="url(#whiteGlow)" />
+    <text x="150" y="21" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5" font-weight="700" letter-spacing="2" text-anchor="middle">SOVEREIGN ARCHITECTURE v1.5.0</text>
+  </g>
+
+  <!-- Header Section -->
+  <text x="600" y="118" fill="url(#platinumGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="40" font-weight="900" letter-spacing="4" text-anchor="middle" filter="url(#whiteGlow)">ONE LANGUAGE</text>
+  <text x="600" y="148" fill="#888888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="500" letter-spacing="3" text-anchor="middle">THE SOVEREIGN COMPUTATIONAL &amp; NEURAL ECOSYSTEM</text>
+
+  <!-- Divider Line -->
+  <line x1="300" y1="168" x2="900" y2="168" stroke="#333333" stroke-width="1" />
+  <polygon points="600,165 605,171 595,171" fill="#FFFFFF" />
+
+  <!-- ── 3-6-9 VORTEX HIERARCHY TREE (MONOCHROME SCHEMATIC) ── -->
+  <g transform="translate(0, 15)">
+    <!-- Central Spine Connecting Line -->
+    <line x1="600" y1="205" x2="600" y2="395" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4,4" opacity="0.8" />
+
+    <!-- Branch Connection Paths -->
+    <path d="M 600 395 L 430 405" stroke="#666666" stroke-width="1.5" fill="none" stroke-dasharray="2,2" />
+    <path d="M 600 300 L 770 310" stroke="#666666" stroke-width="1.5" fill="none" stroke-dasharray="2,2" />
+    <path d="M 600 205 L 430 215" stroke="#666666" stroke-width="1.5" fill="none" stroke-dasharray="2,2" />
+
+    <!-- ANCHOR 9: SINGULARITY (Top) -->
+    <g transform="translate(600, 205)">
+      <circle cx="0" cy="0" r="24" fill="#111111" stroke="#FFFFFF" stroke-width="2.5" filter="url(#whiteGlow)" />
+      <polygon points="0,-12 10,8 -10,8" fill="none" stroke="#FFFFFF" stroke-width="1.5" />
+      <text x="0" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" text-anchor="middle">9</text>
+      <!-- Label -->
+      <rect x="35" y="-14" width="230" height="28" rx="6" fill="#141414" stroke="#444444" stroke-width="1" />
+      <text x="45" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700">ANCHOR 9: SINGULARITY</text>
+      <text x="180" y="4" fill="#888888" font-family="monospace" font-size="9.5">Collapsed Truth</text>
+    </g>
+
+    <!-- BRANCH (7, 8): ANALYSIS & VERIFICATION (Left of 9) -->
+    <g transform="translate(340, 205)">
+      <rect x="-80" y="-14" width="160" height="28" rx="14" fill="#141414" stroke="#555555" stroke-width="1" />
+      <text x="0" y="4" fill="#CCCCCC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">BRANCH (7, 8) ANALYSIS</text>
+    </g>
+
+    <!-- ANCHOR 6: PROCESS (Middle) -->
+    <g transform="translate(600, 300)">
+      <circle cx="0" cy="0" r="22" fill="#111111" stroke="#E0E0E0" stroke-width="2" />
+      <circle cx="0" cy="0" r="10" fill="none" stroke="#888888" stroke-width="1.2" />
+      <text x="0" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" text-anchor="middle">6</text>
+      <!-- Label -->
+      <rect x="-265" y="-14" width="230" height="28" rx="6" fill="#141414" stroke="#444444" stroke-width="1" />
+      <text x="-255" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700">ANCHOR 6: PROCESS</text>
+      <text x="-120" y="4" fill="#888888" font-family="monospace" font-size="9.5">Logic &amp; Transform</text>
+    </g>
+
+    <!-- BRANCH (4, 5): CONTEXT & MEMORY (Right of 6) -->
+    <g transform="translate(860, 300)">
+      <rect x="-80" y="-14" width="160" height="28" rx="14" fill="#141414" stroke="#555555" stroke-width="1" />
+      <text x="0" y="4" fill="#CCCCCC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">BRANCH (4, 5) CONTEXT</text>
+    </g>
+
+    <!-- ANCHOR 3: FOUNDATION (Bottom) -->
+    <g transform="translate(600, 395)">
+      <circle cx="0" cy="0" r="22" fill="#111111" stroke="#CCCCCC" stroke-width="2" />
+      <rect x="-7" y="-7" width="14" height="14" fill="none" stroke="#888888" stroke-width="1.2" />
+      <text x="0" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="800" text-anchor="middle">3</text>
+      <!-- Label -->
+      <rect x="35" y="-14" width="230" height="28" rx="6" fill="#141414" stroke="#444444" stroke-width="1" />
+      <text x="45" y="4" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="700">ANCHOR 3: FOUNDATION</text>
+      <text x="180" y="4" fill="#888888" font-family="monospace" font-size="9.5">State &amp; Subject</text>
+    </g>
+
+    <!-- BRANCH (1, 2): INPUT & OBSERVATION (Left of 3) -->
+    <g transform="translate(340, 395)">
+      <rect x="-80" y="-14" width="160" height="28" rx="14" fill="#141414" stroke="#555555" stroke-width="1" />
+      <text x="0" y="4" fill="#CCCCCC" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="600" text-anchor="middle">BRANCH (1, 2) INPUT</text>
+    </g>
+  </g>
+
+  <!-- ── 4 CORE PILLARS MATRIX (BOTTOM CARDS) ── -->
+  <!-- Card 1: 3-6-9 Tokenizer Engine -->
+  <g transform="translate(50, 470)">
+    <rect width="255" height="130" rx="12" fill="url(#cardBg)" stroke="#333333" stroke-width="1.2" />
+    <rect x="16" y="16" width="36" height="36" rx="8" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="34" y="38" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">369</text>
+    <text x="62" y="32" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700">3-6-9 Tokenizer</text>
+    <text x="62" y="48" fill="#888888" font-family="monospace" font-size="10.5">8,192 Sovereign Vocab</text>
+    <text x="16" y="80" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">Zero HuggingFace/TikToken</text>
+    <text x="16" y="98" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">100% Roundtrip Bit-Exact</text>
+    <text x="16" y="116" fill="#FFFFFF" font-family="monospace" font-size="10.5">Int32Array Tensor Ready</text>
+  </g>
+
+  <!-- Card 2: OLTO Reactive Frontend -->
+  <g transform="translate(330, 470)">
+    <rect width="255" height="130" rx="12" fill="url(#cardBg)" stroke="#333333" stroke-width="1.2" />
+    <rect x="16" y="16" width="36" height="36" rx="8" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="34" y="38" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">&lt;/&gt;</text>
+    <text x="62" y="32" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700">OLTO Frontend</text>
+    <text x="62" y="48" fill="#888888" font-family="monospace" font-size="10.5">0.70µs Signal Reactivity</text>
+    <text x="16" y="80" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">Zero node_modules / CDN</text>
+    <text x="16" y="98" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">Single-file .olto Declarative</text>
+    <text x="16" y="116" fill="#FFFFFF" font-family="monospace" font-size="10.5">Security Invariant E9001</text>
+  </g>
+
+  <!-- Card 3: ECHO-1 Offline AI Copilot -->
+  <g transform="translate(610, 470)">
+    <rect width="255" height="130" rx="12" fill="url(#cardBg)" stroke="#333333" stroke-width="1.2" />
+    <rect x="16" y="16" width="36" height="36" rx="8" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="34" y="38" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">AI</text>
+    <text x="62" y="32" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700">ECHO-1 Copilot</text>
+    <text x="62" y="48" fill="#888888" font-family="monospace" font-size="10.5">24.56 MB Local Weights</text>
+    <text x="16" y="80" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">100% CPU Offline Inference</text>
+    <text x="16" y="98" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">Zero Cloud API Requirements</text>
+    <text x="16" y="116" fill="#FFFFFF" font-family="monospace" font-size="10.5">Ctrl+Shift+I Instant Code</text>
+  </g>
+
+  <!-- Card 4: Qplayer Engine & Address369 -->
+  <g transform="translate(890, 470)">
+    <rect width="260" height="130" rx="12" fill="url(#cardBg)" stroke="#333333" stroke-width="1.2" />
+    <rect x="16" y="16" width="36" height="36" rx="8" fill="#202020" stroke="#555555" stroke-width="1" />
+    <text x="34" y="38" fill="#FFFFFF" font-family="monospace" font-size="13" font-weight="bold" text-anchor="middle">OBI</text>
+    <text x="62" y="32" fill="#FFFFFF" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13.5" font-weight="700">Qplayer Runtime</text>
+    <text x="62" y="48" fill="#888888" font-family="monospace" font-size="10.5">204M ops/sec Throughput</text>
+    <text x="16" y="80" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">ONE Binary Intelligence (OBI)</text>
+    <text x="16" y="98" fill="#AAAAAA" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11.5">Address369 Memory Space</text>
+    <text x="16" y="116" fill="#FFFFFF" font-family="monospace" font-size="10.5">Deterministic 3D Bounds</text>
+  </g>
+</svg>

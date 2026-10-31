@@ -9,3 +9,5 @@ export * from './CandidateEvaluator';
 export * from './StateExplorer';
 export * from './ReasoningEngine';
 export * from './BinaryReasoningBridge';
+export * from './ReasoningSession';
+export * from './ModelReasoningAdapter';

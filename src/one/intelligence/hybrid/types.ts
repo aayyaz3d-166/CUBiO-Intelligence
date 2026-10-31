@@ -397,10 +397,16 @@ export function resolveFollowUpEntity(
     return undefined;
   }
 
-  // ---------- numeric chain follow-ups ----------
-  if (lower.includes('relations') || lower.includes('chain') || lower.includes('show')) {
+  // ---------- numeric chain / step follow-ups ----------
+  if (
+    lower.includes('relations') ||
+    lower.includes('chain') ||
+    lower.includes('show') ||
+    /^(?:subtract|add|decrease|increase|decrement|increment)\s+(?:by\s+)?\d+/i.test(lower) ||
+    lower.includes('step')
+  ) {
     const latest = window[window.length - 1];
-    if (latest.intentType === UserIntentType.REASONING_TASK && latest.entities.inputValue !== undefined) {
+    if (latest && latest.intentType === UserIntentType.REASONING_TASK && latest.entities.inputValue !== undefined) {
       return { isNumericChain: true, lastIntentType: latest.intentType };
     }
     return undefined;
@@ -418,7 +424,6 @@ export function recordTurn(
   entities: ExtractedEntities,
 ): void {
   state.turnCount++;
-  pruneReferenceWindow(state.referenceWindow, 10);
   state.referenceWindow.push({
     turn: state.turnCount,
     rawText,
@@ -427,5 +432,6 @@ export function recordTurn(
     confidence: 0.9,
     clarificationRequired: false,
   });
+  pruneReferenceWindow(state.referenceWindow, 10);
 }
 
