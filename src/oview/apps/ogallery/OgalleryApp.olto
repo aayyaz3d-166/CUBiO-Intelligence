@@ -1,0 +1,65 @@
+// Ogallery — Sovereign Photo Viewer & Media Gallery
+// ==============================================================================
+// Pure Canonical OLTO Frontend Component.
+// Zero external dependencies — 100% Sovereign ONE Language substrate.
+// ==============================================================================
+
+component OgalleryApp {
+    state currentImage: String = "/user/media/artwork.png"
+    state zoomLevel: Number = 100
+    state rotationDeg: Number = 0
+    state isSlideshowActive: Boolean = false
+    state imageCount: Number = 3
+
+    action selectImage(imgPath: String) {
+        currentImage = imgPath
+        zoomLevel = 100
+        rotationDeg = 0
+    }
+
+    action setZoom(zoomVal: Number) {
+        zoomLevel = zoomVal
+    }
+
+    action rotateImage(degDelta: Number) {
+        rotationDeg = rotationDeg + degDelta
+        if rotationDeg >= 360 {
+            rotationDeg = rotationDeg - 360
+        }
+    }
+
+    action toggleSlideshow() {
+        isSlideshowActive = !isSlideshowActive
+    }
+
+    view {
+        Container(maxWidth: 1200, padding: 16) {
+            Card(padding: 16, radius: 12, elevation: 2) {
+                Row(justify: "between", align: "center", marginBottom: 14) {
+                    Text("Ogallery — Sovereign Photo Viewer", size: 22, weight: "bold", color: "white")
+                    Badge(label: "\(imageCount) Images in /user/media", color: "green")
+                }
+
+                Row(gap: 8, marginBottom: 14, align: "center") {
+                    Button(label: "Zoom -", variant: "outline", onClick: { setZoom(zoomLevel > 50 ? zoomLevel - 25 : 50) })
+                    Text("\(zoomLevel)%", size: 13, color: "green", weight: "bold")
+                    Button(label: "Zoom +", variant: "outline", onClick: { setZoom(zoomLevel < 300 ? zoomLevel + 25 : 300) })
+                    Spacer(8)
+                    Button(label: "Rotate ⟲", variant: "outline", onClick: { rotateImage(270) })
+                    Button(label: "Rotate ⟳", variant: "outline", onClick: { rotateImage(90) })
+                    Spacer(8)
+                    Button(label: isSlideshowActive ? "Pause Slideshow" : "Start Slideshow", variant: isSlideshowActive ? "solid" : "outline", onClick: { toggleSlideshow() })
+                }
+
+                Card(padding: 24, radius: 10, background: "#05070e") {
+                    Text("Current View: \(currentImage)", size: 14, weight: "bold", color: "white", marginBottom: 6)
+                    Text("Zoom: \(zoomLevel) percent | Rotation: \(rotationDeg) deg", size: 12, color: "gray", marginBottom: 14)
+
+                    Card(padding: 12, radius: 8, background: "#0c1322") {
+                        Text("VFS Image Stream: Rendered in Hardware 2D Canvas Matrix", size: 12, color: "green")
+                    }
+                }
+            }
+        }
+    }
+}

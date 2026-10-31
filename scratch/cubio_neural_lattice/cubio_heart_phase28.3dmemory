@@ -1,0 +1,30 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v28_SOVEREIGN_HEART",
+  "gate": "CNL-P28-001",
+  "version": "28.1.0-one-heart-biomorphic",
+  "pqc_master_seal": "0xPQC_369_b4f1c78be73215c1f37f29f7e652fef1_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 350.4947,
+  "total_action_potentials": 9,
+  "total_icns_reflex_events": 3,
+  "total_neurons_activated": 26,
+  "icns_neuron_pool_size": 40000,
+  "autonomic_balance": "SYMPATHETIC_DOMINANT",
+  "hrv_freq_transitions": 3,
+  "hrv_mean_rmssd_ms": 65.47285,
+  "hrv_mean_sdnn_ms": 43.648567,
+  "hrv_mean_lf_hf_ratio": 1.166667,
+  "hrv_mean_stress_index": 0.49434,
+  "energy_flux_watts_total": 1.824528,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3,
+    6,
+    9
+  ],
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725905000000
+}

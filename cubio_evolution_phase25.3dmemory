@@ -1,0 +1,23 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v25_SELF_EVOLVING_CODE",
+  "gate": "CNL-P25-001",
+  "version": "25.0.0-one-evolve",
+  "pqc_master_seal": "0xPQC_369_e55e2fb382a19dfac18db7cf0eee0798_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 88.4,
+  "total_generations": 5,
+  "initial_fitness": 1,
+  "final_fitness": 1.4209,
+  "cumulative_gain_percent": 42.09,
+  "rollback_count": 1,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3.33,
+    6.25,
+    9.09
+  ],
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "active_ast_nodes": 10,
+  "timestamp": 1725895000000
+}

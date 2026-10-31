@@ -1,0 +1,65 @@
+{
+  "gate": "CNL-P26.8",
+  "timestamp": "2026-09-09T07:49:53Z",
+  "module": "sovereign_wireless_mesh",
+  "title": "Sovereign Network & RF Telemetry Protocol",
+  "sourceFile": "src/one/programs/sovereign_wireless_mesh.one",
+  "engineFiles": {
+    "typescript": "src/one/sovereign_wireless_mesh_engine.ts",
+    "python": "src/one/cubio_hardware_bridge.py"
+  },
+  "criticalFix": {
+    "originalFlaw": "socket.socket() always returns True regardless of hardware presence — violates zero-hallucination",
+    "fix": "4-priority OS driver probe: NETSH_WLAN → SYSFS_WIRELESS → NETWORKSETUP_MACOS → OS_IF_INDEX → NONE"
+  },
+  "hardwareProbe4Priority": {
+    "1_NETSH_WLAN": "Windows: 'netsh wlan show interfaces' — real WLAN driver query",
+    "2_SYSFS_WIRELESS": "Linux: /sys/class/net/<iface>/wireless/ + operstate=up",
+    "3_NETWORKSETUP_MACOS": "macOS: 'networksetup -listallhardwareports'",
+    "4_OS_IF_INDEX": "Cross-platform: os.networkInterfaces() name pattern match",
+    "NONE": "No physical hardware confirmed → fail-closed"
+  },
+  "transmissionStates": {
+    "PHYSICAL_LINK_DOWN_NO_SIMULATION": "No adapter → bytesSent=0, isValid=false",
+    "ADAPTER_PRESENT_NOT_ASSOCIATED": "Adapter present, no AP → bytesSent=0, isValid=false",
+    "PHYSICAL_SOCKET_WRITE_FAILED": "Hardware present, write failed → bytesSent=0",
+    "OK_TRANSMITTED_VIA_PHYSICAL_RF": "Live transmission → bytesSent=64, PQC seal"
+  },
+  "oneLanguageMapping": {
+    "NativeSystem.ProbePhysicalRFInterface()": "probePhysicalRFInterface() — 4-priority OS probe",
+    "NativeSystem.WriteToHardwareSocket(0x8369, data)": "writeToHardwareSocket(8369, data) — real TCP socket",
+    "NativeSystem.GetHardwareClockTicks()": "process.hrtime.bigint() — nanosecond precision",
+    "TransmissionPacket.bytes_sent": "0 ALWAYS when isValid=false — σ²=0.0"
+  },
+  "liveResult": {
+    "platform": "Windows",
+    "probe_method": "NETSH_WLAN",
+    "interface": "Wi-Fi",
+    "status": "ADAPTER_PRESENT_NOT_ASSOCIATED",
+    "bytes_sent": 0,
+    "is_actuation_blocked": true
+  },
+  "testResults": {
+    "typescript": { "total": 25, "passed": 25, "failed": 0 },
+    "python": { "total": 26, "passed": 26, "failed": 0 }
+  },
+  "cumulativeResults": {
+    "CNL-P26.3-COMPILER": "100% CERTIFIED",
+    "CNL-P26.3-BINARY": "33/33",
+    "CNL-P26.4-RENDER": "33/33",
+    "CNL-P26.5-NET": "37/37",
+    "CNL-P26.6-TELEMETRY-QM": "61/61",
+    "CNL-P26.7-QUANTUM-METRICS": "45/45",
+    "CNL-P26.8-WIRELESS-TS": "25/25",
+    "CNL-P26.8-WIRELESS-PY": "26/26",
+    "TOTAL": "293/293 PASS"
+  },
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1.0,
+    "sigmaSq": 0.0,
+    "port": 8369,
+    "zeroHallucination": true,
+    "pqcSeal": "0xPQC_369_CNL_P26_8_SOVEREIGN_WIRELESS_MESH_CERTIFIED_SEAL"
+  }
+}

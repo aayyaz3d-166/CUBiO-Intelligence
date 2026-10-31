@@ -1,0 +1,125 @@
+{
+  "task": "TASK-27-NATIVE-TRAINING-PERFORMANCE",
+  "timestamp": "2026-09-15T15:14:28.336Z",
+  "model": {
+    "name": "CUBIO-MODEL-STAGE1-V1",
+    "parameterCount": 148912,
+    "vocabSize": 369,
+    "hiddenDimension": 64,
+    "intermediateDimension": 288,
+    "outputDimension": 40,
+    "sequenceLength": 32,
+    "batchSize": 1
+  },
+  "seeds": [
+    42,
+    101,
+    999
+  ],
+  "baselineMeanMs": 7.456299999999999,
+  "bestStepTimeMs": 4.697496666666681,
+  "totalSpeedup": 1.59,
+  "bestIndividualOptimization": {
+    "level": "L6",
+    "name": "MLP KERNEL",
+    "speedup": 1.9
+  },
+  "bestCombinedConfiguration": {
+    "level": "L10",
+    "name": "BEST VERIFIED COMBINATION",
+    "meanMs": 4.697496666666681,
+    "speedup": 1.59
+  },
+  "verificationStatus": {
+    "numericalEquivalence": "PASS",
+    "deterministicReplay": "PASS",
+    "memoryCeilingPass": true,
+    "actuationBlocked": true,
+    "productionRegressionCount": 0,
+    "externalAIDependencyCount": 0
+  },
+  "modelScalingGate": {
+    "authorized": false,
+    "reason": "Model scaling authorized only after training runtime baseline is locked and verified",
+    "nextAction": "SEPARATE_MODEL_SCALING_TASK"
+  },
+  "levels": [
+    {
+      "level": "L0",
+      "name": "CURRENT BASELINE",
+      "meanMs": 7.456,
+      "speedup": 1,
+      "status": "BASELINE"
+    },
+    {
+      "level": "L1",
+      "name": "DATA / INPUT PIPELINE",
+      "meanMs": 4.637,
+      "speedup": 1.61,
+      "status": "KEEP"
+    },
+    {
+      "level": "L2",
+      "name": "MEMORY ALLOCATION / BUFFER REUSE",
+      "meanMs": 3.996,
+      "speedup": 1.87,
+      "status": "KEEP"
+    },
+    {
+      "level": "L3",
+      "name": "FORWARD HOT LOOPS",
+      "meanMs": 3.981,
+      "speedup": 1.87,
+      "status": "KEEP"
+    },
+    {
+      "level": "L4",
+      "name": "BACKWARD HOT LOOPS",
+      "meanMs": 4.683,
+      "speedup": 1.59,
+      "status": "KEEP"
+    },
+    {
+      "level": "L5",
+      "name": "QKV / ATTENTION",
+      "meanMs": 4.009,
+      "speedup": 1.86,
+      "status": "KEEP"
+    },
+    {
+      "level": "L6",
+      "name": "MLP KERNEL",
+      "meanMs": 3.929,
+      "speedup": 1.9,
+      "status": "KEEP"
+    },
+    {
+      "level": "L7",
+      "name": "OPTIMIZER ADAMW",
+      "meanMs": 5.094,
+      "speedup": 1.46,
+      "status": "KEEP"
+    },
+    {
+      "level": "L8",
+      "name": "BATCHING / PARALLELISM",
+      "meanMs": 4.689,
+      "speedup": 1.59,
+      "status": "KEEP"
+    },
+    {
+      "level": "L9",
+      "name": "CPU / GPU PATH SELECTION",
+      "meanMs": 5.066,
+      "speedup": 1.47,
+      "status": "KEEP"
+    },
+    {
+      "level": "L10",
+      "name": "BEST VERIFIED COMBINATION",
+      "meanMs": 4.697,
+      "speedup": 1.59,
+      "status": "KEEP"
+    }
+  ]
+}

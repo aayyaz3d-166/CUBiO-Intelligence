@@ -1,0 +1,80 @@
+// Weather — Sovereign Weather Studio & Forecast Widget
+// ==============================================================================
+// Pure Canonical OLTO Frontend Component.
+// Zero external dependencies — 100% Sovereign ONE Language substrate.
+// ==============================================================================
+
+component WeatherApp {
+    state currentCity: String = "Karachi"
+    state currentTemperature: Number = 28
+    state conditionText: String = "Sunny & Clear"
+    state humidityLevel: Number = 58
+    state windSpeedKmh: Number = 14
+    state uvIndexVal: Number = 6
+
+    action selectCity(cityName: String) {
+        currentCity = cityName
+        if cityName == "Karachi" {
+            currentTemperature = 28
+            conditionText = "Sunny & Clear"
+            humidityLevel = 58
+        }
+        if cityName == "Tokyo" {
+            currentTemperature = 19
+            conditionText = "Cyber Haze"
+            humidityLevel = 65
+        }
+        if cityName == "London" {
+            currentTemperature = 14
+            conditionText = "Light Rain"
+            humidityLevel = 82
+        }
+        if cityName == "New York" {
+            currentTemperature = 21
+            conditionText = "Partly Cloudy"
+            humidityLevel = 50
+        }
+    }
+
+    view {
+        Container(maxWidth: 1200, padding: 16) {
+            Card(padding: 16, radius: 12, elevation: 2) {
+                Row(justify: "between", align: "center", marginBottom: 14) {
+                    Text("Oview Weather — Sovereign Atmospheric Matrix", size: 22, weight: "bold", color: "white")
+                    Badge(label: "Live Telemetry", color: "orange")
+                }
+
+                Row(gap: 8, marginBottom: 16) {
+                    Button(label: "Karachi", variant: currentCity == "Karachi" ? "solid" : "outline", onClick: { selectCity("Karachi") })
+                    Button(label: "Tokyo", variant: currentCity == "Tokyo" ? "solid" : "outline", onClick: { selectCity("Tokyo") })
+                    Button(label: "London", variant: currentCity == "London" ? "solid" : "outline", onClick: { selectCity("London") })
+                    Button(label: "New York", variant: currentCity == "New York" ? "solid" : "outline", onClick: { selectCity("New York") })
+                }
+
+                Card(padding: 24, radius: 10, background: "#060914") {
+                    Row(justify: "between", align: "center", marginBottom: 12) {
+                        Text("\(currentCity)", size: 26, weight: "bold", color: "white")
+                        Text("\(currentTemperature) deg C", size: 32, weight: "bold", color: "green")
+                    }
+
+                    Text("Condition: \(conditionText)", size: 14, color: "gray", marginBottom: 14)
+
+                    Row(gap: 12) {
+                        Card(padding: 10, radius: 6, background: "#0f172a") {
+                            Text("Humidity", size: 11, color: "gray")
+                            Text("\(humidityLevel) percent", size: 14, weight: "bold", color: "white")
+                        }
+                        Card(padding: 10, radius: 6, background: "#0f172a") {
+                            Text("Wind Speed", size: 11, color: "gray")
+                            Text("\(windSpeedKmh) km/h", size: 14, weight: "bold", color: "white")
+                        }
+                        Card(padding: 10, radius: 6, background: "#0f172a") {
+                            Text("UV Index", size: 11, color: "gray")
+                            Text("\(uvIndexVal) / 10", size: 14, weight: "bold", color: "white")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

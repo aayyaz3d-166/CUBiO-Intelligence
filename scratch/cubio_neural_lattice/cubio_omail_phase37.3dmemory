@@ -1,0 +1,51 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v37_SOVEREIGN_OMAIL",
+  "gate": "CNL-P37-001",
+  "version": "37.0.0-one-omail",
+  "omail_suite_status": "SYNCHRONIZED_ACTIVE",
+  "pqc_master_seal": "0xPQC_369_92409d2cb4dbb5ade9450ede7b450586_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 96.2,
+  "active_mailboxes_count": 3,
+  "registered_mailboxes": [
+    "alice@portal.one",
+    "bob@studio.cubio",
+    "operator@docs.sovereign"
+  ],
+  "sample_transmission": {
+    "message_id": "OMAIL_MSG_27B1E349343608BC",
+    "sender": "alice@portal.one",
+    "recipient": "bob@studio.cubio",
+    "recipient_canonical_address": 197,
+    "recipient_display_index": 198,
+    "recipient_spatial_coord": {
+      "i": 3,
+      "j": 3,
+      "k": 3
+    },
+    "envelope_pqc_signature": "0xPQC_369_44d9211b2be1606221b9694c9b4ee445_SEAL",
+    "decryption_signature_verified": true
+  },
+  "quantum_superposition": {
+    "amplitudes": {
+      "cDirect": 0.31622,
+      "cMeshRelay": 0.92195,
+      "cStoreForward": 0.2236,
+      "coherenceConfidence": 1
+    },
+    "collapsed_path": "SPATIAL_MESH_RELAY",
+    "collapse_probability": 0.85,
+    "ai_model": "CUBIO-MODEL-STAGE1-V1",
+    "ai_parameters": 148912
+  },
+  "csi_total_score": 99.625,
+  "csi_grade": "S+",
+  "spatial_cells_count": 343,
+  "symbolic_cells_count": 26,
+  "total_address369_count": 369,
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725915000000
+}

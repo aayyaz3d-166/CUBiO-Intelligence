@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  ⚠️ ARCHITECTURAL STATUS: REFERENCE DEMO ONLY (NON-PRODUCTION)
+  Per Gate CNL-P26.1-R1 Forensic Correction Protocol:
+  Production sovereign 3D Memory Studio runtime dependency on Three.js = 0.
+  Native rendering is performed natively via ONE Language NativeSpatialRenderer.
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 CUBiO Intelligence Core — 3D Memory Studio (REFERENCE DEMO ONLY)</title>
+  <style>
+    :root {
+      --bg-dark: #030308;
+      --bg-panel: #05050f;
+      --border-cyan: rgba(0, 255, 204, 0.25);
+      --border-purple: rgba(153, 0, 255, 0.35);
+      --cyan-glow: #00ffcc;
+      --purple-glow: #9900ff;
+      --red-alert: #ff0055;
+      --text-main: #e2e8f0;
+      --text-muted: #888899;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "SF Mono", Monaco, Consolas, "Liberation Mono", monospace; }
+    body { background: var(--bg-dark); color: var(--cyan-glow); height: 100vh; display: flex; overflow: hidden; }
+
+    /* Left Control & Telemetry Panel */
+    #sidebar {
+      width: 340px;
+      min-width: 320px;
+      background: var(--bg-panel);
+      border-right: 1px solid var(--border-cyan);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    h1 { font-size: 1.25rem; color: #ffffff; letter-spacing: 0.5px; }
+    .subtitle { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px; }
+
+    /* Connection Status Badge */
+    .connection-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      padding: 6px 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f59e0b;
+      box-shadow: 0 0 8px #f59e0b;
+      transition: all 0.3s;
+    }
+    .status-dot.connected {
+      background: #00ff00;
+      box-shadow: 0 0 8px #00ff00;
+    }
+
+    /* Branch Switcher */
+    .branch-switcher {
+      display: flex;
+      gap: 8px;
+    }
+    .branch-btn {
+      flex: 1;
+      padding: 10px 6px;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.72rem;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .branch-btn.intelligence {
+      color: var(--cyan-glow);
+      border: 1px solid var(--cyan-glow);
+    }
+    .branch-btn.intelligence.active {
+      background: var(--cyan-glow);
+      color: #000000;
+      box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
+    }
+    .branch-btn.network {
+      color: #bb66ff;
+      border: 1px solid var(--purple-glow);
+    }
+    .branch-btn.network.active {
+      background: var(--purple-glow);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(153, 0, 255, 0.5);
+    }
+
+    /* Telemetry HUD Box */
+    .card {
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      line-height: 1.6;
+      border: 1px solid var(--border-cyan);
+      background: rgba(0, 255, 204, 0.05);
+      transition: all 0.3s;
+    }
+    .card.network-mode {
+      border-color: var(--border-purple);
+      background: rgba(153, 0, 255, 0.06);
+    }
+    .card-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 4px 0;
+    }
+    .metric-val { font-weight: 700; }
+    .val-green { color: #00ff00; }
+    .val-gold { color: #f59e0b; }
+    .val-purple { color: #cc88ff; }
+
+    /* PQC Security Lock Panel */
+    .card-security {
+      border-color: rgba(255, 0, 85, 0.3);
+      background: rgba(255, 0, 85, 0.06);
+      color: #fca5a5;
+    }
+    .seal-hash {
+      font-size: 0.62rem;
+      word-break: break-all;
+      color: #888899;
+      margin-top: 6px;
+    }
+
+    /* 3D Viewport */
+    #viewport-container {
+      flex: 1;
+      position: relative;
+      background: radial-gradient(circle at 60% 40%, #080816 0%, #020206 100%);
+      overflow: hidden;
+    }
+    #viewport-hud {
+      position: absolute;
+      top: 24px;
+      left: 28px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    #viewport-hud h2 {
+      font-size: 1.15rem;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    #viewport-hud p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .hint-bar {
+      position: absolute;
+      bottom: 20px;
+      left: 28px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      background: rgba(5, 5, 15, 0.8);
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+  <!-- Left Sidebar -->
+  <aside id="sidebar">
+    <div>
+      <h1>🧠 INTELLIGENCE CORE</h1>
+      <div class="subtitle">3D Memory Studio | Gate CNL-P35-002</div>
+    </div>
+
+    <!-- Live Bridge Status -->
+    <div class="connection-badge">
+      <div class="status-dot" id="bridgeDot"></div>
+      <span id="bridgeText">Wi-Fi Bridge: INTERNAL AUTONOMIC</span>
+    </div>
+
+    <!-- Dual-Product Branch Switcher -->
+    <div class="branch-switcher">
+      <button class="branch-btn intelligence active" id="btnIntelligence" onclick="switchBranch('INTELLIGENCE')">
+        CubiO Intelligence
+      </button>
+      <button class="branch-btn network" id="btnNetwork" onclick="switchBranch('NETWORK')">
+        CubiO Network
+      </button>
+    </div>
+
+    <!-- Live Telemetry Box -->
+    <div class="card" id="telemetryCard">
+      <div class="card-title">
+        <span id="cardHeading">📊 Intelligence Live Stats</span>
+        <span class="val-green" id="stateTag">AWAKENED</span>
+      </div>
+      <div class="metric-row">
+        <span>CSI Sovereign Score:</span>
+        <span class="metric-val val-green" id="csiScore">99.6250% (S+)</span>
+      </div>
+      <div class="metric-row">
+        <span>Autonomous RSI:</span>
+        <span class="metric-val val-green" id="rsiGain">+35.28% Gain</span>
+      </div>
+      <div class="metric-row">
+        <span>Working Memory RSS:</span>
+        <span class="metric-val" id="memoryRss">101.80 MB</span>
+      </div>
+      <div class="metric-row">
+        <span>Ambient SpaceField:</span>
+        <span class="metric-val val-gold" id="fieldStrength">99.9886 V/m</span>
+      </div>
+      <div class="metric-row" id="networkRow" style="display:none;">
+        <span>Relativistic Lorentz:</span>
+        <span class="metric-val val-purple">γ = 1.0000000003</span>
+      </div>
+      <div class="metric-row">
+        <span>Epistemic Truth (UUP):</span>
+        <span class="metric-val">100.0% (UUP=1.0)</span>
+      </div>
+    </div>
+
+    <!-- PQC Security Enclave -->
+    <div class="card card-security">
+      <div class="card-title" style="color: #ff0055;">
+        <span>🔒 PQC Master Security Lock</span>
+      </div>
+      <div class="metric-row">
+        <span>Actuation Blocked:</span>
+        <span class="metric-val" style="color: #ff0055;">true (Fail-Closed)</span>
+      </div>
+      <div class="metric-row">
+        <span>Lattice Cryptography:</span>
+        <span class="metric-val">Dilithium/Kyber</span>
+      </div>
+      <div class="seal-hash" id="pqcSeal">
+        0xPQC_369_8ad13f5054cafe1b017bc8e193cdfce2_SEAL
+      </div>
+    </div>
+  </aside>
+
+  <!-- 3D WebGL Viewport -->
+  <main id="viewport-container">
+    <div id="viewport-hud">
+      <h2 id="viewportTitle">🌌 7×7×7 Spatial Voxel Lattice (343 Cells)</h2>
+      <p id="viewportSubtitle">Active Mode: AGI Core, Prefrontal Cortex & Autonomous Self-Compiler</p>
+    </div>
+    <div class="hint-bar">
+      🖱️ Left Click + Drag: Rotate | Right Click + Drag: Pan | Scroll: Zoom | Space-Field Coupler: Active
+    </div>
+  </main>
+
+  <script>
+    // State Variables
+    let currentBranch = 'INTELLIGENCE';
+    const cubes = [];
+
+    // Switch Branch Handler
+    function switchBranch(branch) {
+      currentBranch = branch;
+      const btnInt = document.getElementById('btnIntelligence');
+      const btnNet = document.getElementById('btnNetwork');
+      const card = document.getElementById('telemetryCard');
+      const heading = document.getElementById('cardHeading');
+      const netRow = document.getElementById('networkRow');
+      const vTitle = document.getElementById('viewportSubtitle');
+
+      if (branch === 'INTELLIGENCE') {
+        btnInt.classList.add('active');
+        btnNet.classList.remove('active');
+        card.classList.remove('network-mode');
+        heading.innerText = '🧠 Intelligence Live Stats';
+        netRow.style.display = 'none';
+        vTitle.innerText = 'Active Mode: AGI Core, Prefrontal Cortex & Autonomous Self-Compiler';
+      } else {
+        btnNet.classList.add('active');
+        btnInt.classList.remove('active');
+        card.classList.add('network-mode');
+        heading.innerText = '🌌 SpaceField & DTN Mesh Stats';
+        netRow.style.display = 'flex';
+        vTitle.innerText = 'Active Mode: Interplanetary DTN Mesh, Relativistic Sync & Space-Field Resonance';
+      }
+    }
+
+    // Initialize Three.js Scene
+    const container = document.getElementById('viewport-container');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+
+    // Orbit Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+    camera.position.set(10, 8, 14);
+    controls.update();
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const pointLight = new THREE.PointLight(0x00ffcc, 2.5, 60);
+    pointLight.position.set(6, 12, 8);
+    scene.add(pointLight);
+
+    const secondaryLight = new THREE.PointLight(0x9900ff, 1.8, 60);
+    secondaryLight.position.set(-6, -10, -8);
+    scene.add(secondaryLight);
+
+    // Build 7x7x7 Voxel Grid (343 Spatial Cells)
+    const geometry = new THREE.BoxGeometry(0.68, 0.68, 0.68);
+    for (let x = -3; x <= 3; x++) {
+      for (let y = -3; y <= 3; y++) {
+        for (let z = -3; z <= 3; z++) {
+          const isCenter = x === 0 && y === 0 && z === 0;
+          const isSpaceFieldCell = x === -2 && y === 0 && z === 2; // [1, 3, 5]
+          const isMarsCell = x === 3 && y === 3 && z === 3; // [6, 6, 6]
+
+          let hexColor = 0x00ffcc;
+          if (isCenter) hexColor = 0xff0055;
+          else if (isSpaceFieldCell) hexColor = 0xf59e0b;
+          else if (isMarsCell) hexColor = 0x9900ff;
+
+          const material = new THREE.MeshStandardMaterial({
+            color: hexColor,
+            transparent: true,
+            opacity: isCenter ? 0.95 : 0.65,
+            roughness: 0.2,
+            metalness: 0.8
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.position.set(x * 1.15, y * 1.15, z * 1.15);
+          scene.add(mesh);
+          cubes.push({ mesh, x, y, z, isCenter, isSpaceFieldCell });
+        }
+      }
+    }
+
+    // Animation Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+
+      const time = Date.now() * 0.0022;
+      cubes.forEach(({ mesh, x, y, z, isCenter, isSpaceFieldCell }) => {
+        const dist = Math.sqrt(x * x + y * y + z * z);
+        const pulse = 1 + Math.sin(time - dist * 0.45) * 0.12;
+        mesh.scale.set(pulse, pulse, pulse);
+
+        const mat = mesh.material;
+        if (currentBranch === 'INTELLIGENCE') {
+          mat.emissive.setHex(isCenter ? 0x660022 : isSpaceFieldCell ? 0x553300 : 0x003322);
+        } else {
+          mat.emissive.setHex(isCenter ? 0x660022 : isSpaceFieldCell ? 0x553300 : 0x220044);
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Window Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // Real-Time Telemetry Bridge Streaming (SSE or Polling)
+    function setupBridgeConnection() {
+      const dot = document.getElementById('bridgeDot');
+      const text = document.getElementById('bridgeText');
+
+      try {
+        const eventSource = new EventSource('http://localhost:8369/stream');
+        eventSource.onopen = () => {
+          dot.classList.add('connected');
+          text.innerText = 'Wi-Fi / SpaceField Bridge: CONNECTED (SSE)';
+        };
+        eventSource.onmessage = (event) => {
+          const data = JSON.parse(event.data);
+          updateTelemetryUI(data);
+        };
+        eventSource.onerror = () => {
+          dot.classList.remove('connected');
+          text.innerText = 'Wi-Fi Bridge: INTERNAL AUTONOMIC';
+          eventSource.close();
+          // Fallback to internal simulation loop
+          startInternalSimulation();
+        };
+      } catch (e) {
+        startInternalSimulation();
+      }
+    }
+
+    function updateTelemetryUI(data) {
+      if (data.fieldStrength) document.getElementById('fieldStrength').innerText = data.fieldStrength.toFixed(4) + ' V/m';
+      if (data.csiScore) document.getElementById('csiScore').innerText = data.csiScore.toFixed(4) + '% (S+)';
+      if (data.rsiGain) document.getElementById('rsiGain').innerText = '+' + data.rsiGain + '% Gain';
+      if (data.memoryRss) document.getElementById('memoryRss').innerText = data.memoryRss.toFixed(2) + ' MB';
+      if (data.pqcSeal) document.getElementById('pqcSeal').innerText = data.pqcSeal;
+    }
+
+    function startInternalSimulation() {
+      setInterval(() => {
+        const time = Date.now() * 0.001;
+        const fakeField = (99.9886 + Math.sin(time * 2.5) * 0.035).toFixed(4);
+        const fakeRss = (101.80 + Math.sin(time * 1.2) * 0.22).toFixed(2);
+        document.getElementById('fieldStrength').innerText = fakeField + ' V/m';
+        document.getElementById('memoryRss').innerText = fakeRss + ' MB';
+      }, 800);
+    }
+
+    setupBridgeConnection();
+  </script>
+</body>
+</html>

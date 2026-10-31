@@ -1,0 +1,25 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v20_PRODUCTION_CORE",
+  "gate": "CNL-P20-001",
+  "version": "20.0.0-production-ready",
+  "status": "CLASSIFICATION A — PRODUCTION READY",
+  "pqc_seal": "0xPQC_369_faf1e8af0f75f3b45b35ddd9d900ca14_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 128.5,
+  "startup_latency_ms": 18.4,
+  "warm_latency_ms": 2.1,
+  "checkpoint_load_ms": 12,
+  "replay_variance": "0.0000% (sigma^2 = 0.0)",
+  "spatial_cells_count": 343,
+  "layers": {
+    "database": "ISOLATED_IMMUTABLE",
+    "memory_core": "SOVEREIGN_343_LATTICE",
+    "ai_intelligence": "DECOUPLED_STATELESS_INFERENCE",
+    "normal_studio": "HOLOGRAPHIC_3D_VIEWPORT",
+    "hardware": "PERMANENT_FAIL_CLOSED_LOCK"
+  },
+  "parent_gate": "CNL-P19-001",
+  "parent_seal": "0xPQC_369_e9a184c85d883b134bb049e78261909a_SEAL",
+  "timestamp": 1725680000000
+}

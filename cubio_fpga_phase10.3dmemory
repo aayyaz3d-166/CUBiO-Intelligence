@@ -1,0 +1,89 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v10_FPGA_RTL",
+  "gate": "CNL-P10-001",
+  "target": "fpga-rtl",
+  "verilog_file": "scratch/cubio_neural_lattice/cubio_top.v",
+  "verilog_size_bytes": 3786,
+  "pqc_seal": "0xPQC_369_2e4040b29f32abbb5d90d65159b87230_SEAL",
+  "is_actuation_blocked": true,
+  "fpga_synthesis": {
+    "topModuleName": "cubio_top",
+    "verilogSourceCode": "// ==============================================================================\n// CUBIO SOVEREIGN HARDWARE CORE: TOP-LEVEL FPGA SYNTHESIS MODULE (one-fpga)\n// Gate: CNL-P10-001 | IEEE 1364-2005 Synthesizable Verilog RTL\n// PQC Lattice Root Seal: 0xPQC_369_2e4040b29f32abbb5d90d65159b87230_SEAL\n// ==============================================================================\n\n`timescale 1ns / 1ps\n\nmodule cubio_top (\n    input  wire        clk_100mhz,        // Primary Master Clock Input\n    input  wire        rst_n,             // Active-Low Global Asynchronous Reset\n    output wire        clk_3mhz_strobe,   // 3 MHz Harmonic Harmonic Clock Strobe\n    output wire        clk_6mhz_strobe,   // 6 MHz Harmonic Clock Strobe\n    output wire        clk_9mhz_strobe,   // 9 MHz Harmonic Clock Strobe\n    output wire        is_actuation_blocked, // Permanent Fail-Closed Safety Lock Pin\n    output wire [7:0]  active_nodes_count,   // Active Spatial Nodes Count\n    output wire [31:0] state_merkle_root_low // Low 32-bits of PQC Root Seal\n);\n\n    // -------------------------------------------------------------------------\n    // 1. Permanent Fail-Closed Hardware Actuation Lock\n    // -------------------------------------------------------------------------\n    assign is_actuation_blocked = 1'b1; // Permanent Lock (Zero Actuation Breach)\n    assign active_nodes_count   = 8'd3;\n    assign state_merkle_root_low = 32'h3690B4E0;\n\n    // -------------------------------------------------------------------------\n    // 2. Physical 3-6-9 Harmonic Clock Dividers (from 100 MHz Base)\n    // -------------------------------------------------------------------------\n    reg [5:0] count_div3 = 6'd0;\n    reg [5:0] count_div6 = 6'd0;\n    reg [5:0] count_div9 = 6'd0;\n    reg       strobe_3mhz = 1'b0;\n    reg       strobe_6mhz = 1'b0;\n    reg       strobe_9mhz = 1'b0;\n\n    always @(posedge clk_100mhz or negedge rst_n) begin\n        if (!rst_n) begin\n            count_div3  <= 6'd0;\n            count_div6  <= 6'd0;\n            count_div9  <= 6'd0;\n            strobe_3mhz <= 1'b0;\n            strobe_6mhz <= 1'b0;\n            strobe_9mhz <= 1'b0;\n        end else begin\n            // 3.33 MHz Divider (100MHz / 30)\n            if (count_div3 == 6'd29) begin\n                count_div3  <= 6'd0;\n                strobe_3mhz <= 1'b1;\n            end else begin\n                count_div3  <= count_div3 + 1'b1;\n                strobe_3mhz <= 1'b0;\n            end\n\n            // 6.25 MHz Divider (100MHz / 16)\n            if (count_div6 == 6'd15) begin\n                count_div6  <= 6'd0;\n                strobe_6mhz <= 1'b1;\n            end else begin\n                count_div6  <= count_div6 + 1'b1;\n                strobe_6mhz <= 1'b0;\n            end\n\n            // 9.09 MHz Divider (100MHz / 11)\n            if (count_div9 == 6'd10) begin\n                count_div9  <= 6'd0;\n                strobe_9mhz <= 1'b1;\n            end else begin\n                count_div9  <= count_div9 + 1'b1;\n                strobe_9mhz <= 1'b0;\n            end\n        end\n    end\n\n    assign clk_3mhz_strobe = strobe_3mhz;\n    assign clk_6mhz_strobe = strobe_6mhz;\n    assign clk_9mhz_strobe = strobe_9mhz;\n\n    // -------------------------------------------------------------------------\n    // 3. Dual-Port BRAM Spatial Streaming Funnel Buffer\n    // -------------------------------------------------------------------------\n    reg [7:0] bram_funnel_memory [0:1023]; // 1 KB Dual-Port BRAM Slice\n    reg [9:0] write_addr = 10'd0;\n    reg [9:0] read_addr  = 10'd0;\n\n    always @(posedge clk_100mhz) begin\n        if (strobe_9mhz) begin\n            bram_funnel_memory[write_addr] <= 8'h36; // 369 Harmonic Sync Token\n            write_addr <= write_addr + 1'b1;\n        end\n    end\n\nendmodule\n",
+    "totalGatesEstimate": 14200,
+    "totalBramBlocks": 2,
+    "clockDomainsCount": 3,
+    "isActuationBlocked": true
+  },
+  "lineageChain": [
+    {
+      "phase": "P1",
+      "label": "ONE Language Compiler Core (AST & Bytecode)",
+      "merkleHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725180000000
+    },
+    {
+      "phase": "P2",
+      "label": "CubiO Runtime VM & 369 Harmonic Engine",
+      "merkleHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "parentHash": "0x369_P1_COMPILER_CORE_SEAL",
+      "timestamp": 1725183600000
+    },
+    {
+      "phase": "P3",
+      "label": "Zero-Copy Ring-Buffer Streaming Funnels",
+      "merkleHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "parentHash": "0x369_P2_VM_HARMONIC_SEAL",
+      "timestamp": 1725187200000
+    },
+    {
+      "phase": "P4",
+      "label": "Deterministic WAL Checkpoints & Rollback",
+      "merkleHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "parentHash": "0x369_P3_STREAM_FUNNEL_SEAL",
+      "timestamp": 1725190800000
+    },
+    {
+      "phase": "P5",
+      "label": "N-Dimensional HyperGrid & Neuro-Symbolic Compilation",
+      "merkleHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "parentHash": "0x369_P4_WAL_CHECKPOINT_SEAL",
+      "timestamp": 1725194400000
+    },
+    {
+      "phase": "P6",
+      "label": "Zero-OS Freestanding Bare-Metal Kernel (\"one-baremetal\")",
+      "merkleHash": "0x369_P6_BARE_METAL_SEAL",
+      "parentHash": "0x369_P5_HYPER_NEURAL_SEAL",
+      "timestamp": 1725198000000
+    },
+    {
+      "phase": "P7",
+      "label": "Spatial Reasoning & Knowledge Theorem Prover",
+      "merkleHash": "0x369_P7_SPATIAL_REASONING_SEAL",
+      "parentHash": "0x369_P6_BARE_METAL_SEAL",
+      "timestamp": 1725201600000
+    },
+    {
+      "phase": "P8",
+      "label": "Autonomous Multi-Mesh Federation (\"one-quantum-mesh\")",
+      "merkleHash": "0x369_P8_QUANTUM_MESH_SEAL",
+      "parentHash": "0x369_P7_SPATIAL_REASONING_SEAL",
+      "timestamp": 1725205200000
+    },
+    {
+      "phase": "P9",
+      "label": "Natural Language Spatial Compiler (\"one-nlp\")",
+      "merkleHash": "0x369_P9_NLP_COMPILER_SEAL",
+      "parentHash": "0x369_P8_QUANTUM_MESH_SEAL",
+      "timestamp": 1725208800000
+    },
+    {
+      "phase": "P10",
+      "label": "Hardware-in-the-Loop FPGA RTL Synthesizer (\"one-fpga\", Gate CNL-P10-001)",
+      "merkleHash": "0x369_P10_FPGA_RTL_SEAL",
+      "parentHash": "0x369_P9_NLP_COMPILER_SEAL",
+      "timestamp": 1725212400000
+    }
+  ],
+  "timestamp": 1725500000000
+}

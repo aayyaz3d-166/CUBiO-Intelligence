@@ -1,0 +1,17 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v19_UNIVERSAL_NATIVE",
+  "gate": "CNL-P19-001",
+  "version": "19.0.0-universal-native",
+  "pqc_seal": "0xPQC_369_e9a184c85d883b134bb049e78261909a_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3.33,
+    6.25,
+    9.09
+  ],
+  "deterministic_variance": "sigma^2 = 0.0",
+  "parentGate": "CNL-P18-001",
+  "timestamp": 1725650000000
+}

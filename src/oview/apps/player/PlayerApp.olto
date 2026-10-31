@@ -1,0 +1,54 @@
+// Oplayer — Native Audio & Video Media Engine
+// ==============================================================================
+// Pure Canonical OLTO Component.
+// Zero external dependencies — 100% Sovereign ONE Language substrate.
+// ==============================================================================
+
+component PlayerApp {
+    state isPlaying: Boolean = false
+    state currentTrackTitle: String = "Sovereign Wave (Synthwave)"
+    state currentTrackDuration: Number = 214
+    state playbackPosition: Number = 42
+    state volumeLevel: Number = 80
+
+    action togglePlay() {
+        isPlaying = !isPlaying
+    }
+
+    action stopTrack() {
+        isPlaying = false
+        playbackPosition = 0
+    }
+
+    action setVolume(vol: Number) {
+        volumeLevel = vol
+    }
+
+    action nextTrack() {
+        currentTrackTitle = "ECHO-1 Neural Beats (Lo-Fi)"
+        playbackPosition = 0
+    }
+
+    view {
+        Container(maxWidth: 1200, padding: 16) {
+            Card(padding: 16, radius: 12, elevation: 2) {
+                Row(justify: "between", align: "center", marginBottom: 14) {
+                    Text("Oplayer — Native Media Engine", size: 22, weight: "bold", color: "white")
+                    Badge(label: "FFT Visualizer Active", color: "purple")
+                }
+
+                Row(gap: 8, marginBottom: 16) {
+                    Button(label: isPlaying ? "⏸ Pause" : "▶ Play", variant: "solid", onClick: { togglePlay() })
+                    Button(label: "⏹ Stop", variant: "outline", onClick: { stopTrack() })
+                    Button(label: "⏭ Next Track", variant: "ghost", onClick: { nextTrack() })
+                }
+
+                Card(padding: 16, radius: 10, background: "#060914", marginBottom: 14) {
+                    Text("Now Playing: \(currentTrackTitle)", size: 14, weight: "bold", color: "white", marginBottom: 8)
+                    Text("Timeline: \(playbackPosition)s of \(currentTrackDuration)s", size: 12, color: "gray", marginBottom: 6)
+                    Text("Real-Time WebAudio FFT Spectrum & VFS Streaming (/user/media/)", size: 11, color: "green")
+                }
+            }
+        }
+    }
+}

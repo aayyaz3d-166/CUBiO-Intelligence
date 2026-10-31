@@ -1,0 +1,100 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v22_NEURAL_GAME_WORLD",
+  "gate": "CNL-P22-001",
+  "version": "22.0.0-game-world",
+  "chunk_checksum": "0x369_cfdc9905",
+  "npcs_count": 3,
+  "pqc_seal": "0xPQC_369_7eebb3e8296f2bb0d7712a998222be9d_SEAL",
+  "is_actuation_blocked": true,
+  "lineageChain": [
+    {
+      "phase": "P1",
+      "hash": "0x369_P1_COMPILER_CORE_SEAL"
+    },
+    {
+      "phase": "P2",
+      "hash": "0x369_P2_VM_HARMONIC_SEAL"
+    },
+    {
+      "phase": "P3",
+      "hash": "0x369_P3_STREAM_FUNNEL_SEAL"
+    },
+    {
+      "phase": "P4",
+      "hash": "0x369_P4_WAL_CHECKPOINT_SEAL"
+    },
+    {
+      "phase": "P5",
+      "hash": "0x369_P5_HYPER_NEURAL_SEAL"
+    },
+    {
+      "phase": "P6",
+      "hash": "0x369_P6_BARE_METAL_SEAL"
+    },
+    {
+      "phase": "P7",
+      "hash": "0x369_P7_SPATIAL_REASONING_SEAL"
+    },
+    {
+      "phase": "P8",
+      "hash": "0x369_P8_QUANTUM_MESH_SEAL"
+    },
+    {
+      "phase": "P9",
+      "hash": "0x369_P9_NLP_COMPILER_SEAL"
+    },
+    {
+      "phase": "P10",
+      "hash": "0x369_P10_FPGA_RTL_SEAL"
+    },
+    {
+      "phase": "P11",
+      "hash": "0x369_P11_SWARM_CONSENSUS_SEAL"
+    },
+    {
+      "phase": "P12",
+      "hash": "0x369_P12_TOPOLOGY_MORPH_SEAL"
+    },
+    {
+      "phase": "P13",
+      "hash": "0x369_P13_ENTROPY_HARMONIC_SEAL"
+    },
+    {
+      "phase": "P14",
+      "hash": "0x369_P14_BELL_TELEPORT_SEAL"
+    },
+    {
+      "phase": "P15",
+      "hash": "0x369_P15_FALSIFICATION_SEAL"
+    },
+    {
+      "phase": "P16",
+      "hash": "0x369_P16_SCIENCE_ENGINE_SEAL"
+    },
+    {
+      "phase": "P17",
+      "hash": "0x369_P17_META_COGNITION_SEAL"
+    },
+    {
+      "phase": "P18",
+      "hash": "0x369_P18_HOLO_VOXEL_SEAL"
+    },
+    {
+      "phase": "P19",
+      "hash": "0x369_P19_NATIVE_TRANSPILER_SEAL"
+    },
+    {
+      "phase": "P20",
+      "hash": "0x369_P20_STUDIO_IDE_SEAL"
+    },
+    {
+      "phase": "P21",
+      "hash": "0x369_P21_SINGULARITY_MASTER_SEAL"
+    },
+    {
+      "phase": "P22",
+      "hash": "0x369_P22_NEURAL_GAME_WORLD_SEAL"
+    }
+  ],
+  "timestamp": 1725800000000
+}

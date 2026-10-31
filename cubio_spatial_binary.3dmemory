@@ -1,0 +1,35 @@
+{
+  "gate": "CNL-P26.3-BINARY",
+  "timestamp": "2026-09-10T11:22:36.410Z",
+  "module": "One.Engine.SpatialQuantum",
+  "binaryName": "SOVEREIGN_BIN_SPATIAL_ENGINE_RV64",
+  "targetArchitecture": "FREESTANDING_RISCV64",
+  "binaryMagic": "0x3690B4E0",
+  "headerSizeBytes": 64,
+  "dataSectionBytes": 9604,
+  "totalBinaryBytes": 9668,
+  "totalCells": 343,
+  "bytesPerCell": 28,
+  "canonicalAddressRange": {
+    "start": 26,
+    "end": 368
+  },
+  "origin": {
+    "x": 3,
+    "y": 3,
+    "z": 3
+  },
+  "originResonance": 1,
+  "originCollapsed": true,
+  "pqcBinaryRootSeal": "0xPQC_369_712fce1b97aed3d4577c0c0ba916585e_SEAL",
+  "compilationPqcSeal": "0xPQC_369_787aa3885b56ef593a3ac4de94d14323_SEAL",
+  "binaryPath": "F:\\ONE language\\dist\\bin\\spatial_engine.rv64.bin",
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1,
+    "sigmaSq": 0,
+    "csiGrade": "S+",
+    "rssLimitMb": 512,
+    "externalDependencies": 0
+  }
+}

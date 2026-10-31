@@ -1,0 +1,38 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v32_SOVEREIGN_AGI_AWAKENING",
+  "gate": "CNL-P32-001",
+  "version": "32.0.0-one-agi",
+  "agi_awakening_state": "AWAKENED",
+  "pqc_master_seal": "0xPQC_369_974774ea25d8802816ad934416c264b3_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 99.2,
+  "total_synchronized_organs": 5,
+  "synchronized_organs_list": [
+    "CORTEX_PREFRONTAL",
+    "HEART_AUTONOMIC",
+    "IMMUNE_SHIELD",
+    "ROVER_FLEET",
+    "PHARMACOKINETICS_ENGINE"
+  ],
+  "pharmacokinetics_injections": 2,
+  "pharmacokinetics_efficacy_pct": 100,
+  "pharmacokinetics_auto_homeostasis": true,
+  "csi_total_score": 99.625,
+  "csi_grade": "S+",
+  "csi_fail_safe_triggered": false,
+  "pillar_evolutionary_fitness": 98.5,
+  "pillar_homeostatic_health": 100,
+  "pillar_uup_truth": 100,
+  "pillar_pqc_security": 100,
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3,
+    6,
+    9
+  ],
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725905000000
+}

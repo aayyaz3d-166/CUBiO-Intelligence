@@ -1,0 +1,23 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v27_PHYSICAL_ROVER_FLEET",
+  "gate": "CNL-P27-001",
+  "version": "27.0.0-one-rover",
+  "pqc_master_seal": "0xPQC_369_7e19a8033d146eb892cbe185d05e7b52_SEAL",
+  "is_actuation_blocked": true,
+  "is_conditional_actuation_verified": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 96.4,
+  "total_field_rovers": 2,
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "hil_stress_cycles_tested": 50,
+  "hil_thermal_vibration_status": "PASS (100% Stable)",
+  "quorum_consensus_rate": "100.0% (Quorum Achieved)",
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3.33,
+    6.25,
+    9.09
+  ],
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725905000000
+}

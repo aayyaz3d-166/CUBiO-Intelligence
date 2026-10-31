@@ -1,0 +1,14 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v23_SWARM_MESH_SHARDS",
+  "gate": "CNL-P23-002",
+  "version": "23.0.0-swarm-p2p",
+  "cluster_nodes": 7,
+  "spatial_cells_count": 343,
+  "pqc_master_seal": "0xPQC_369_2494a285182771507cc2ba542406ca6e_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 72.4,
+  "consensus_agreement_percentage": 100,
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725880000000
+}

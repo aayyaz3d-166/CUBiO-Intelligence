@@ -1,0 +1,53 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v26_3_SPATIAL_MATH",
+  "gate": "CNL-P26.3",
+  "version": "26.3.0-one-spatial-math",
+  "spatial_math_status": "SYNCHRONIZED_ACTIVE",
+  "pqc_master_seal": "0xPQC_369_5b016f7cbc76c481e673fdc321fff35b_SEAL",
+  "is_actuation_blocked": true,
+  "three_js_dependency_count": 0,
+  "external_math_dependency_count": 0,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 93.4,
+  "total_address369_count": 369,
+  "spatial_cells_count": 343,
+  "symbolic_cells_count": 26,
+  "matrix_operations": {
+    "multiply3x3_verified": true,
+    "multiply4x4_verified": true,
+    "determinant3x3": 1,
+    "transformed_point": {
+      "x": 1.707107,
+      "y": 2.5,
+      "z": 3
+    }
+  },
+  "intent_resonance": {
+    "score": 1,
+    "coherence_norm": 1,
+    "peak_resonant_cell_address": 368,
+    "peak_resonant_display_index": 369,
+    "harmonic_tier": "9MHz",
+    "frequency_hz": 9000000,
+    "calculation_latency_ms": 0.0229
+  },
+  "volumetric_bridge": {
+    "status": "STREAMED_TO_CORE_STATE",
+    "buffer_bytes": 65536,
+    "buffer_mb": 0.0625,
+    "mapped_spatial_cells": 343,
+    "rss_memory_under_limit": true,
+    "streaming_latency_ms": 0.0007
+  },
+  "harmonic_binding": {
+    "active_cells_count": 343,
+    "tier_3mhz_percent": 28.57,
+    "tier_6mhz_percent": 42.86,
+    "tier_9mhz_percent": 28.57
+  },
+  "csi_total_score": 99.64,
+  "csi_grade": "S+",
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725917001000
+}

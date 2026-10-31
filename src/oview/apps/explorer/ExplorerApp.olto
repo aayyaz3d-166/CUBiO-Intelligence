@@ -1,0 +1,75 @@
+// Oview OS — Sovereign File Explorer Application (Phase 11: Explorer Pro)
+// ========================================================================
+// ExplorerApp.olto: Visual folder navigation, My Space personal hub,
+// starred/pinned favorites, recent items, and storage health metrics.
+
+component ExplorerApp(
+    initialPath: String = "myspace"
+) {
+    state currentPath: String = initialPath
+    state isMySpaceView: Boolean = true
+    state activeCategoryFilter: String = "all"
+    state searchQuery: String = ""
+    state pinnedCount: Number = 3
+    state storageUsagePercent: Number = 28
+
+    action navigateTo(path: String) {
+        currentPath = path
+        isMySpaceView = (path == "myspace")
+        Toast.show("Navigated to: \(currentPath)", type: "info")
+    }
+
+    action togglePin(itemPath: String) {
+        Toast.show("Toggled pin: \(itemPath)", type: "success")
+    }
+
+    view {
+        Card(padding: 0, radius: 10) {
+            // Address & Navigation Bar
+            Row(justify: "between", align: "center", padding: 8) {
+                Row(align: "center", gap: 8) {
+                    Button(label: "🏠 My Space", variant: "solid", onClick: { navigateTo("myspace") })
+                    Button(label: "◀", variant: "ghost")
+                    Button(label: "▶", variant: "ghost")
+                    Button(label: "▲ Up", variant: "outline")
+                    Text("\(currentPath)", size: 12, weight: "bold", color: "#10b981")
+                }
+
+                Row(align: "center", gap: 6) {
+                    Button(label: "+ File", variant: "ghost")
+                    Button(label: "+ Folder", variant: "ghost")
+                }
+            }
+
+            // Explorer Main Layout
+            Row(gap: 12, padding: 12) {
+                // Left Sidebar: Locations & My Space
+                Column(gap: 6) {
+                    Text("MY SPACE", size: 10, weight: "bold", color: "#94a3b8")
+                    Button(label: "🏠 Dashboard", variant: "solid", onClick: { navigateTo("myspace") })
+                    Button(label: "📄 Documents", variant: "ghost", onClick: { navigateTo("/user/documents") })
+                    Button(label: "🖼️ Pictures", variant: "ghost", onClick: { navigateTo("/user/media") })
+                    Button(label: "📦 My Apps", variant: "ghost", onClick: { navigateTo("/user/packages") })
+                    Button(label: "📥 Downloads", variant: "ghost", onClick: { navigateTo("/user/downloads") })
+                    Button(label: "🗑️ Recycle Bin", variant: "ghost", onClick: { navigateTo("/user/trash") })
+                }
+
+                // Right Content: Directory Items or My Space Dashboard
+                Column(gap: 8) {
+                    Text("My Space Personal Hub", size: 12, color: "#f8fafc", weight: "bold")
+                    Row(gap: 12) {
+                        Card(padding: 10, radius: 8) {
+                            Text("📄 Documents (5 items)", size: 12)
+                        }
+                        Card(padding: 10, radius: 8) {
+                            Text("🖼️ Pictures (3 items)", size: 12)
+                        }
+                        Card(padding: 10, radius: 8) {
+                            Text("📦 Packages (2 items)", size: 12)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

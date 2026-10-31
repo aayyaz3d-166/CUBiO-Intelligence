@@ -10,6 +10,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Native5MAdapter, Native5MGenerationResult } from '../hybrid/Native5MAdapter';
+import { OltoGenerator } from '../../../olto/ai/OltoGenerator';
+import { OltoAutoRepair } from '../../../olto/ai/OltoAutoRepair';
 
 export interface Echo1Response {
   answer: string;
@@ -80,6 +82,19 @@ export class Echo1Assistant {
   public ask(userPrompt: string): Echo1Response {
     const t0 = performance.now();
     const promptLower = userPrompt.toLowerCase();
+
+    // 0. OLTO Frontend and UI Component Generation Queries
+    if (promptLower.includes('olto') || promptLower.includes('frontend') || promptLower.includes('ui') || promptLower.includes('website') || promptLower.includes('component') || promptLower.includes('card') || promptLower.includes('login') || promptLower.includes('store') || promptLower.includes('button')) {
+      const generated = this.generateOltoApp(userPrompt);
+      return {
+        answer: `ECHO-1 generated a sovereign, fine-grained reactive OLTO application for "${userPrompt}":`,
+        codeSnippet: generated.code,
+        romanUrduTip: `Tip: Is application ko live preview karne ke liye ek file (maslan ${generated.schema.name}.olto) mein save karein aur \`one olto dev ${generated.schema.name}.olto\` chalayein.`,
+        latencyMs: Math.round(performance.now() - t0),
+        epistemicStatus: 'OLTO_AI_GENERATION',
+        isModelOutput: true,
+      };
+    }
 
     // 1. Symbolic Knowledge-Based Exact Matching for ONE Language Syntax
     if (promptLower.includes('function') || promptLower.includes('method') || promptLower.includes('func')) {
@@ -239,6 +254,31 @@ export class Echo1Assistant {
         suggestion = 'While loop ke termination condition aur counter variable ko check karein.';
         break;
 
+      case 'E9001':
+        explanation = 'Security Guard Violation (E9001): Client-side state mein sensitive secret key declare nahi ki ja sakti!';
+        suggestion = 'Secret keys ko client frontend se hata kar backend .one service mein rakhein.';
+        break;
+
+      case 'E9002':
+        explanation = 'Component Registry Error (E9002): Unrecognized component tag use kiya gaya hai jo OLTO library mein defined nahi hai.';
+        suggestion = 'Standard OLTO components use karein: Container, Row, Column, Grid, Text, Button, Input, Card, Modal, Image, Badge, LoadingSpinner.';
+        break;
+
+      case 'E9003':
+        explanation = 'Reactivity Safety Error (E9003): Read-only `computed` property ko mutate karne ki koshish ki gayi hai.';
+        suggestion = 'Computed properties read-only hoti hain. Agar value badalni hai toh `state` property mutate karein.';
+        break;
+
+      case 'E9004':
+        explanation = 'Duplicate State Error (E9004): Same component ke andar duplicate state identifier declare ho gaya.';
+        suggestion = 'Har state property ka unique name rakhein.';
+        break;
+
+      case 'E9005':
+        explanation = 'Unsupported Directive Error (E9005): OLTO frontend mein unsupported directive use ki gayi.';
+        suggestion = 'OLTO Language Specification (docs/olto/LANGUAGE_SPEC.md) ke mutabiq syntax update karein.';
+        break;
+
       default:
         explanation = `Compiler error [${errorCode}]: ${rawMessage}`;
         suggestion = 'Code syntax ko verify karein ya `one ask "how to fix ' + errorCode + '"` likhein.';
@@ -250,5 +290,19 @@ export class Echo1Assistant {
       `  👉 Suggested Fix:   ${suggestion}`,
       sourceSnippet ? `  📌 Problematic Code: ${sourceSnippet.trim()}` : '',
     ].filter(Boolean).join('\n');
+  }
+
+  /**
+   * Generates a fully verified and auto-repaired OLTO application from natural language intent.
+   */
+  public generateOltoApp(intent: string): { schema: any; code: string; repaired: boolean } {
+    const schema = OltoGenerator.generateFromIntent(intent);
+    let code = OltoGenerator.schemaToCode(schema);
+    const rep = OltoAutoRepair.repair(code);
+    return {
+      schema,
+      code: rep.success ? rep.source : code,
+      repaired: rep.repaired,
+    };
   }
 }

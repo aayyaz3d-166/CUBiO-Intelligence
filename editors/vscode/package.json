@@ -1,8 +1,8 @@
 {
   "name": "one-language",
   "displayName": "ONE Language",
-  "description": "OLTO Reactive Frontend Subsystem, built-in 100% offline AI Copilot (ECHO-1, 25MB), Qplayer OBI runtime, compiler diagnostics, and one-click execution for ONE Language (.one) and OLTO (.olto).",
-  "version": "1.4.0",
+  "description": "OLTO Reactive Frontend Subsystem, built-in 100% offline AI Copilot (ECHO-1, 25MB), Sovereign 3-6-9 Branching Tokenizer, Qplayer OBI runtime, compiler diagnostics, and one-click execution for ONE Language (.one) and OLTO (.olto).",
+  "version": "1.5.0",
   "publisher": "ayyaz3d",
   "author": "Ayyaz3D",
   "license": "MIT OR Apache-2.0",

@@ -72,12 +72,7 @@ export async function runTask26CrossRepoParityAndGapResolutionTests(): Promise<v
   console.log('================================================================================\n');
 
   const rootONE = path.resolve(process.cwd());
-  const embeddedOBR = path.resolve(rootONE, 'packages', 'binary-reasoning');
-  const siblingOBR = path.resolve(rootONE, '..', 'one-binary-reasoning');
-  const fallbackOBR = 'F:\\one-binary-reasoning';
-  const rootOBR = fs.existsSync(embeddedOBR)
-    ? embeddedOBR
-    : (fs.existsSync(siblingOBR) ? siblingOBR : fallbackOBR);
+  const rootOBR = path.resolve(rootONE, '..', 'one-binary-reasoning');
 
   // ==========================================================================
   // SUITE 1: Cross-Repository Codebase Discovery & Boundary Containment

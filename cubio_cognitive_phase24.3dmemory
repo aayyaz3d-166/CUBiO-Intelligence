@@ -1,0 +1,19 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v24_COGNITIVE_FUSION",
+  "gate": "CNL-P24-001",
+  "version": "24.0.0-cognitive-brain",
+  "pqc_master_seal": "0xPQC_369_09550904c31c25b042b4ae9b8d9958ec_SEAL",
+  "is_actuation_blocked": true,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 84.6,
+  "forgetting_rate": "0.0000%",
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "spatial_cells_count": 343,
+  "harmonic_frequencies_mhz": [
+    3.33,
+    6.25,
+    9.09
+  ],
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725890000000
+}

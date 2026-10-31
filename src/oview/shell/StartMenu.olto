@@ -1,0 +1,112 @@
+// Oview OS — Sovereign Start Menu & Application Launcher
+// ========================================================
+// StartMenu.olto: Flyout launcher menu providing searchable access to
+// installed native applications, user identity, system search, and power actions.
+
+component StartMenu(
+    userName: String = "Sovereign Operator",
+    osVersion: String = "Oview OS v1.0"
+) {
+    state searchQuery: String = ""
+    state isOfflineBrainReady: Boolean = true
+
+    view {
+        Card(padding: 20, radius: 18) {
+            // Header: User identity & OS Badge
+            Row(justify: "between", align: "center", marginBottom: 16) {
+                Row(align: "center", gap: 12) {
+                    Text("👤", size: 28)
+                    Column(gap: 2) {
+                        Text("\(userName)", size: 15, weight: "bold", color: "#f8fafc")
+                        Text("\(osVersion)", size: 12, color: "#10b981")
+                    }
+                }
+
+                Badge(label: "ECHO-1 OFFLINE", color: "#10b981")
+            }
+
+            // Quick Search Input
+            Input(
+                placeholder: "Search applications, files, or ask ECHO-1..."
+            )
+
+            Spacer(14)
+
+            // Pinned Applications Grid
+            Text("INSTALLED APPLICATIONS", size: 11, weight: "bold", color: "#94a3b8", marginBottom: 10)
+
+            Grid(columns: 2, gap: 10) {
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("📝", size: 20)
+                        Column(gap: 2) {
+                            Text("Oview Notepad", size: 13, weight: "bold")
+                            Text("Text & Notes", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("📁", size: 20)
+                        Column(gap: 2) {
+                            Text("File Explorer", size: 13, weight: "bold")
+                            Text("VFS Browser", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("⚡", size: 20)
+                        Column(gap: 2) {
+                            Text("Oview Terminal", size: 13, weight: "bold")
+                            Text("ONE Lang Shell", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("🧮", size: 20)
+                        Column(gap: 2) {
+                            Text("Calculator", size: 13, weight: "bold")
+                            Text("Math Evaluator", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("⚙️", size: 20)
+                        Column(gap: 2) {
+                            Text("Settings", size: 13, weight: "bold")
+                            Text("System Config", size: 11, color: "#94a3b8")
+                        }
+                    }
+                }
+
+                Card(padding: 10, radius: 10) {
+                    Row(align: "center", gap: 10) {
+                        Text("🤖", size: 20)
+                        Column(gap: 2) {
+                            Text("ECHO-1 Core", size: 13, weight: "bold")
+                            Text("Sovereign AI", size: 11, color: "#10b981")
+                        }
+                    }
+                }
+            }
+
+            Spacer(16)
+
+            // Bottom Footer & Power Controls
+            Row(justify: "between", align: "center") {
+                Text("Address369 Memory: OK", size: 12, color: "#94a3b8")
+                Row(align: "center", gap: 8) {
+                    Button(label: "Restart", variant: "ghost")
+                    Button(label: "Shutdown", variant: "outline")
+                }
+            }
+        }
+    }
+}

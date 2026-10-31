@@ -1,0 +1,89 @@
+{
+  "cubio_magic": "CUBIO_3DMEM_v38_SOVEREIGN_ODE",
+  "gate": "CNL-P38-001",
+  "version": "38.0.0-one-ode",
+  "ode_suite_status": "SYNCHRONIZED_ACTIVE",
+  "pqc_master_seal": "0xPQC_369_fd491504637db8bec75db27778ec26c2_SEAL",
+  "is_actuation_blocked": true,
+  "three_js_dependency_count": 0,
+  "rss_ceiling_mb": 512,
+  "measured_rss_mb": 94.8,
+  "total_address369_count": 369,
+  "spatial_cells_count": 343,
+  "symbolic_cells_count": 26,
+  "superposition_metrics": {
+    "total_nodes": 3,
+    "total_funnels": 2,
+    "branches_count": 2,
+    "state_coherence_norm": 1,
+    "dominant_branch_id": "BRANCH_F1"
+  },
+  "harmonic_profiler_metrics": {
+    "tier_3mhz_percent": 33.33,
+    "tier_6mhz_percent": 33.33,
+    "tier_9mhz_percent": 33.33,
+    "total_energy_flux_mw": 162.2,
+    "harmonic_resonance_score": 1,
+    "peak_frequency_hz": 9000000,
+    "total_allocated_memory_mb": 48,
+    "memory_headroom_mb": 464
+  },
+  "spatial_nodes": [
+    {
+      "node_id": "Alpha",
+      "canonical_address": 132,
+      "display_index": 133,
+      "harmonic_tier": "3MHz",
+      "frequency_hz": 3000000,
+      "energy_flux_mw": 21.2,
+      "memory_footprint_mb": 16,
+      "spatial_coord": {
+        "x": 0.1,
+        "y": 0.2,
+        "z": 0.3,
+        "i": 1,
+        "j": 1,
+        "k": 2
+      }
+    },
+    {
+      "node_id": "Beta",
+      "canonical_address": 197,
+      "display_index": 198,
+      "harmonic_tier": "6MHz",
+      "frequency_hz": 6000000,
+      "energy_flux_mw": 52.4,
+      "memory_footprint_mb": 16,
+      "spatial_coord": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.5,
+        "i": 3,
+        "j": 3,
+        "k": 3
+      }
+    },
+    {
+      "node_id": "Gamma",
+      "canonical_address": 262,
+      "display_index": 263,
+      "harmonic_tier": "9MHz",
+      "frequency_hz": 9000000,
+      "energy_flux_mw": 88.6,
+      "memory_footprint_mb": 16,
+      "spatial_coord": {
+        "x": 0.9,
+        "y": 0.8,
+        "z": 0.7,
+        "i": 5,
+        "j": 5,
+        "k": 4
+      }
+    }
+  ],
+  "csi_total_score": 99.64,
+  "csi_grade": "S+",
+  "uup_confidence": "100.0% (UUP = 1.0)",
+  "drift_variance": "0.0000% (sigma^2 = 0.0)",
+  "timestamp": 1725916001000
+}

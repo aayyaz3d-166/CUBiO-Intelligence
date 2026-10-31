@@ -1,0 +1,65 @@
+{
+  "gate": "CNL-P26.11",
+  "timestamp": "2026-09-09T09:20:45Z",
+  "module": "One.Engine.MaterialGrid",
+  "title": "Spatial Material Interference & Permittivity Mapping Engine",
+  "description": "Solid interference, Maxwell wave velocity slowdown, and localized pressure in the 343-cell lattice",
+  "sourceFile": "src/one/programs/spatial_material_grid.one",
+  "engineFile": "src/one/spatial_material_grid_engine.ts",
+  "testSuite": "scratch/cubio_neural_lattice/tests/test_phase26_11_material_grid.ts",
+  "latticeGeometry": {
+    "dimension": 7,
+    "totalCells": 343,
+    "indexing": "x + 7*y + 49*z",
+    "originCenterCell": {
+      "coordinates": [3, 3, 3],
+      "cellId": 171
+    }
+  },
+  "materialsCatalog": {
+    "AIR": {
+      "permittivity_epsilon_r": 1.0,
+      "density_kg_m3": 1.204,
+      "isObstacle": false,
+      "velocityFactor": 1.0,
+      "status": "UNOBSTRUCTED_FREE_SPACE"
+    },
+    "CONCRETE": {
+      "permittivity_epsilon_r": 6.5,
+      "density_kg_m3": 2300.0,
+      "isObstacle": true,
+      "velocityFactor": 0.392232,
+      "status": "SOLID_INTERFERENCE_DETECTED"
+    },
+    "METAL": {
+      "permittivity_epsilon_r": 1.0,
+      "density_kg_m3": 7850.0,
+      "isObstacle": true,
+      "velocityFactor": 1.0,
+      "status": "SOLID_INTERFERENCE_DETECTED"
+    },
+    "HUMAN_MASS": {
+      "permittivity_epsilon_r": 50.0,
+      "density_kg_m3": 985.0,
+      "isObstacle": true,
+      "velocityFactor": 0.141421,
+      "status": "SOLID_INTERFERENCE_DETECTED"
+    }
+  },
+  "physicalFormulas": {
+    "waveVelocitySlowdown": "v_factor = 1.0 / sqrt(epsilon_r)",
+    "energyDensityPressure": "local_pressure = P_in * density * epsilon_r * 0.001"
+  },
+  "testResults": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0
+  },
+  "constraints": {
+    "isActuationBlocked": true,
+    "uup": 1.0,
+    "sigmaSq": 0.0,
+    "zeroHallucination": true,
+    "masterSeal": "0xPQC_369_CNL_P26_11_MATERIAL_GRID_PERMITTIVITY_CERTIFIED_SEAL"
+  }
+}

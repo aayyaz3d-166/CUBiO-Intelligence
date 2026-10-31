@@ -1,0 +1,629 @@
+// ==============================================================================
+// ONE LANGUAGE WEB GENERATOR: KEEP NOTES GLASSMORPHIC SUITE
+// A 100% Pure ONE Language script that compiles and writes the complete,
+// standalone, dependency-free Keep Notes Website for PC (HTML, CSS & JS).
+// Theme: Ultra-Premium Glassmorphism with Emerald Green & Sunset Orange Accents.
+// ==============================================================================
+
+function generateWebsite(): void {
+    print "[ONE Language] Generating Keep Notes Glassmorphism Web App...";
+
+    let html: string = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n";
+    html = html + "  <meta charset=\"UTF-8\">\n";
+    html = html + "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n";
+    html = html + "  <title>ONE Notes — Sovereign Glassmorphism Notebook</title>\n";
+    html = html + "  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n";
+    html = html + "  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n";
+    html = html + "  <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap\" rel=\"stylesheet\">\n";
+    html = html + "  <style>\n";
+    html = html + "    :root {\n";
+    html = html + "      --bg-gradient: radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),\n";
+    html = html + "                     radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.12) 0%, transparent 40%),\n";
+    html = html + "                     #090d16;\n";
+    html = html + "      --glass-bg: rgba(22, 30, 49, 0.65);\n";
+    html = html + "      --glass-card: rgba(26, 38, 62, 0.55);\n";
+    html = html + "      --glass-card-hover: rgba(33, 48, 77, 0.75);\n";
+    html = html + "      --glass-border: rgba(255, 255, 255, 0.1);\n";
+    html = html + "      --glass-border-focus: rgba(52, 211, 153, 0.5);\n";
+    html = html + "      --emerald: #10b981;\n";
+    html = html + "      --emerald-glow: rgba(16, 185, 129, 0.35);\n";
+    html = html + "      --emerald-light: #6ee7b7;\n";
+    html = html + "      --orange: #f97316;\n";
+    html = html + "      --orange-glow: rgba(249, 115, 22, 0.35);\n";
+    html = html + "      --orange-light: #fdba74;\n";
+    html = html + "      --text-main: #f8fafc;\n";
+    html = html + "      --text-muted: #94a3b8;\n";
+    html = html + "      --blur: blur(20px);\n";
+    html = html + "      --radius-lg: 20px;\n";
+    html = html + "      --radius-md: 14px;\n";
+    html = html + "      --radius-sm: 8px;\n";
+    html = html + "      --shadow-glass: 0 16px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.15);\n";
+    html = html + "      --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.08);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    * {\n";
+    html = html + "      margin: 0;\n";
+    html = html + "      padding: 0;\n";
+    html = html + "      box-sizing: border-box;\n";
+    html = html + "      font-family: 'Plus Jakarta Sans', sans-serif;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    body {\n";
+    html = html + "      background: var(--bg-gradient);\n";
+    html = html + "      background-attachment: fixed;\n";
+    html = html + "      color: var(--text-main);\n";
+    html = html + "      min-height: 100vh;\n";
+    html = html + "      display: flex;\n";
+    html = html + "      flex-direction: column;\n";
+    html = html + "      overflow-x: hidden;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    /* Top Navbar */\n";
+    html = html + "    header.glass-nav {\n";
+    html = html + "      position: sticky;\n";
+    html = html + "      top: 0;\n";
+    html = html + "      z-index: 100;\n";
+    html = html + "      backdrop-filter: var(--blur);\n";
+    html = html + "      -webkit-backdrop-filter: var(--blur);\n";
+    html = html + "      background: rgba(15, 23, 42, 0.75);\n";
+    html = html + "      border-bottom: 1px solid var(--glass-border);\n";
+    html = html + "      padding: 16px 36px;\n";
+    html = html + "      display: flex;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      justify-content: space-between;\n";
+    html = html + "      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .logo-container {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      gap: 12px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .logo-badge {\n";
+    html = html + "      background: linear-gradient(135deg, var(--emerald), var(--orange));\n";
+    html = html + "      width: 40px;\n";
+    html = html + "      height: 40px;\n";
+    html = html + "      border-radius: var(--radius-md);\n";
+    html = html + "      display: flex;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      justify-content: center;\n";
+    html = html + "      box-shadow: 0 0 20px var(--emerald-glow);\n";
+    html = html + "      font-weight: 800;\n";
+    html = html + "      font-size: 1.2rem;\n";
+    html = html + "      color: #fff;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .logo-title {\n";
+    html = html + "      font-size: 1.35rem;\n";
+    html = html + "      font-weight: 800;\n";
+    html = html + "      letter-spacing: -0.5px;\n";
+    html = html + "      background: linear-gradient(90deg, #fff, var(--emerald-light) 50%, var(--orange-light));\n";
+    html = html + "      -webkit-background-clip: text;\n";
+    html = html + "      -webkit-text-fill-color: transparent;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .nav-search {\n";
+    html = html + "      position: relative;\n";
+    html = html + "      width: 360px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .nav-search input {\n";
+    html = html + "      width: 100%;\n";
+    html = html + "      background: rgba(30, 41, 59, 0.6);\n";
+    html = html + "      border: 1px solid var(--glass-border);\n";
+    html = html + "      border-radius: 30px;\n";
+    html = html + "      padding: 10px 18px 10px 42px;\n";
+    html = html + "      color: var(--text-main);\n";
+    html = html + "      font-size: 0.92rem;\n";
+    html = html + "      outline: none;\n";
+    html = html + "      transition: all 0.3s ease;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .nav-search input:focus {\n";
+    html = html + "      border-color: var(--emerald);\n";
+    html = html + "      box-shadow: 0 0 18px var(--emerald-glow);\n";
+    html = html + "      background: rgba(30, 41, 59, 0.9);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .nav-search svg {\n";
+    html = html + "      position: absolute;\n";
+    html = html + "      left: 14px;\n";
+    html = html + "      top: 50%;\n";
+    html = html + "      transform: translateY(-50%);\n";
+    html = html + "      fill: var(--text-muted);\n";
+    html = html + "      width: 18px;\n";
+    html = html + "      height: 18px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .nav-actions {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      gap: 12px;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .badge-pill {\n";
+    html = html + "      background: rgba(16, 185, 129, 0.15);\n";
+    html = html + "      border: 1px solid rgba(16, 185, 129, 0.3);\n";
+    html = html + "      color: var(--emerald-light);\n";
+    html = html + "      padding: 6px 14px;\n";
+    html = html + "      border-radius: 20px;\n";
+    html = html + "      font-size: 0.82rem;\n";
+    html = html + "      font-weight: 600;\n";
+    html = html + "      letter-spacing: 0.3px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    /* Main Workspace */\n";
+    html = html + "    main.workspace {\n";
+    html = html + "      flex: 1;\n";
+    html = html + "      max-width: 1240px;\n";
+    html = html + "      width: 100%;\n";
+    html = html + "      margin: 32px auto;\n";
+    html = html + "      padding: 0 24px;\n";
+    html = html + "      display: flex;\n";
+    html = html + "      flex-direction: column;\n";
+    html = html + "      gap: 36px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    /* Note Creator Glass Box */\n";
+    html = html + "    .creator-card {\n";
+    html = html + "      background: var(--glass-bg);\n";
+    html = html + "      backdrop-filter: var(--blur);\n";
+    html = html + "      -webkit-backdrop-filter: var(--blur);\n";
+    html = html + "      border: 1px solid var(--glass-border);\n";
+    html = html + "      border-radius: var(--radius-lg);\n";
+    html = html + "      padding: 22px 26px;\n";
+    html = html + "      box-shadow: var(--shadow-glass);\n";
+    html = html + "      max-width: 720px;\n";
+    html = html + "      width: 100%;\n";
+    html = html + "      margin: 0 auto;\n";
+    html = html + "      transition: border 0.3s ease, box-shadow 0.3s ease;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .creator-card:focus-within {\n";
+    html = html + "      border-color: rgba(249, 115, 22, 0.45);\n";
+    html = html + "      box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.7), 0 0 25px var(--orange-glow);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .creator-header {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      justify-content: space-between;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      margin-bottom: 12px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .creator-title {\n";
+    html = html + "      width: 100%;\n";
+    html = html + "      background: transparent;\n";
+    html = html + "      border: none;\n";
+    html = html + "      color: var(--text-main);\n";
+    html = html + "      font-size: 1.15rem;\n";
+    html = html + "      font-weight: 700;\n";
+    html = html + "      outline: none;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .pin-btn {\n";
+    html = html + "      background: transparent;\n";
+    html = html + "      border: none;\n";
+    html = html + "      cursor: pointer;\n";
+    html = html + "      font-size: 1.25rem;\n";
+    html = html + "      opacity: 0.5;\n";
+    html = html + "      transition: transform 0.2s, opacity 0.2s;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .pin-btn.active {\n";
+    html = html + "      opacity: 1;\n";
+    html = html + "      filter: drop-shadow(0 0 8px var(--orange));\n";
+    html = html + "      transform: rotate(30deg) scale(1.15);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .creator-body {\n";
+    html = html + "      width: 100%;\n";
+    html = html + "      background: transparent;\n";
+    html = html + "      border: none;\n";
+    html = html + "      color: var(--text-main);\n";
+    html = html + "      font-size: 0.95rem;\n";
+    html = html + "      line-height: 1.6;\n";
+    html = html + "      resize: none;\n";
+    html = html + "      min-height: 80px;\n";
+    html = html + "      outline: none;\n";
+    html = html + "      font-family: inherit;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .creator-footer {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      justify-content: space-between;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      margin-top: 14px;\n";
+    html = html + "      padding-top: 14px;\n";
+    html = html + "      border-top: 1px solid rgba(255, 255, 255, 0.08);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .category-pills {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      gap: 8px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .cat-btn {\n";
+    html = html + "      background: rgba(255, 255, 255, 0.05);\n";
+    html = html + "      border: 1px solid var(--glass-border);\n";
+    html = html + "      color: var(--text-muted);\n";
+    html = html + "      padding: 4px 12px;\n";
+    html = html + "      border-radius: 20px;\n";
+    html = html + "      font-size: 0.78rem;\n";
+    html = html + "      cursor: pointer;\n";
+    html = html + "      transition: all 0.2s ease;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .cat-btn.selected {\n";
+    html = html + "      background: var(--emerald-glow);\n";
+    html = html + "      border-color: var(--emerald);\n";
+    html = html + "      color: #fff;\n";
+    html = html + "      font-weight: 600;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .save-btn {\n";
+    html = html + "      background: linear-gradient(135deg, var(--emerald), #059669);\n";
+    html = html + "      color: white;\n";
+    html = html + "      border: none;\n";
+    html = html + "      padding: 8px 22px;\n";
+    html = html + "      border-radius: var(--radius-sm);\n";
+    html = html + "      font-weight: 600;\n";
+    html = html + "      font-size: 0.9rem;\n";
+    html = html + "      cursor: pointer;\n";
+    html = html + "      display: flex;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      gap: 6px;\n";
+    html = html + "      box-shadow: 0 4px 16px var(--emerald-glow);\n";
+    html = html + "      transition: transform 0.2s, box-shadow 0.2s;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .save-btn:hover {\n";
+    html = html + "      transform: translateY(-2px);\n";
+    html = html + "      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    /* Sections */\n";
+    html = html + "    .section-title {\n";
+    html = html + "      font-size: 0.85rem;\n";
+    html = html + "      font-weight: 700;\n";
+    html = html + "      text-transform: uppercase;\n";
+    html = html + "      letter-spacing: 1.2px;\n";
+    html = html + "      color: var(--text-muted);\n";
+    html = html + "      margin-bottom: 18px;\n";
+    html = html + "      display: flex;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      gap: 8px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .section-title span.dot-green {\n";
+    html = html + "      width: 8px;\n";
+    html = html + "      height: 8px;\n";
+    html = html + "      background: var(--emerald);\n";
+    html = html + "      border-radius: 50%;\n";
+    html = html + "      box-shadow: 0 0 10px var(--emerald);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .section-title span.dot-orange {\n";
+    html = html + "      width: 8px;\n";
+    html = html + "      height: 8px;\n";
+    html = html + "      background: var(--orange);\n";
+    html = html + "      border-radius: 50%;\n";
+    html = html + "      box-shadow: 0 0 10px var(--orange);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    /* Notes Grid */\n";
+    html = html + "    .notes-grid {\n";
+    html = html + "      display: grid;\n";
+    html = html + "      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));\n";
+    html = html + "      gap: 22px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card {\n";
+    html = html + "      background: var(--glass-card);\n";
+    html = html + "      backdrop-filter: var(--blur);\n";
+    html = html + "      -webkit-backdrop-filter: var(--blur);\n";
+    html = html + "      border: 1px solid var(--glass-border);\n";
+    html = html + "      border-radius: var(--radius-md);\n";
+    html = html + "      padding: 20px;\n";
+    html = html + "      box-shadow: var(--shadow-card);\n";
+    html = html + "      display: flex;\n";
+    html = html + "      flex-direction: column;\n";
+    html = html + "      position: relative;\n";
+    html = html + "      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);\n";
+    html = html + "      cursor: pointer;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card:hover {\n";
+    html = html + "      background: var(--glass-card-hover);\n";
+    html = html + "      transform: translateY(-4px);\n";
+    html = html + "      box-shadow: 0 16px 35px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card.pinned-border {\n";
+    html = html + "      border-left: 4px solid var(--orange);\n";
+    html = html + "      box-shadow: 0 10px 30px -5px rgba(249, 115, 22, 0.15);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card.green-border {\n";
+    html = html + "      border-left: 4px solid var(--emerald);\n";
+    html = html + "      box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.15);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card-header {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      justify-content: space-between;\n";
+    html = html + "      align-items: flex-start;\n";
+    html = html + "      margin-bottom: 12px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card-title {\n";
+    html = html + "      font-size: 1.05rem;\n";
+    html = html + "      font-weight: 700;\n";
+    html = html + "      color: var(--text-main);\n";
+    html = html + "      line-height: 1.35;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card-body {\n";
+    html = html + "      font-size: 0.92rem;\n";
+    html = html + "      color: #cbd5e1;\n";
+    html = html + "      line-height: 1.6;\n";
+    html = html + "      white-space: pre-wrap;\n";
+    html = html + "      flex: 1;\n";
+    html = html + "      margin-bottom: 16px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-card-footer {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      justify-content: space-between;\n";
+    html = html + "      align-items: center;\n";
+    html = html + "      font-size: 0.78rem;\n";
+    html = html + "      color: var(--text-muted);\n";
+    html = html + "      padding-top: 10px;\n";
+    html = html + "      border-top: 1px solid rgba(255, 255, 255, 0.05);\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .note-tag {\n";
+    html = html + "      background: rgba(255, 255, 255, 0.08);\n";
+    html = html + "      padding: 3px 10px;\n";
+    html = html + "      border-radius: 12px;\n";
+    html = html + "      font-weight: 600;\n";
+    html = html + "      font-size: 0.72rem;\n";
+    html = html + "      text-transform: uppercase;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .tag-dev { color: var(--emerald-light); background: rgba(16, 185, 129, 0.15); }\n";
+    html = html + "    .tag-design { color: var(--orange-light); background: rgba(249, 115, 22, 0.15); }\n";
+    html = html + "    .tag-ideas { color: #a78bfa; background: rgba(167, 139, 250, 0.15); }\n\n";
+
+    html = html + "    .card-actions {\n";
+    html = html + "      display: flex;\n";
+    html = html + "      gap: 8px;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .action-icon {\n";
+    html = html + "      background: transparent;\n";
+    html = html + "      border: none;\n";
+    html = html + "      color: var(--text-muted);\n";
+    html = html + "      cursor: pointer;\n";
+    html = html + "      padding: 4px;\n";
+    html = html + "      border-radius: 4px;\n";
+    html = html + "      transition: color 0.2s;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    .action-icon:hover { color: #fff; }\n";
+    html = html + "    .action-icon.delete:hover { color: #f43f5e; }\n\n";
+
+    html = html + "    /* Empty State */\n";
+    html = html + "    .empty-state {\n";
+    html = html + "      text-align: center;\n";
+    html = html + "      padding: 48px 20px;\n";
+    html = html + "      color: var(--text-muted);\n";
+    html = html + "      font-size: 0.95rem;\n";
+    html = html + "    }\n";
+    html = html + "  </style>\n</head>\n<body>\n";
+
+    html = html + "  <header class=\"glass-nav\">\n";
+    html = html + "    <div class=\"logo-container\">\n";
+    html = html + "      <div class=\"logo-badge\">1</div>\n";
+    html = html + "      <div class=\"logo-title\">ONE Notes</div>\n";
+    html = html + "    </div>\n";
+    html = html + "    <div class=\"nav-search\">\n";
+    html = html + "      <svg viewBox=\"0 0 24 24\"><path d=\"M21.71 20.29l-5.01-5.01C17.54 13.68 18 11.91 18 10c0-4.41-3.59-8-8-8S2 5.59 2 10s3.59 8 8 8c1.91 0 3.68-.46 5.28-1.3l5.01 5.01c.39.39 1.02.39 1.41 0 .39-.39.39-1.01.01-1.42zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z\"/></svg>\n";
+    html = html + "      <input type=\"text\" id=\"search-input\" placeholder=\"Search your notes & tags...\">\n";
+    html = html + "    </div>\n";
+    html = html + "    <div class=\"nav-actions\">\n";
+    html = html + "      <span class=\"badge-pill\">⚡ Native ONE Engine</span>\n";
+    html = html + "    </div>\n";
+    html = html + "  </header>\n\n";
+
+    html = html + "  <main class=\"workspace\">\n";
+    html = html + "    <!-- Note Creator -->\n";
+    html = html + "    <div class=\"creator-card\">\n";
+    html = html + "      <div class=\"creator-header\">\n";
+    html = html + "        <input type=\"text\" id=\"note-title\" class=\"creator-title\" placeholder=\"Title of your note...\">\n";
+    html = html + "        <button id=\"pin-toggle\" class=\"pin-btn\" title=\"Pin note\">📌</button>\n";
+    html = html + "      </div>\n";
+    html = html + "      <textarea id=\"note-body\" class=\"creator-body\" placeholder=\"Write down your thoughts, ideas or tasks...\"></textarea>\n";
+    html = html + "      <div class=\"creator-footer\">\n";
+    html = html + "        <div class=\"category-pills\">\n";
+    html = html + "          <button class=\"cat-btn selected\" data-cat=\"DEV\">DEV</button>\n";
+    html = html + "          <button class=\"cat-btn\" data-cat=\"DESIGN\">DESIGN</button>\n";
+    html = html + "          <button class=\"cat-btn\" data-cat=\"IDEAS\">IDEAS</button>\n";
+    html = html + "        </div>\n";
+    html = html + "        <button id=\"save-note-btn\" class=\"save-btn\">Save Note</button>\n";
+    html = html + "      </div>\n";
+    html = html + "    </div>\n\n";
+
+    html = html + "    <!-- Pinned Notes Stream -->\n";
+    html = html + "    <section id=\"pinned-section\">\n";
+    html = html + "      <div class=\"section-title\"><span class=\"dot-orange\"></span> Pinned Notes</div>\n";
+    html = html + "      <div class=\"notes-grid\" id=\"pinned-grid\"></div>\n";
+    html = html + "    </section>\n\n";
+
+    html = html + "    <!-- All Other Notes Stream -->\n";
+    html = html + "    <section id=\"others-section\">\n";
+    html = html + "      <div class=\"section-title\"><span class=\"dot-green\"></span> All Notes</div>\n";
+    html = html + "      <div class=\"notes-grid\" id=\"others-grid\"></div>\n";
+    html = html + "    </section>\n";
+    html = html + "  </main>\n\n";
+
+    html = html + "  <script>\n";
+    html = html + "    // 100% Zero-Dependency Local State Engine\n";
+    html = html + "    const defaultNotes = [\n";
+    html = html + "      {\n";
+    html = html + "        id: 1,\n";
+    html = html + "        title: 'ONE Language Compiler Architecture',\n";
+    html = html + "        body: 'Deterministic single-pass parser lowering into bit-exact UnifiedIR with zero host escape.',\n";
+    html = html + "        category: 'DEV',\n";
+    html = html + "        pinned: true,\n";
+    html = html + "        date: 'Oct 30, 2026'\n";
+    html = html + "      },\n";
+    html = html + "      {\n";
+    html = html + "        id: 2,\n";
+    html = html + "        title: 'Glassmorphism Design Concept',\n";
+    html = html + "        body: 'Emerald green glows combined with warm sunset orange highlights over frosted slate panels.',\n";
+    html = html + "        category: 'DESIGN',\n";
+    html = html + "        pinned: true,\n";
+    html = html + "        date: 'Oct 30, 2026'\n";
+    html = html + "      },\n";
+    html = html + "      {\n";
+    html = html + "        id: 3,\n";
+    html = html + "        title: 'Zero Dependency Execution',\n";
+    html = html + "        body: 'Pure browser/native execution without requiring any npm packages, external bundles, or node_modules.',\n";
+    html = html + "        category: 'IDEAS',\n";
+    html = html + "        pinned: false,\n";
+    html = html + "        date: 'Oct 30, 2026'\n";
+    html = html + "      }\n";
+    html = html + "    ];\n\n";
+
+    html = html + "    let notes = JSON.parse(localStorage.getItem('one_notes_data')) || defaultNotes;\n";
+    html = html + "    let currentCategory = 'DEV';\n";
+    html = html + "    let isPinnedCurrent = false;\n\n";
+
+    html = html + "    const pinnedGrid = document.getElementById('pinned-grid');\n";
+    html = html + "    const othersGrid = document.getElementById('others-grid');\n";
+    html = html + "    const pinnedSection = document.getElementById('pinned-section');\n";
+    html = html + "    const pinToggleBtn = document.getElementById('pin-toggle');\n";
+    html = html + "    const catButtons = document.querySelectorAll('.cat-btn');\n";
+    html = html + "    const saveBtn = document.getElementById('save-note-btn');\n";
+    html = html + "    const titleInput = document.getElementById('note-title');\n";
+    html = html + "    const bodyInput = document.getElementById('note-body');\n";
+    html = html + "    const searchInput = document.getElementById('search-input');\n\n";
+
+    html = html + "    function persist() {\n";
+    html = html + "      localStorage.setItem('one_notes_data', JSON.stringify(notes));\n";
+    html = html + "    }\n\n";
+
+    html = html + "    pinToggleBtn.addEventListener('click', () => {\n";
+    html = html + "      isPinnedCurrent = !isPinnedCurrent;\n";
+    html = html + "      pinToggleBtn.classList.toggle('active', isPinnedCurrent);\n";
+    html = html + "    });\n\n";
+
+    html = html + "    catButtons.forEach(btn => {\n";
+    html = html + "      btn.addEventListener('click', () => {\n";
+    html = html + "        catButtons.forEach(b => b.classList.remove('selected'));\n";
+    html = html + "        btn.classList.add('selected');\n";
+    html = html + "        currentCategory = btn.getAttribute('data-cat');\n";
+    html = html + "      });\n";
+    html = html + "    });\n\n";
+
+    html = html + "    saveBtn.addEventListener('click', () => {\n";
+    html = html + "      const title = titleInput.value.trim();\n";
+    html = html + "      const body = bodyInput.value.trim();\n";
+    html = html + "      if (!title && !body) return;\n\n";
+    html = html + "      const newNote = {\n";
+    html = html + "        id: Date.now(),\n";
+    html = html + "        title: title || 'Untitled Note',\n";
+    html = html + "        body: body,\n";
+    html = html + "        category: currentCategory,\n";
+    html = html + "        pinned: isPinnedCurrent,\n";
+    html = html + "        date: 'Just now'\n";
+    html = html + "      };\n\n";
+    html = html + "      notes.unshift(newNote);\n";
+    html = html + "      persist();\n";
+    html = html + "      render();\n\n";
+    html = html + "      titleInput.value = '';\n";
+    html = html + "      bodyInput.value = '';\n";
+    html = html + "      isPinnedCurrent = false;\n";
+    html = html + "      pinToggleBtn.classList.remove('active');\n";
+    html = html + "    });\n\n";
+
+    html = html + "    window.togglePin = function(id) {\n";
+    html = html + "      const note = notes.find(n => n.id === id);\n";
+    html = html + "      if (note) {\n";
+    html = html + "        note.pinned = !note.pinned;\n";
+    html = html + "        persist();\n";
+    html = html + "        render();\n";
+    html = html + "      }\n";
+    html = html + "    };\n\n";
+
+    html = html + "    window.deleteNote = function(id) {\n";
+    html = html + "      notes = notes.filter(n => n.id !== id);\n";
+    html = html + "      persist();\n";
+    html = html + "      render();\n";
+    html = html + "    };\n\n";
+
+    html = html + "    searchInput.addEventListener('input', (e) => {\n";
+    html = html + "      render(e.target.value.toLowerCase());\n";
+    html = html + "    });\n\n";
+
+    html = html + "    function createNoteCard(note) {\n";
+    html = html + "      const borderClass = note.pinned ? 'pinned-border' : 'green-border';\n";
+    html = html + "      const tagClass = 'tag-' + (note.category ? note.category.toLowerCase() : 'dev');\n";
+    html = html + "      return `\n";
+    html = html + "        <div class=\"note-card ${borderClass}\">\n";
+    html = html + "          <div class=\"note-card-header\">\n";
+    html = html + "            <div class=\"note-card-title\">${escapeHTML(note.title)}</div>\n";
+    html = html + "            <button class=\"action-icon\" onclick=\"togglePin(${note.id})\" title=\"Toggle pin\">\n";
+    html = html + "              ${note.pinned ? '📌' : '📍'}\n";
+    html = html + "            </button>\n";
+    html = html + "          </div>\n";
+    html = html + "          <div class=\"note-card-body\">${escapeHTML(note.body)}</div>\n";
+    html = html + "          <div class=\"note-card-footer\">\n";
+    html = html + "            <span class=\"note-tag ${tagClass}\">${note.category}</span>\n";
+    html = html + "            <div class=\"card-actions\">\n";
+    html = html + "              <span>${note.date}</span>\n";
+    html = html + "              <button class=\"action-icon delete\" onclick=\"deleteNote(${note.id})\" title=\"Delete note\">🗑️</button>\n";
+    html = html + "            </div>\n";
+    html = html + "          </div>\n";
+    html = html + "        </div>\n";
+    html = html + "      `;\n";
+    html = html + "    }\n\n";
+
+    html = html + "    function escapeHTML(str) {\n";
+    html = html + "      return (str || '').replace(/[&<>'\"']/g,\n";
+    html = html + "        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', \"'\": '&#39;', '\"': '&quot;' }[tag] || tag)\n";
+    html = html + "      );\n";
+    html = html + "    }\n\n";
+
+    html = html + "    function render(query = '') {\n";
+    html = html + "      const filtered = notes.filter(n =>\n";
+    html = html + "        n.title.toLowerCase().includes(query) ||\n";
+    html = html + "        n.body.toLowerCase().includes(query) ||\n";
+    html = html + "        (n.category && n.category.toLowerCase().includes(query))\n";
+    html = html + "      );\n\n";
+    html = html + "      const pinnedNotes = filtered.filter(n => n.pinned);\n";
+    html = html + "      const otherNotes = filtered.filter(n => !n.pinned);\n\n";
+    html = html + "      if (pinnedNotes.length === 0) {\n";
+    html = html + "        pinnedSection.style.display = 'none';\n";
+    html = html + "      } else {\n";
+    html = html + "        pinnedSection.style.display = 'block';\n";
+    html = html + "        pinnedGrid.innerHTML = pinnedNotes.map(createNoteCard).join('');\n";
+    html = html + "      }\n\n";
+    html = html + "      if (otherNotes.length === 0 && pinnedNotes.length === 0) {\n";
+    html = html + "        othersGrid.innerHTML = '<div class=\"empty-state\">No notes found. Create your first note above!</div>';\n";
+    html = html + "      } else {\n";
+    html = html + "        othersGrid.innerHTML = otherNotes.map(createNoteCard).join('');\n";
+    html = html + "      }\n";
+    html = html + "    }\n\n";
+
+    html = html + "    render();\n";
+    html = html + "  </script>\n";
+    html = html + "</body>\n</html>";
+
+    io_write("index.html", html);
+    print "[ONE Language] Successfully written 'index.html' with zero external dependencies!";
+}
+
+generateWebsite();

@@ -1,30 +1,50 @@
-# Dependencies
+# ==============================================================================
+# ONE LANGUAGE — REPOSITORY BASELINE IGNORE RULES
+# Target: Local Git Version Control Baseline (No Remote Push)
+# ==============================================================================
+
+# 1. Dependencies
 node_modules/
 */node_modules/
 
-# Local Scratch Sandbox (Junctions to research/)
-scratch/
-
-# Intermediate Build Blobs & Duplicate Distributions
-dist/v1.0.1-rc/
-dist/temp-icon-test/
-dist/sea-prep.blob
-dist/cli-bundle.js
-dist/test-bundle.js
-dist/test-small.js
-dist/*.exe
+# 2. Build Outputs & Clean Build Artifacts
+dist/
 dist-clean/
+*/dist/
 
-# Compilers & Runtime Caches
+# 3. Compilers & Runtime Caches
 *.tsbuildinfo
 __pycache__/
 */__pycache__/
 *.pyc
 
-# OS & Editor files
-.DS_Store
-Thumbs.db
-.vscode/
+# 4. Large Standalone Binaries (>180MB total; preserved locally)
+*.exe
+/cubio-v3-release.exe
+/one.exe
 
-# Transient Test Files
+# 5. Intermediate Single Executable Application (SEA) Blobs
+*.blob
+/sea-prep.blob
+/sea-cli-prep.blob
+
+# 6. Emitted Test Binaries & Graphic Raster Frames
+*.bin
+!/one-baremetal.bin
+*.tga
+*.cubiomodel
+
+# 7. Transient Test Outputs (Preserved locally)
 temp_*.3dmemory
+
+# 8. Pre-Phase Micro-Backups (Preserved locally, not tracked)
+/.backup_*/
+
+# 9. Nested Legacy Clone Workspace (Consolidated into legacy_experiments; preserved locally)
+/ONE language/
+
+# 10. Internal Forensic Audits, Reports & Scratch Sandboxes
+/audit/
+/reports/
+/scratch/
+/PHASE_0_TO_PHASE_3_END_TO_END_FORENSIC_REPORT.md

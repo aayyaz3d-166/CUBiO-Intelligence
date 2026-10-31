@@ -42,7 +42,7 @@ export async function runVSCodeExtensionTests(): Promise<void> {
   console.log('[Suite 1] Extension Manifest and Structure Validation...');
 
   assert(pkg.name === 'one-language', `Expected name 'one-language', got '${pkg.name}'`);
-  assert(pkg.version === '1.3.1' || pkg.version === '1.3.0' || pkg.version === '1.2.1' || pkg.version === '1.2.0' || pkg.version === '1.1.0' || pkg.version === '1.0.1' || pkg.version === '1.0.0', `Expected version 1.3.1, 1.3.0, 1.2.1, 1.2.0, 1.1.0, 1.0.1 or 1.0.0, got ${pkg.version}`);
+  assert(pkg.version === '1.4.0' || pkg.version === '1.3.1' || pkg.version === '1.3.0' || pkg.version === '1.2.1' || pkg.version === '1.2.0' || pkg.version === '1.1.0' || pkg.version === '1.0.1' || pkg.version === '1.0.0', `Expected version 1.4.0, 1.3.1, 1.3.0, 1.2.1, 1.2.0, 1.1.0, 1.0.1 or 1.0.0, got ${pkg.version}`);
   assert(pkg.publisher === 'ayyaz3d' || pkg.publisher === 'one-language', `Expected publisher 'ayyaz3d' or 'one-language', got '${pkg.publisher}'`);
   assert(pkg.engines && pkg.engines.vscode, 'Missing engines.vscode declaration');
   assert(pkg.main === './dist/extension.js', `Expected main './dist/extension.js', got '${pkg.main}'`);

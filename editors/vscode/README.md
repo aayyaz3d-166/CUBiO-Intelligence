@@ -2,30 +2,60 @@
 
 <img src="https://raw.githubusercontent.com/aayyaz3d-166/CUBiO-Intelligence/main/assets/ONE-Language-Logo.png" alt="ONE Language Logo" width="160" style="margin-bottom: 12px;"/>
 
-# ONE Language for Visual Studio Code
-### The Official Language Pack with Built-In Offline AI Assistant (ECHO-1)
+# ONE Language for Visual Studio Code (v1.5.0)
+### Sovereign IDE with Offline AI Copilot (ECHO-1), OLTO Reactive Frontend & 3-6-9 Tokenizer
 
-[![Version](https://img.shields.io/badge/version-1.3.0--stable-blue.svg?style=for-the-badge&logo=visualstudiocode)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
-[![AI Assistant](https://img.shields.io/badge/ECHO--1-100%25%20Offline%20AI-success.svg?style=for-the-badge&logo=sparkles)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
-[![Embedded Brain](https://img.shields.io/badge/Model-24.56%20MB%20Local-purple.svg?style=for-the-badge)](https://github.com/aayyaz3d-166/CUBiO-Intelligence)
+[![Version](https://img.shields.io/badge/version-1.5.0--stable-white.svg?style=for-the-badge&logo=visualstudiocode&color=000000)](https://github.com/aayyaz3d-166/ONE-language)
+[![Tokenizer](https://img.shields.io/badge/3--6--9%20Tokenizer-8,192%20Sovereign%20Vocab-white.svg?style=for-the-badge&color=111111)](https://github.com/aayyaz3d-166/ONE-language)
+[![OLTO Frontend](https://img.shields.io/badge/OLTO-Reactive%20Frontend%20(0.70µs)-white.svg?style=for-the-badge&logo=html5&color=222222)](https://github.com/aayyaz3d-166/ONE-language)
+[![AI Assistant](https://img.shields.io/badge/ECHO--1-100%25%20Offline%20AI-white.svg?style=for-the-badge&logo=sparkles&color=000000)](https://github.com/aayyaz3d-166/ONE-language)
 [![License](https://img.shields.io/badge/license-MIT%20%7C%20Apache--2.0-lightgrey.svg?style=for-the-badge)](LICENSE)
 
 <br/>
 
-Delivering a professional, all-in-one developer environment for **ONE Language** (`.one`) featuring built-in offline artificial intelligence, compiler diagnostics, syntax highlighting, autocompletion, hover docs, and one-click execution.
+<img src="assets/vscode-extension-hero-bw.png" alt="ONE Language Studio v1.5.0 Hero Graphic" width="100%"/>
+
+<br/>
+
+**ONE Language for VS Code** delivers an all-in-one sovereign development suite for **ONE Language** (`.one`) and **OLTO** (`.olto`). Featuring built-in offline artificial intelligence (**ECHO-1**), sovereign mathematical tokenization (**3-6-9 Vortex Spine**), instant reactivity, real-time compiler diagnostics, autocompletion, hover docs, and one-click binary execution.
 
 </div>
 
 ---
 
-## 🤖 Built-in ECHO-1 Offline AI Copilot
+## 🔮 1. Sovereign 3-6-9 Branching Tokenizer Engine
 
-Unlike extensions that require external API keys, OpenAI accounts, or active internet connections, **ONE Language v1.3.0 carries its own 24.56 MB neural model directly inside this extension**.
+New in **v1.5.0**, the extension integrates the **Sovereign 3-6-9 Branching Tokenizer & Vocabulary Engine**:
+* **Exact Power-of-2 Capacity ($2^{13} = 8,192$ Tokens):** Engineered with deterministic SHA-256 manifest hash `20d87a8714cf4447e7320aa58c4b15a443792aede85faf6984f1105badac0c89`.
+* **Zero Third-Party Dependencies:** 100% sovereign mathematical implementation — no HuggingFace, no TikToken, zero npm network calls.
+* **3-6-9 Vortex Branching Hierarchy:**
+  * $\text{Branch}(1, 2) \to \text{Anchor } 3$ (Observation & Input $\to$ State Anchor)
+  * $\text{Branch}(4, 5) \to \text{Anchor } 6$ (Context & Memory $\to$ Active Logic)
+  * $\text{Branch}(7, 8) \to \text{Anchor } 9$ (Analysis & Verification $\to$ Collapsed Singularity)
+* **100% Roundtrip Bit-Exact Fidelity:** Reconstructs natural English dialogues and code without `<UNK>` degradation.
+* **C-Speed Tensor Serialization:** Outputs direct `Int32Array` buffers for instantaneous training ingestion in **3D Memory Studio**.
+
+---
+
+## 🌐 2. OLTO: Native Reactive Frontend Subsystem
+
+Write complete reactive web applications directly inside your workspace without leaving the IDE:
+* **Single-File Architecture (`.olto`):** Combine reactive state, declarative layout, event actions, and styles in a single clean grammar.
+* **Zero-Dependency Single-File Bundler:** One click bundles your app into a standalone HTML package with **zero `node_modules`** and zero CDN scripts.
+* **0.70µs Signal Reactivity:** Bypass Virtual DOM overhead entirely — mutating state instantly updates the targeted DOM node in sub-microseconds.
+* **Live-Reload Dev Server:** Launch instant hot-reloading using `one olto dev <App.olto>`.
+* **Security Invariant `E9001`:** Automatically flags client-side secret exposure at compile time.
+
+---
+
+## 🤖 3. Built-In ECHO-1 Autonomous Offline AI Copilot
+
+Unlike extensions that require external API keys, OpenAI tokens, or active internet connections, **ONE Language carries its complete 24.56 MB neural network weights directly inside this extension**.
 
 ### How to use ECHO-1:
 1. **Global Shortcut**: Press `Ctrl + Shift + I` (or `Cmd + Shift + I` on macOS) anywhere in VS Code.
-2. **Status Bar**: Click the **`$(sparkle) Ask ECHO-1`** item at the bottom right.
-3. **One-Click Insert**: Choose **"Insert into Editor"** to immediately paste generated code snippets.
+2. **Status Bar**: Click the **`$(sparkle) Ask ECHO-1`** button on the bottom status bar.
+3. **One-Click Insert**: Select **"Insert into Editor"** to paste generated code snippets.
 
 ```mermaid
 graph LR
@@ -37,28 +67,24 @@ graph LR
 
 ---
 
-## ✨ Features
+## ✨ 4. Complete Feature Suite
 
-### 1. 🎨 Full TextMate Syntax Highlighting
-* **Spatial Directives:** `@Space`, `@Grid777`, `@Slice`, `@memview`, `@seal`, `@gossip`, `@actuation_lock`
+### 🎨 Full TextMate Syntax Highlighting
+* **Spatial & Memory Directives:** `@Space`, `@Grid777`, `@Slice`, `@memview`, `@seal`, `@gossip`, `@actuation_lock`
 * **Declarations:** `let`, `const`, `struct`, `enum`, `class`, `function`, `fn`, `native`
 * **Control Flow & Async:** `if`, `else`, `while`, `for`, `return`, `async`, `await`
 * **Multi-File Modules:** `module`, `import`, `export`, `from`, `as`
+* **OLTO Frontend:** `component`, `page`, `state`, `computed`, `action`, `view`, `Card`, `Button`, `Input`
 
-### 2. ⚡ Real-Time Compiler Diagnostics & Smart Auto-Fixer
-* Instant error highlighting on edit and save (`checkOnSave: true`).
-* Intercepts `E1001`-`E1016` syntax errors and provides actionable fix guidance powered by ECHO-1.
-* Invariant validation for `ACTUATION_LOCK` and Address369 boundary guards (`[0..368]`).
+### ⚡ Real-Time Compiler Diagnostics & Smart Auto-Fixer
+* Real-time linting on typing and save (`checkOnSave: true`).
+* Intercepts `E1001` - `E1016` syntax errors and provides actionable fix guidance powered by ECHO-1.
+* Invariant enforcement for `ACTUATION_LOCK` and Address369 boundary guards (`[0..368]`).
 
-### 3. 🔍 Autocomplete, Hover Docs & Outline
-* **Contextual Suggestions:** Keywords, spatial primitives, and standard library functions (`len`, `push`, `pop`, `readFile`, `writeFile`).
-* **Hover Tooltips:** Rich markdown hover documentation for keywords, types, and function signatures.
-* **Document Outline:** Jump between functions, structs, and variables with the Symbol Outline view.
-
-### 4. 🚀 Execution & Qplayer Engine Switcher
-* **Switch Engine with 1 Click:** Toggle between **Qplayer Runtime** (204M ops/sec fast `.obi` execution) and **UnifiedVM** (Address369 deterministic spatial memory).
+### 🚀 Execution & Qplayer Engine Switcher
+* **Qplayer Runtime:** 204M ops/sec fast `.obi` (ONE Binary Intelligence) execution.
+* **UnifiedVM:** Deterministic 3D spatial memory execution with Address369 coordinates.
 * **One-Click Run:** Press `Ctrl + F5` to run the active file instantly.
-* **Build Containers:** Press `Ctrl + Shift + B` to compile to `.ox` or `.obi`.
 
 ---
 
@@ -74,9 +100,9 @@ graph LR
 
 ---
 
-## 📋 Requirements
+## 📋 Requirements & Sovereign Guarantee
 * Visual Studio Code version **1.80.0** or higher.
-* No internet connection or API keys required — ECHO-1 runs 100% locally.
+* **100% Sovereign Guarantee:** No cloud connection, no API keys, and no telemetry required. All models and compilers operate 100% locally.
 
 ---
 
